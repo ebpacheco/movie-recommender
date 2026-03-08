@@ -25,4 +25,36 @@ class MoviePromptBuilder(IPromptBuilder):
 
         parts.append("Priorize filmes que ainda não estão na lista de favoritos do usuário.")
 
+        # 🔹 Instruções para resposta estruturada
+        parts.append("""
+Retorne APENAS um JSON válido.
+
+Formato obrigatório:
+
+[
+  {
+    "title": "Nome do filme",
+    "year": 2000,
+    "genre": "Gênero principal",
+    "description": "Breve descrição do motivo da recomendação"
+  }
+]
+
+Exemplo de resposta:
+
+[
+  {
+    "title": "Interstellar",
+    "year": 2014,
+    "genre": "Sci-Fi",
+    "description": "Explora conceitos científicos profundos e viagens espaciais."
+  }
+]
+
+Regras:
+- Retorne exatamente 5 filmes
+- Não inclua explicações
+- Não use ```json ou markdown
+""")
+
         return "\n".join(parts)

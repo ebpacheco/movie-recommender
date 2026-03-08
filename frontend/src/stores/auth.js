@@ -9,12 +9,19 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value)
 
-  async function login(email, password) {
-    const { data } = await api.post('/auth/login', { email, password })
-    token.value = data.access_token
-    localStorage.setItem('token', data.access_token)
+async function login(email, password) {
+  const { data } = await api.post('/auth/login', { email, password })
+
+  token.value = data.access_token
+  localStorage.setItem('token', data.access_token)
+
+  try {
     await fetchUser()
+  } catch {
+    logout()
+    throw new Error('Erro ao carregar usuário')
   }
+}
 
   async function register(payload) {
     await api.post('/auth/register', payload)

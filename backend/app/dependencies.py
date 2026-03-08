@@ -12,7 +12,7 @@ from app.repositories.recommendation_repository import RecommendationRepository
 from app.services.auth_service import AuthService
 from app.services.user_service import UserService
 from app.services.recommendation_service import RecommendationService
-from app.providers.openai_provider import OpenAIProvider
+from app.providers.gemini_provider import GeminiProvider
 from app.builders.movie_prompt_builder import MoviePromptBuilder
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
@@ -31,7 +31,7 @@ def get_recommendation_service(db: Session = Depends(get_db)) -> RecommendationS
     return RecommendationService(
         profile_repo        = ProfileRepository(db),
         recommendation_repo = RecommendationRepository(db),
-        ai_provider         = OpenAIProvider(),
+        ai_provider         = GeminiProvider(),   # ✅ era OpenAIProvider()
         prompt_builder      = MoviePromptBuilder(),
     )
 

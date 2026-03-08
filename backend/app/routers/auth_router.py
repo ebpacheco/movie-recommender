@@ -18,4 +18,7 @@ def register(data: UserCreate, service: UserService = Depends(get_user_service))
 def login(data: LoginRequest, service: UserService = Depends(get_user_service)):
     user  = service.authenticate(data.email, data.password)
     token = auth_service.create_access_token(str(user.id))
-    return TokenResponse(access_token=token)
+    return TokenResponse(
+    access_token=token,
+    token_type="bearer"
+)
