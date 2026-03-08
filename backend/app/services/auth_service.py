@@ -2,20 +2,21 @@
 from datetime import datetime, timedelta
 
 from jose import jwt, JWTError
-from passlib.context import CryptContext
+from pwdlib import PasswordHash
+from pwdlib.hashers.bcrypt import BcryptHasher
 
 from app.core.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_hash = PasswordHash([BcryptHasher()])
 
 
 class AuthService:
 
     def hash_password(self, password: str) -> str:
-        return pwd_context.hash(password)
+        return pwd_hash.hash(password)
 
     def verify_password(self, plain_password: str, hashed_password: str) -> bool:
-        return pwd_context.verify(plain_password, hashed_password)
+        return pwd_hash.verify(plain_password, hashed_password)
 
     def create_access_token(self, user_id: str) -> str:
         expire  = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
