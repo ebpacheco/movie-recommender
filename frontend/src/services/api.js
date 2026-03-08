@@ -13,14 +13,20 @@ api.interceptors.request.use((config) => {
   return config
 })
 
-// Redireciona para login se o token expirar
+// Redireciona para login apenas se o token expirar (quando já havia um token salvo)
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    const isLoginRoute    = err.config?.url?.includes('/auth/')
+    const hasToken        = !!localStorage.getItem('token')
+    const isUnauthorized  = err.response?.status === 401
+
+    // Só redireciona se não for rota de auth E já havia token (token expirado)
+    if (isUnauthorized && !isLoginRoute && hasToken) {
       localStorage.removeItem('token')
       window.location.href = '/login'
     }
+
     return Promise.reject(err)
   }
 )
