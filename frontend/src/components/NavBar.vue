@@ -33,7 +33,7 @@ async function changeLang(lang) {
   setLanguage(lang)
   currentLang.value = lang
   if (auth.isAuthenticated) {
-    try { await api.put('/users/me/profile', { language: lang }) } catch {}
+    try { await api.patch('/users/me/language', { language: lang }) } catch {}
   }
 }
 

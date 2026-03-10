@@ -9,6 +9,14 @@ LANGUAGE_NAMES = {
     'es': 'español',
 }
 
+# Limites máximos usados na construção do prompt
+PROMPT_LIMITS = {
+    'genres':    3,
+    'movies':    3,
+    'actors':    5,
+    'directors': 3,
+}
+
 
 class MoviePromptBuilder(IPromptBuilder):
 
@@ -20,24 +28,39 @@ class MoviePromptBuilder(IPromptBuilder):
     ) -> str:
         lang_name = LANGUAGE_NAMES.get(language, 'português brasileiro')
 
-        parts = [f"Recomende 6 filmes para um usuário com as seguintes preferências:"]
+        # Aplica limites defensivamente
+        # Suporta tanto strings simples quanto objetos {name, id, image} do autocomplete
+        def names(lst, limit):
+            items = (lst or [])[:limit]
+            return [i['name'] if isinstance(i, dict) else i for i in items]
 
-        if profile.favorite_genres:
-            parts.append(f"- Gêneros favoritos: {', '.join(profile.favorite_genres)}")
+        genres    = names(profile.favorite_genres,    PROMPT_LIMITS['genres'])
+        movies    = names(profile.favorite_movies,    PROMPT_LIMITS['movies'])
+        actors    = names(profile.favorite_actors,    PROMPT_LIMITS['actors'])
+        directors = names(profile.favorite_directors, PROMPT_LIMITS['directors'])
 
-        if profile.favorite_movies:
-            parts.append(f"- Filmes favoritos: {', '.join(profile.favorite_movies)}")
+        parts = ["Recomende 6 filmes para um usuário com as seguintes preferências:"]
 
-        if profile.favorite_actors:
-            parts.append(f"- Atores favoritos: {', '.join(profile.favorite_actors)}")
+        if genres:
+            parts.append(f"- Gêneros favoritos: {', '.join(genres)}")
 
-        if profile.favorite_directors:
-            parts.append(f"- Diretores favoritos: {', '.join(profile.favorite_directors)}")
+        if movies:
+            parts.append(f"- Filmes favoritos (use como referência de estilo/gosto, NÃO os inclua na lista): {', '.join(movies)}")
+
+        if actors:
+            parts.append(f"- Atores favoritos: {', '.join(actors)}")
+
+        if directors:
+            parts.append(f"- Diretores favoritos: {', '.join(directors)}")
+
+        if not any([genres, movies, actors, directors]):
+            parts.append("- Sem preferências específicas: recomende filmes variados e populares")
 
         if extra_context:
-            parts.append(f"- Contexto adicional do usuário: {extra_context}")
+            parts.append(f"- Pedido específico do usuário: {extra_context}")
 
-        parts.append("Priorize filmes que ainda não estão na lista de favoritos do usuário.")
+        if movies:
+            parts.append("- NÃO repita os filmes favoritos listados acima na recomendação")
 
         parts.append(f"""
 IMPORTANTE: Escreva o campo "description" de cada filme em {lang_name}.

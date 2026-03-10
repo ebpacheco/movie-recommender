@@ -78,17 +78,23 @@
     "movies": {
       "title": "Películas favoritas",
       "subtitle": "Añade películas que te marcaron",
-      "placeholder": "Escribe el nombre y presiona Enter"
+      "placeholder": "Escribe el nombre y presiona Enter",
+      "limitLabel": "películas",
+      "emptyHint": "No se han añadido películas todavía."
     },
     "actors": {
       "title": "Actores y actrices favoritos",
       "subtitle": "¿A quién no te pierdes ninguna película?",
-      "placeholder": "Nombre del actor/actriz"
+      "placeholder": "Nombre del actor/actriz",
+      "limitLabel": "actores",
+      "emptyHint": "No se han añadido actores todavía."
     },
     "directors": {
       "title": "Directores favoritos",
       "subtitle": "Tus cineastas preferidos",
-      "placeholder": "Nombre del director"
+      "placeholder": "Nombre del director",
+      "limitLabel": "directores",
+      "emptyHint": "No se han añadido directores todavía."
     },
     "hint": "Presiona Enter o coma para añadir",
     "save": "Guardar preferencias",

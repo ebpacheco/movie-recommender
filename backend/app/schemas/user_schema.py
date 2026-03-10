@@ -6,6 +6,14 @@ from app.models.user_model import UserRole
 
 # --- Profile ---
 
+PROFILE_LIMITS = {
+    "favorite_genres":    3,
+    "favorite_movies":    3,
+    "favorite_actors":    5,
+    "favorite_directors": 3,
+}
+
+
 class ProfileBase(BaseModel):
     favorite_genres:    list[str] = []
     favorite_movies:    list[str] = []
@@ -18,7 +26,35 @@ class ProfileCreate(ProfileBase):
 
 
 class ProfileUpdate(ProfileBase):
-    pass
+    from pydantic import field_validator
+
+    @field_validator("favorite_genres")
+    @classmethod
+    def limit_genres(cls, v):
+        if len(v) > PROFILE_LIMITS["favorite_genres"]:
+            raise ValueError(f"Máximo de {PROFILE_LIMITS['favorite_genres']} gêneros favoritos")
+        return v
+
+    @field_validator("favorite_movies")
+    @classmethod
+    def limit_movies(cls, v):
+        if len(v) > PROFILE_LIMITS["favorite_movies"]:
+            raise ValueError(f"Máximo de {PROFILE_LIMITS['favorite_movies']} filmes favoritos")
+        return v
+
+    @field_validator("favorite_actors")
+    @classmethod
+    def limit_actors(cls, v):
+        if len(v) > PROFILE_LIMITS["favorite_actors"]:
+            raise ValueError(f"Máximo de {PROFILE_LIMITS['favorite_actors']} atores favoritos")
+        return v
+
+    @field_validator("favorite_directors")
+    @classmethod
+    def limit_directors(cls, v):
+        if len(v) > PROFILE_LIMITS["favorite_directors"]:
+            raise ValueError(f"Máximo de {PROFILE_LIMITS['favorite_directors']} diretores favoritos")
+        return v
 
 
 class ProfileResponse(ProfileBase):
@@ -60,6 +96,12 @@ class LoginRequest(BaseModel):
 class TokenResponse(BaseModel):
     access_token: str
     token_type:   str = "bearer"
+
+
+# --- Language ---
+
+class LanguageUpdate(BaseModel):
+    language: str
 
 
 # --- Admin ---

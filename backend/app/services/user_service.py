@@ -71,6 +71,20 @@ class UserService:
 
         return self.profile_repo.save(profile)
 
+    def update_language(self, user_id: UUID, language: str) -> None:
+        """Atualiza apenas o campo language no perfil — não afeta outros campos."""
+        profile = self.profile_repo.find_by_user_id(user_id)
+        if not profile:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Perfil não encontrado")
+        profile.language = language
+        self.profile_repo.save(profile)
+
+    def get_profile_by_user_id(self, user_id: UUID):
+        profile = self.profile_repo.find_by_user_id(user_id)
+        if not profile:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Perfil não encontrado")
+        return profile
+
     def list_all(self) -> list[User]:
         return self.user_repo.find_all()
 

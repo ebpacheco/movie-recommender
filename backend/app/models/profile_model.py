@@ -16,5 +16,6 @@ class Profile(Base):
     favorite_movies     = Column(ARRAY(String), default=[])
     favorite_actors     = Column(ARRAY(String), default=[])
     favorite_directors  = Column(ARRAY(String), default=[])
+    language            = Column(String, nullable=False, server_default='pt')
 
     user = relationship("User", back_populates="profile")
