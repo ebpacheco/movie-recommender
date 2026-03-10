@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "preferences": "Preferências de Cinema",
+    "logout": "Sair"
+  },
+  "login": {
+    "title": "CineMatch",
+    "subtitle": "Seu guia pessoal de cinema",
+    "email": "E-mail",
+    "password": "Senha",
+    "emailPlaceholder": "seu@email.com",
+    "passwordPlaceholder": "Sua senha",
+    "submit": "Entrar",
+    "loading": "Entrando...",
+    "noAccount": "Não tem conta?",
+    "register": "Cadastre-se",
+    "error": "E-mail ou senha incorretos"
+  },
+  "register": {
+    "title": "Criar conta",
+    "subtitle": "Junte-se ao CineMatch e descubra seus próximos filmes favoritos",
+    "name": "Nome completo",
+    "namePlaceholder": "Seu nome",
+    "email": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "cpf": "CPF",
+    "cpfPlaceholder": "000.000.000-00",
+    "password": "Senha",
+    "passwordPlaceholder": "Crie uma senha segura",
+    "confirmPassword": "Confirmar senha",
+    "confirmPlaceholder": "Repita a senha",
+    "submit": "Criar conta",
+    "loading": "Criando...",
+    "hasAccount": "Já tem uma conta?",
+    "login": "Entrar",
+    "rules": {
+      "length": "Mínimo 8 caracteres",
+      "upper": "Uma letra maiúscula",
+      "number": "Um número",
+      "special": "Um caractere especial (!@#$%...)"
+    },
+    "errors": {
+      "name": "Nome muito curto",
+      "email": "E-mail inválido",
+      "cpf": "CPF inválido",
+      "password": "A senha não atende aos requisitos",
+      "confirmPassword": "As senhas não coincidem"
+    }
+  },
+  "recommendations": {
+    "hello": "Olá,",
+    "subtitle": "O que você vai assistir hoje?",
+    "label": "Contexto extra",
+    "placeholder": "Ex: quero algo leve pra hoje à noite, um thriller tenso...",
+    "button": "Recomendar",
+    "title": "Recomendações",
+    "history": "Histórico",
+    "movies": "filmes",
+    "error": "Erro ao gerar recomendações"
+  },
+  "profile": {
+    "title": "Preferências de Cinema",
+    "subtitle": "Personalize suas recomendações contando o que você ama no cinema",
+    "saved": "Salvo!",
+    "saving": "Salvando...",
+    "loading": "Carregando suas preferências...",
+    "genres": {
+      "title": "Gêneros favoritos",
+      "subtitle": "Selecione os gêneros que mais gosta"
+    },
+    "movies": {
+      "title": "Filmes favoritos",
+      "subtitle": "Adicione filmes que marcaram você",
+      "placeholder": "Digite o nome e pressione Enter"
+    },
+    "actors": {
+      "title": "Atores e atrizes favoritos",
+      "subtitle": "Quem você não perde um filme?",
+      "placeholder": "Nome do ator/atriz"
+    },
+    "directors": {
+      "title": "Diretores favoritos",
+      "subtitle": "Seus cineastas preferidos",
+      "placeholder": "Nome do diretor"
+    },
+    "hint": "Pressione Enter ou vírgula para adicionar",
+    "save": "Salvar preferências",
+    "back": "← Voltar para recomendações"
+  },
+  "language": {
+    "label": "Idioma",
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}

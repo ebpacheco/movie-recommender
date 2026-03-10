@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "preferences": "Cinema Preferences",
+    "logout": "Sign out"
+  },
+  "login": {
+    "title": "CineMatch",
+    "subtitle": "Your personal cinema guide",
+    "email": "E-mail",
+    "password": "Password",
+    "emailPlaceholder": "your@email.com",
+    "passwordPlaceholder": "Your password",
+    "submit": "Sign in",
+    "loading": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "register": "Sign up",
+    "error": "Invalid email or password"
+  },
+  "register": {
+    "title": "Create account",
+    "subtitle": "Join CineMatch and discover your next favorite films",
+    "name": "Full name",
+    "namePlaceholder": "Your name",
+    "email": "E-mail",
+    "emailPlaceholder": "your@email.com",
+    "cpf": "CPF",
+    "cpfPlaceholder": "000.000.000-00",
+    "password": "Password",
+    "passwordPlaceholder": "Create a strong password",
+    "confirmPassword": "Confirm password",
+    "confirmPlaceholder": "Repeat your password",
+    "submit": "Create account",
+    "loading": "Creating...",
+    "hasAccount": "Already have an account?",
+    "login": "Sign in",
+    "rules": {
+      "length": "At least 8 characters",
+      "upper": "One uppercase letter",
+      "number": "One number",
+      "special": "One special character (!@#$%...)"
+    },
+    "errors": {
+      "name": "Name too short",
+      "email": "Invalid email",
+      "cpf": "Invalid CPF",
+      "password": "Password does not meet requirements",
+      "confirmPassword": "Passwords do not match"
+    }
+  },
+  "recommendations": {
+    "hello": "Hello,",
+    "subtitle": "What are you watching today?",
+    "label": "Extra context",
+    "placeholder": "E.g.: something light for tonight, an intense thriller...",
+    "button": "Recommend",
+    "title": "Recommendations",
+    "history": "History",
+    "movies": "movies",
+    "error": "Error generating recommendations"
+  },
+  "profile": {
+    "title": "Cinema Preferences",
+    "subtitle": "Personalize your recommendations by telling us what you love in cinema",
+    "saved": "Saved!",
+    "saving": "Saving...",
+    "loading": "Loading your preferences...",
+    "genres": {
+      "title": "Favorite genres",
+      "subtitle": "Select the genres you enjoy most"
+    },
+    "movies": {
+      "title": "Favorite movies",
+      "subtitle": "Add movies that made an impression on you",
+      "placeholder": "Type the name and press Enter"
+    },
+    "actors": {
+      "title": "Favorite actors & actresses",
+      "subtitle": "Who do you never miss a movie from?",
+      "placeholder": "Actor/actress name"
+    },
+    "directors": {
+      "title": "Favorite directors",
+      "subtitle": "Your favorite filmmakers",
+      "placeholder": "Director name"
+    },
+    "hint": "Press Enter or comma to add",
+    "save": "Save preferences",
+    "back": "← Back to recommendations"
+  },
+  "language": {
+    "label": "Language",
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}

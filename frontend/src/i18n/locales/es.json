@@ -1,0 +1,96 @@
+{
+  "nav": {
+    "preferences": "Preferencias de Cine",
+    "logout": "Cerrar sesión"
+  },
+  "login": {
+    "title": "CineMatch",
+    "subtitle": "Tu guía personal de cine",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "emailPlaceholder": "tu@correo.com",
+    "passwordPlaceholder": "Tu contraseña",
+    "submit": "Iniciar sesión",
+    "loading": "Iniciando...",
+    "noAccount": "¿No tienes cuenta?",
+    "register": "Regístrate",
+    "error": "Correo o contraseña incorrectos"
+  },
+  "register": {
+    "title": "Crear cuenta",
+    "subtitle": "Únete a CineMatch y descubre tus próximas películas favoritas",
+    "name": "Nombre completo",
+    "namePlaceholder": "Tu nombre",
+    "email": "Correo electrónico",
+    "emailPlaceholder": "tu@correo.com",
+    "cpf": "CPF",
+    "cpfPlaceholder": "000.000.000-00",
+    "password": "Contraseña",
+    "passwordPlaceholder": "Crea una contraseña segura",
+    "confirmPassword": "Confirmar contraseña",
+    "confirmPlaceholder": "Repite la contraseña",
+    "submit": "Crear cuenta",
+    "loading": "Creando...",
+    "hasAccount": "¿Ya tienes una cuenta?",
+    "login": "Iniciar sesión",
+    "rules": {
+      "length": "Mínimo 8 caracteres",
+      "upper": "Una letra mayúscula",
+      "number": "Un número",
+      "special": "Un carácter especial (!@#$%...)"
+    },
+    "errors": {
+      "name": "Nombre muy corto",
+      "email": "Correo inválido",
+      "cpf": "CPF inválido",
+      "password": "La contraseña no cumple los requisitos",
+      "confirmPassword": "Las contraseñas no coinciden"
+    }
+  },
+  "recommendations": {
+    "hello": "Hola,",
+    "subtitle": "¿Qué vas a ver hoy?",
+    "label": "Contexto adicional",
+    "placeholder": "Ej: algo ligero para esta noche, un thriller intenso...",
+    "button": "Recomendar",
+    "title": "Recomendaciones",
+    "history": "Historial",
+    "movies": "películas",
+    "error": "Error al generar recomendaciones"
+  },
+  "profile": {
+    "title": "Preferencias de Cine",
+    "subtitle": "Personaliza tus recomendaciones contando lo que amas del cine",
+    "saved": "¡Guardado!",
+    "saving": "Guardando...",
+    "loading": "Cargando tus preferencias...",
+    "genres": {
+      "title": "Géneros favoritos",
+      "subtitle": "Selecciona los géneros que más te gustan"
+    },
+    "movies": {
+      "title": "Películas favoritas",
+      "subtitle": "Agrega películas que te hayan marcado",
+      "placeholder": "Escribe el nombre y presiona Enter"
+    },
+    "actors": {
+      "title": "Actores y actrices favoritos",
+      "subtitle": "¿A quién no te pierdes una película?",
+      "placeholder": "Nombre del actor/actriz"
+    },
+    "directors": {
+      "title": "Directores favoritos",
+      "subtitle": "Tus cineastas preferidos",
+      "placeholder": "Nombre del director"
+    },
+    "hint": "Presiona Enter o coma para agregar",
+    "save": "Guardar preferencias",
+    "back": "← Volver a recomendaciones"
+  },
+  "language": {
+    "label": "Idioma",
+    "pt": "Português",
+    "en": "English",
+    "es": "Español"
+  }
+}
