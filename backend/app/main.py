@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse
 
 from app.database import Base, engine
 from app.routers import auth_router, user_router, recommendation_router
+from app.routers import translation_router
 
 # Importa os models para o SQLAlchemy registrá-los antes de criar as tabelas
 import app.models.user_model           # noqa
@@ -37,7 +38,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         field = e["loc"][-1] if e["loc"] else "campo"
         msg   = e["msg"]
 
-        # Mensagens amigáveis por campo
         if field == "email":
             messages.append("E-mail inválido")
         elif field == "cpf":
@@ -58,6 +58,7 @@ PREFIX = "/api/v1"
 app.include_router(auth_router.router,           prefix=PREFIX)
 app.include_router(user_router.router,           prefix=PREFIX)
 app.include_router(recommendation_router.router, prefix=PREFIX)
+app.include_router(translation_router.router,    prefix=PREFIX)
 
 
 @app.get("/health")

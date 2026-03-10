@@ -1,12 +1,13 @@
 {
   "nav": {
     "preferences": "Cinema Preferences",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "manageUsers": "Manage Users"
   },
   "login": {
-    "title": "CineMatch",
+    "title": "CineMAGIC",
     "subtitle": "Your personal cinema guide",
-    "email": "E-mail",
+    "email": "Email",
     "password": "Password",
     "emailPlaceholder": "your@email.com",
     "passwordPlaceholder": "Your password",
@@ -14,14 +15,14 @@
     "loading": "Signing in...",
     "noAccount": "Don't have an account?",
     "register": "Sign up",
-    "error": "Invalid email or password"
+    "error": "Incorrect email or password"
   },
   "register": {
     "title": "Create account",
-    "subtitle": "Join CineMatch and discover your next favorite films",
+    "subtitle": "Join CineMAGIC and discover your next favourite films",
     "name": "Full name",
     "namePlaceholder": "Your name",
-    "email": "E-mail",
+    "email": "Email",
     "emailPlaceholder": "your@email.com",
     "cpf": "CPF",
     "cpfPlaceholder": "000.000.000-00",
@@ -51,36 +52,42 @@
     "hello": "Hello,",
     "subtitle": "What are you watching today?",
     "label": "Extra context",
-    "placeholder": "E.g.: something light for tonight, an intense thriller...",
+    "placeholder": "E.g.: something light for tonight, a tense thriller...",
     "button": "Recommend",
     "title": "Recommendations",
     "history": "History",
     "movies": "movies",
     "error": "Error generating recommendations"
   },
+  "ranks": {
+    "joia": "Raw Gem",
+    "preciosa": "Precious Stone",
+    "fragmento": "Magic Fragment",
+    "curinga": "Wild Card"
+  },
   "profile": {
     "title": "Cinema Preferences",
-    "subtitle": "Personalize your recommendations by telling us what you love in cinema",
+    "subtitle": "Personalise your recommendations by telling us what you love about cinema",
     "saved": "Saved!",
     "saving": "Saving...",
     "loading": "Loading your preferences...",
     "genres": {
-      "title": "Favorite genres",
+      "title": "Favourite genres",
       "subtitle": "Select the genres you enjoy most"
     },
     "movies": {
-      "title": "Favorite movies",
-      "subtitle": "Add movies that made an impression on you",
-      "placeholder": "Type the name and press Enter"
+      "title": "Favourite movies",
+      "subtitle": "Add films that left a mark on you",
+      "placeholder": "Type a name and press Enter"
     },
     "actors": {
-      "title": "Favorite actors & actresses",
-      "subtitle": "Who do you never miss a movie from?",
-      "placeholder": "Actor/actress name"
+      "title": "Favourite actors & actresses",
+      "subtitle": "Who do you never miss a film from?",
+      "placeholder": "Actor / actress name"
     },
     "directors": {
-      "title": "Favorite directors",
-      "subtitle": "Your favorite filmmakers",
+      "title": "Favourite directors",
+      "subtitle": "Your preferred filmmakers",
       "placeholder": "Director name"
     },
     "hint": "Press Enter or comma to add",

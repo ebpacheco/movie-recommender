@@ -4,77 +4,81 @@
 
     <div class="card">
       <div class="card-header">
-        <div class="logo">🎬</div>
+        <div class="logo">
+          <img src="/logo.svg" alt="CineMAGIC" class="logo-img" />
+        </div>
         <h1>{{ t('register.title') }}</h1>
         <p>{{ t('register.subtitle') }}</p>
       </div>
 
       <form @submit.prevent="handleRegister" class="form" novalidate>
+
+        <!-- Nome -->
         <div class="field" :class="{ error: errors.name, success: touched.name && !errors.name }">
           <label>{{ t('register.name') }}</label>
           <input v-model="form.name" type="text" :placeholder="t('register.namePlaceholder')"
-            @blur="touch('name'); validateName()" @input="touched.name && validateName()" />
+            @blur="touch('name'); validateName()"
+            @input="touched.name && validateName()" />
           <span class="field-msg" v-if="errors.name">{{ errors.name }}</span>
         </div>
 
+        <!-- Email -->
         <div class="field" :class="{ error: errors.email, success: touched.email && !errors.email }">
           <label>{{ t('register.email') }}</label>
           <input v-model="form.email" type="email" :placeholder="t('register.emailPlaceholder')"
-            @blur="touch('email'); validateEmail()" @input="touched.email && validateEmail()" />
+            @blur="touch('email'); validateEmail()"
+            @input="touched.email && validateEmail()" />
           <span class="field-msg" v-if="errors.email">{{ errors.email }}</span>
         </div>
 
+        <!-- CPF -->
         <div class="field" :class="{ error: errors.cpf, success: touched.cpf && !errors.cpf }">
           <label>{{ t('register.cpf') }}</label>
           <input v-model="form.cpf" type="text" :placeholder="t('register.cpfPlaceholder')"
-            maxlength="14" @blur="touch('cpf'); validateCpf()" @input="formatCpf" />
+            maxlength="14"
+            @blur="touch('cpf'); validateCpf()"
+            @input="formatCpf" />
           <span class="field-msg" v-if="errors.cpf">{{ errors.cpf }}</span>
         </div>
 
-        <div class="field" :class="{ error: errors.password, success: touched.password && !errors.password }">
-          <label>{{ t('register.password') }}</label>
-          <div class="input-wrapper">
-            <input v-model="form.password" :type="showPassword ? 'text' : 'password'"
-              :placeholder="t('register.passwordPlaceholder')"
-              @blur="touch('password'); validatePassword()"
-              @input="touched.password && validatePassword(); touched.confirmPassword && validateConfirm()" />
-            <button type="button" class="toggle-eye" @click="showPassword = !showPassword">
-              <svg v-if="!showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-              </svg>
-              <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            </button>
-          </div>
+        <!-- Senha -->
+        <PasswordInput
+          v-model="form.password"
+          :label="t('register.password')"
+          :placeholder="t('register.passwordPlaceholder')"
+          autocomplete="new-password"
+          :has-error="!!errors.password"
+          :has-success="touched.password && !errors.password"
+          @blur="touch('password'); validatePassword()"
+        >
           <div class="password-rules" v-if="touched.password || form.password">
-            <div class="rule" :class="{ ok: rules.length }"><span class="rule-dot"></span>{{ t('register.rules.length') }}</div>
-            <div class="rule" :class="{ ok: rules.upper }"><span class="rule-dot"></span>{{ t('register.rules.upper') }}</div>
-            <div class="rule" :class="{ ok: rules.number }"><span class="rule-dot"></span>{{ t('register.rules.number') }}</div>
-            <div class="rule" :class="{ ok: rules.special }"><span class="rule-dot"></span>{{ t('register.rules.special') }}</div>
+            <div class="rule" :class="{ ok: rules.length }">
+              <span class="rule-dot"></span>{{ t('register.rules.length') }}
+            </div>
+            <div class="rule" :class="{ ok: rules.upper }">
+              <span class="rule-dot"></span>{{ t('register.rules.upper') }}
+            </div>
+            <div class="rule" :class="{ ok: rules.number }">
+              <span class="rule-dot"></span>{{ t('register.rules.number') }}
+            </div>
+            <div class="rule" :class="{ ok: rules.special }">
+              <span class="rule-dot"></span>{{ t('register.rules.special') }}
+            </div>
           </div>
-        </div>
+        </PasswordInput>
 
-        <div class="field" :class="{ error: errors.confirmPassword, success: touched.confirmPassword && !errors.confirmPassword }">
-          <label>{{ t('register.confirmPassword') }}</label>
-          <div class="input-wrapper">
-            <input v-model="form.confirmPassword" :type="showConfirm ? 'text' : 'password'"
-              :placeholder="t('register.confirmPlaceholder')"
-              @blur="touch('confirmPassword'); validateConfirm()"
-              @input="touched.confirmPassword && validateConfirm()" />
-            <button type="button" class="toggle-eye" @click="showConfirm = !showConfirm">
-              <svg v-if="!showConfirm" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-              </svg>
-              <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            </button>
-          </div>
+        <!-- Confirmar senha -->
+        <PasswordInput
+          v-model="form.confirmPassword"
+          :label="t('register.confirmPassword')"
+          :placeholder="t('register.confirmPlaceholder')"
+          autocomplete="new-password"
+          :has-error="!!errors.confirmPassword"
+          :has-success="touched.confirmPassword && !errors.confirmPassword"
+          @blur="touch('confirmPassword'); validateConfirm()"
+        >
           <span class="field-msg" v-if="errors.confirmPassword">{{ errors.confirmPassword }}</span>
-        </div>
+        </PasswordInput>
 
         <div class="api-error" v-if="apiError">{{ apiError }}</div>
 
@@ -84,7 +88,8 @@
         </button>
 
         <p class="login-link">
-          {{ t('register.hasAccount') }} <router-link to="/login">{{ t('register.login') }}</router-link>
+          {{ t('register.hasAccount') }}
+          <router-link to="/login">{{ t('register.login') }}</router-link>
         </p>
       </form>
     </div>
@@ -96,17 +101,16 @@ import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import PasswordInput from '@/components/PasswordInput.vue'
 
-const { t } = useI18n()
+const { t }  = useI18n()
 const router = useRouter()
-const auth = useAuthStore()
+const auth   = useAuthStore()
 
-const form = reactive({ name: '', email: '', cpf: '', password: '', confirmPassword: '' })
-const errors = reactive({ name: '', email: '', cpf: '', password: '', confirmPassword: '' })
+const form    = reactive({ name: '', email: '', cpf: '', password: '', confirmPassword: '' })
+const errors  = reactive({ name: '', email: '', cpf: '', password: '', confirmPassword: '' })
 const touched = reactive({ name: false, email: false, cpf: false, password: false, confirmPassword: false })
-const showPassword = ref(false)
-const showConfirm = ref(false)
-const loading = ref(false)
+const loading  = ref(false)
 const apiError = ref('')
 
 const rules = computed(() => ({
@@ -126,15 +130,15 @@ const isFormValid = computed(() =>
 
 function touch(field) { touched[field] = true }
 
-function validateName()    { errors.name = form.name.trim().length < 2 ? t('register.errors.name') : '' }
-function validateEmail()   { errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : t('register.errors.email') }
-function validateCpf()     { errors.cpf = form.cpf.replace(/\D/g, '').length !== 11 ? t('register.errors.cpf') : '' }
-function validatePassword(){ errors.password = isPasswordValid.value ? '' : t('register.errors.password') }
-function validateConfirm() { errors.confirmPassword = form.password !== form.confirmPassword ? t('register.errors.confirmPassword') : '' }
+function validateName()     { errors.name    = form.name.trim().length < 2 ? t('register.errors.name') : '' }
+function validateEmail()    { errors.email   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : t('register.errors.email') }
+function validateCpf()      { errors.cpf     = form.cpf.replace(/\D/g, '').length !== 11 ? t('register.errors.cpf') : '' }
+function validatePassword() { errors.password = isPasswordValid.value ? '' : t('register.errors.password') }
+function validateConfirm()  { errors.confirmPassword = form.password !== form.confirmPassword ? t('register.errors.confirmPassword') : '' }
 
 function formatCpf() {
   let v = form.cpf.replace(/\D/g, '')
-  if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4')
+  if      (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4')
   else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
   else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2')
   form.cpf = v
@@ -146,10 +150,15 @@ async function handleRegister() {
   validateName(); validateEmail(); validateCpf(); validatePassword(); validateConfirm()
   if (!isFormValid.value) return
 
-  loading.value = true
+  loading.value  = true
   apiError.value = ''
   try {
-    await auth.register({ name: form.name, email: form.email, cpf: form.cpf.replace(/\D/g, ''), password: form.password })
+    await auth.register({
+      name:     form.name,
+      email:    form.email,
+      cpf:      form.cpf.replace(/\D/g, ''),
+      password: form.password,
+    })
     router.push('/recommendations')
   } catch (e) {
     apiError.value = e.response?.data?.detail || 'Erro ao criar conta. Tente novamente.'
@@ -195,19 +204,19 @@ async function handleRegister() {
 }
 
 .card-header { text-align: center; margin-bottom: 2rem; }
-.logo { font-size: 2.5rem; margin-bottom: 0.75rem; }
 
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.75rem;
-  color: #e8e0d0;
-  margin: 0 0 0.5rem;
-  font-weight: 600;
+.logo { margin-bottom: 1rem; }
+.logo-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(245, 197, 24, 0.45));
 }
 
-p { color: #6b6050; font-size: 0.875rem; line-height: 1.5; margin: 0; }
+h1 { font-family: 'Playfair Display', serif; font-size: 1.75rem; color: #e8e0d0; margin: 0 0 0.5rem; font-weight: 600; }
+p  { color: #6b6050; font-size: 0.875rem; line-height: 1.5; margin: 0; }
 
-.form { display: flex; flex-direction: column; gap: 1.25rem; }
+.form  { display: flex; flex-direction: column; gap: 1.25rem; }
 .field { display: flex; flex-direction: column; gap: 0.4rem; }
 
 label {
@@ -217,8 +226,6 @@ label {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-
-.input-wrapper { position: relative; }
 
 input {
   width: 100%;
@@ -231,32 +238,16 @@ input {
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
-
-.input-wrapper input { padding-right: 2.75rem; }
 input::placeholder { color: #3a3228; }
-input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
-.field.error input { border-color: rgba(220, 80, 80, 0.5); }
+input:focus   { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
+.field.error   input { border-color: rgba(220, 80, 80, 0.5); }
 .field.success input { border-color: rgba(80, 200, 120, 0.3); }
-
-.toggle-eye {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #5a5040;
-  padding: 0;
-  display: flex;
-  transition: color 0.2s;
-}
-.toggle-eye:hover { color: #d4af37; }
 
 .field-msg { font-size: 0.78rem; color: #e05555; }
 
-.password-rules { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.25rem; }
+.password-rules { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.35rem; }
 
 .rule {
   display: flex;
@@ -296,7 +287,6 @@ input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 
   gap: 0.5rem;
   margin-top: 0.5rem;
 }
-
 .btn-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3); }
 .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -308,7 +298,6 @@ input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .login-link { text-align: center; font-size: 0.85rem; color: #5a5040; margin: 0; }

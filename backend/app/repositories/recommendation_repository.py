@@ -1,5 +1,7 @@
 # app/repositories/recommendation_repository.py
 from uuid import UUID
+from datetime import date
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models.recommendation_model import Recommendation
@@ -20,6 +22,16 @@ class RecommendationRepository(IRecommendationRepository):
             .filter(Recommendation.user_id == user_id)
             .order_by(Recommendation.created_at.desc())
             .all()
+        )
+
+    def count_by_user_and_date(self, user_id: UUID, day: date) -> int:
+        return (
+            self.db.query(func.count(Recommendation.id))
+            .filter(
+                Recommendation.user_id == user_id,
+                func.date(Recommendation.created_at) == day,
+            )
+            .scalar() or 0
         )
 
     def save(self, recommendation: Recommendation) -> Recommendation:

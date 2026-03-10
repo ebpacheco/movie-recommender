@@ -5,13 +5,15 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import RecommendationsView from '@/views/RecommendationsView.vue'
 import ProfileView from '@/views/ProfileView.vue'
+import AdminView from '@/views/AdminView.vue'
 
 const routes = [
   { path: '/', redirect: '/recommendations' },
-  { path: '/login', component: LoginView, meta: { public: true } },
-  { path: '/register', component: RegisterView, meta: { public: true } },
+  { path: '/login',           component: LoginView,           meta: { public: true } },
+  { path: '/register',        component: RegisterView,        meta: { public: true } },
   { path: '/recommendations', component: RecommendationsView, meta: { requiresAuth: true } },
-  { path: '/profile', component: ProfileView, meta: { requiresAuth: true } },
+  { path: '/profile',         component: ProfileView,         meta: { requiresAuth: true } },
+  { path: '/admin',           component: AdminView,           meta: { requiresAuth: true, requiresAdmin: true } },
 ]
 
 const router = createRouter({
@@ -19,10 +21,17 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const auth = useAuthStore()
+
   if (to.meta.requiresAuth && !auth.isAuthenticated) return next('/login')
   if (to.meta.public && auth.isAuthenticated) return next('/recommendations')
+
+  if (to.meta.requiresAdmin) {
+    if (!auth.user) await auth.fetchUser()
+    if (auth.user?.role !== 'admin') return next('/recommendations')
+  }
+
   next()
 })
 

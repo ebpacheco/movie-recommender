@@ -15,7 +15,7 @@ def create(
     user_id: UUID                      = Depends(get_current_user_id),
     service: RecommendationService     = Depends(get_recommendation_service),
 ):
-    rec = service.generate(user_id, data.extra_prompt)
+    rec = service.generate(user_id, data.extra_prompt, data.language)
     return _to_response(rec)
 
 

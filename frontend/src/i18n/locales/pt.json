@@ -1,10 +1,11 @@
 {
   "nav": {
     "preferences": "Preferências de Cinema",
-    "logout": "Sair"
+    "logout": "Sair",
+    "manageUsers": "Gerenciar Usuários"
   },
   "login": {
-    "title": "CineMatch",
+    "title": "CineMAGIC",
     "subtitle": "Seu guia pessoal de cinema",
     "email": "E-mail",
     "password": "Senha",
@@ -18,7 +19,7 @@
   },
   "register": {
     "title": "Criar conta",
-    "subtitle": "Junte-se ao CineMatch e descubra seus próximos filmes favoritos",
+    "subtitle": "Junte-se ao CineMAGIC e descubra seus próximos filmes favoritos",
     "name": "Nome completo",
     "namePlaceholder": "Seu nome",
     "email": "E-mail",
@@ -57,6 +58,12 @@
     "history": "Histórico",
     "movies": "filmes",
     "error": "Erro ao gerar recomendações"
+  },
+  "ranks": {
+    "joia": "Joia Bruta",
+    "preciosa": "Pedra Preciosa",
+    "fragmento": "Fragmento Mágico",
+    "curinga": "Curinga"
   },
   "profile": {
     "title": "Preferências de Cinema",

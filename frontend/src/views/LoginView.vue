@@ -12,6 +12,7 @@
       </div>
 
       <form @submit.prevent="submit" class="form" novalidate>
+
         <div class="field" :class="{ error: touched.email && !form.email }">
           <label>{{ t('login.email') }}</label>
           <input
@@ -23,27 +24,13 @@
           />
         </div>
 
-        <div class="field">
-          <label>{{ t('login.password') }}</label>
-          <div class="input-wrapper">
-            <input
-              v-model="form.password"
-              :type="showPassword ? 'text' : 'password'"
-              :placeholder="t('login.passwordPlaceholder')"
-              @blur="touched.password = true"
-              autocomplete="current-password"
-            />
-            <button type="button" class="toggle-eye" @click="showPassword = !showPassword">
-              <svg v-if="!showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-              </svg>
-              <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                <line x1="1" y1="1" x2="23" y2="23"/>
-              </svg>
-            </button>
-          </div>
-        </div>
+        <PasswordInput
+          v-model="form.password"
+          :label="t('login.password')"
+          :placeholder="t('login.passwordPlaceholder')"
+          autocomplete="current-password"
+          @blur="touched.password = true"
+        />
 
         <div class="api-error" v-if="error">{{ error }}</div>
 
@@ -53,7 +40,8 @@
         </button>
 
         <p class="register-link">
-          {{ t('login.noAccount') }} <router-link to="/register">{{ t('login.register') }}</router-link>
+          {{ t('login.noAccount') }}
+          <router-link to="/register">{{ t('login.register') }}</router-link>
         </p>
       </form>
     </div>
@@ -65,13 +53,14 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import PasswordInput from '@/components/PasswordInput.vue'
 
-const { t } = useI18n()
-const auth    = useAuthStore()
-const router  = useRouter()
+const { t }  = useI18n()
+const auth   = useAuthStore()
+const router = useRouter()
+
 const loading = ref(false)
 const error   = ref('')
-const showPassword = ref(false)
 const form    = reactive({ email: '', password: '' })
 const touched = reactive({ email: false, password: false })
 
@@ -127,7 +116,6 @@ async function submit() {
 .card-header { text-align: center; margin-bottom: 2rem; }
 
 .logo { margin-bottom: 1rem; }
-
 .logo-img {
   width: 72px;
   height: 72px;
@@ -135,17 +123,10 @@ async function submit() {
   filter: drop-shadow(0 0 12px rgba(245, 197, 24, 0.45));
 }
 
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.75rem;
-  color: #d4af37;
-  margin: 0 0 0.4rem;
-  font-weight: 600;
-}
+h1 { font-family: 'Playfair Display', serif; font-size: 1.75rem; color: #d4af37; margin: 0 0 0.4rem; font-weight: 600; }
+p  { color: #6b6050; font-size: 0.875rem; margin: 0; }
 
-p { color: #6b6050; font-size: 0.875rem; margin: 0; }
-
-.form { display: flex; flex-direction: column; gap: 1.25rem; }
+.form  { display: flex; flex-direction: column; gap: 1.25rem; }
 .field { display: flex; flex-direction: column; gap: 0.4rem; }
 
 label {
@@ -155,8 +136,6 @@ label {
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
-
-.input-wrapper { position: relative; }
 
 input {
   width: 100%;
@@ -169,30 +148,11 @@ input {
   font-size: 0.9rem;
   outline: none;
   transition: all 0.2s;
+  box-sizing: border-box;
 }
-
-.input-wrapper input { padding-right: 2.75rem; }
 input::placeholder { color: #3a3228; }
-input:focus {
-  border-color: rgba(212, 175, 55, 0.4);
-  background: rgba(212, 175, 55, 0.04);
-}
+input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
 .field.error input { border-color: rgba(220, 80, 80, 0.4); }
-
-.toggle-eye {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #5a5040;
-  padding: 0;
-  display: flex;
-  transition: color 0.2s;
-}
-.toggle-eye:hover { color: #d4af37; }
 
 .api-error {
   background: rgba(220, 80, 80, 0.1);
@@ -220,11 +180,7 @@ input:focus {
   justify-content: center;
   margin-top: 0.25rem;
 }
-
-.btn-submit:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
-}
+.btn-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3); }
 .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .spinner {
@@ -235,7 +191,6 @@ input:focus {
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
 }
-
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .register-link { text-align: center; font-size: 0.85rem; color: #5a5040; margin: 0; }

@@ -3,10 +3,24 @@ from app.models.profile_model import Profile
 from app.builders.interfaces.i_prompt_builder import IPromptBuilder
 
 
+LANGUAGE_NAMES = {
+    'pt': 'português brasileiro',
+    'en': 'English',
+    'es': 'español',
+}
+
+
 class MoviePromptBuilder(IPromptBuilder):
 
-    def build(self, profile: Profile, extra_context: str | None = None) -> str:
-        parts = ["Recomende 5 filmes para um usuário com as seguintes preferências:"]
+    def build(
+        self,
+        profile:       Profile,
+        extra_context: str | None = None,
+        language:      str = 'pt',
+    ) -> str:
+        lang_name = LANGUAGE_NAMES.get(language, 'português brasileiro')
+
+        parts = [f"Recomende 6 filmes para um usuário com as seguintes preferências:"]
 
         if profile.favorite_genres:
             parts.append(f"- Gêneros favoritos: {', '.join(profile.favorite_genres)}")
@@ -25,35 +39,27 @@ class MoviePromptBuilder(IPromptBuilder):
 
         parts.append("Priorize filmes que ainda não estão na lista de favoritos do usuário.")
 
-        # 🔹 Instruções para resposta estruturada
-        parts.append("""
-Retorne APENAS um JSON válido.
+        parts.append(f"""
+IMPORTANTE: Escreva o campo "description" de cada filme em {lang_name}.
+O campo "title" deve ser o título original do filme (em inglês ou no idioma original).
+O campo "genre" deve ser escrito em {lang_name}.
+
+Retorne APENAS um JSON válido com exatamente 6 filmes, ordenados do mais recomendado para o menos.
 
 Formato obrigatório:
 
 [
-  {
-    "title": "Nome do filme",
+  {{
+    "title": "Nome original do filme",
     "year": 2000,
     "genre": "Gênero principal",
     "description": "Breve descrição do motivo da recomendação"
-  }
-]
-
-Exemplo de resposta:
-
-[
-  {
-    "title": "Interstellar",
-    "year": 2014,
-    "genre": "Sci-Fi",
-    "description": "Explora conceitos científicos profundos e viagens espaciais."
-  }
+  }}
 ]
 
 Regras:
-- Retorne exatamente 5 filmes
-- Não inclua explicações
+- Retorne exatamente 6 filmes
+- Não inclua explicações fora do JSON
 - Não use ```json ou markdown
 """)
 

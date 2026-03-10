@@ -21,6 +21,18 @@ class IUserRepository(ABC):
         pass
 
     @abstractmethod
+    def find_all(self) -> list[User]:
+        pass
+
+    @abstractmethod
+    def find_paginated(self, page: int, page_size: int) -> tuple[list[User], int]:
+        pass
+
+    @abstractmethod
+    def delete(self, user_id: UUID) -> None:
+        pass
+
+    @abstractmethod
     def save(self, user: User) -> User:
         pass
 

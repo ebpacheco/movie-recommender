@@ -1,24 +1,25 @@
 {
   "nav": {
     "preferences": "Preferencias de Cine",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "manageUsers": "Gestionar Usuarios"
   },
   "login": {
-    "title": "CineMatch",
+    "title": "CineMAGIC",
     "subtitle": "Tu guía personal de cine",
     "email": "Correo electrónico",
     "password": "Contraseña",
     "emailPlaceholder": "tu@correo.com",
     "passwordPlaceholder": "Tu contraseña",
     "submit": "Iniciar sesión",
-    "loading": "Iniciando...",
+    "loading": "Iniciando sesión...",
     "noAccount": "¿No tienes cuenta?",
     "register": "Regístrate",
     "error": "Correo o contraseña incorrectos"
   },
   "register": {
     "title": "Crear cuenta",
-    "subtitle": "Únete a CineMatch y descubre tus próximas películas favoritas",
+    "subtitle": "Únete a CineMAGIC y descubre tus próximas películas favoritas",
     "name": "Nombre completo",
     "namePlaceholder": "Tu nombre",
     "email": "Correo electrónico",
@@ -40,7 +41,7 @@
       "special": "Un carácter especial (!@#$%...)"
     },
     "errors": {
-      "name": "Nombre muy corto",
+      "name": "Nombre demasiado corto",
       "email": "Correo inválido",
       "cpf": "CPF inválido",
       "password": "La contraseña no cumple los requisitos",
@@ -51,12 +52,18 @@
     "hello": "Hola,",
     "subtitle": "¿Qué vas a ver hoy?",
     "label": "Contexto adicional",
-    "placeholder": "Ej: algo ligero para esta noche, un thriller intenso...",
+    "placeholder": "Ej: algo ligero para esta noche, un thriller tenso...",
     "button": "Recomendar",
     "title": "Recomendaciones",
     "history": "Historial",
     "movies": "películas",
     "error": "Error al generar recomendaciones"
+  },
+  "ranks": {
+    "joia": "Gema Bruta",
+    "preciosa": "Piedra Preciosa",
+    "fragmento": "Fragmento Mágico",
+    "curinga": "Comodín"
   },
   "profile": {
     "title": "Preferencias de Cine",
@@ -70,12 +77,12 @@
     },
     "movies": {
       "title": "Películas favoritas",
-      "subtitle": "Agrega películas que te hayan marcado",
+      "subtitle": "Añade películas que te marcaron",
       "placeholder": "Escribe el nombre y presiona Enter"
     },
     "actors": {
       "title": "Actores y actrices favoritos",
-      "subtitle": "¿A quién no te pierdes una película?",
+      "subtitle": "¿A quién no te pierdes ninguna película?",
       "placeholder": "Nombre del actor/actriz"
     },
     "directors": {
@@ -83,7 +90,7 @@
       "subtitle": "Tus cineastas preferidos",
       "placeholder": "Nombre del director"
     },
-    "hint": "Presiona Enter o coma para agregar",
+    "hint": "Presiona Enter o coma para añadir",
     "save": "Guardar preferencias",
     "back": "← Volver a recomendaciones"
   },

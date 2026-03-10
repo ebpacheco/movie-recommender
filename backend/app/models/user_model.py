@@ -1,10 +1,17 @@
 # app/models/user_model.py
 import uuid
-from sqlalchemy import Column, String, ARRAY
+import enum
+from sqlalchemy import Column, String, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+
+
+class UserRole(str, enum.Enum):
+    free    = "free"
+    premium = "premium"
+    admin   = "admin"
 
 
 class User(Base):
@@ -15,6 +22,7 @@ class User(Base):
     email         = Column(String, unique=True, nullable=False, index=True)
     cpf           = Column(String(11), unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
+    role          = Column(Enum(UserRole), nullable=False, default=UserRole.free)
 
     profile         = relationship("Profile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     recommendations = relationship("Recommendation", back_populates="user", cascade="all, delete-orphan")

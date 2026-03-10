@@ -12,7 +12,8 @@ class MovieResult(BaseModel):
 
 
 class RecommendationRequest(BaseModel):
-    extra_prompt: str | None = None  # contexto adicional do usuário, ex: "quero algo leve pra hoje"
+    extra_prompt: str | None = None
+    language:     str = 'pt'  # idioma para geração das descrições
 
 
 class RecommendationResponse(BaseModel):

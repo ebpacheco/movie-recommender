@@ -1,6 +1,7 @@
 # app/repositories/interfaces/i_recommendation_repository.py
 from abc import ABC, abstractmethod
 from uuid import UUID
+from datetime import date
 
 from app.models.recommendation_model import Recommendation
 
@@ -13,6 +14,10 @@ class IRecommendationRepository(ABC):
 
     @abstractmethod
     def find_all_by_user_id(self, user_id: UUID) -> list[Recommendation]:
+        pass
+
+    @abstractmethod
+    def count_by_user_and_date(self, user_id: UUID, day: date) -> int:
         pass
 
     @abstractmethod
