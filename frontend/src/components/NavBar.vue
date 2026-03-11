@@ -3,7 +3,7 @@
     <div class="navbar-inner">
 
       <router-link to="/recommendations" class="brand">
-        <img src="/logo.svg" alt="CineMAGIC" class="brand-logo" />
+        <img src="/logo.png" alt="CineMAGIC" class="brand-logo" />
         <span class="brand-name">{{ appName }}</span>
       </router-link>
 

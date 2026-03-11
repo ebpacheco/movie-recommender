@@ -98,7 +98,11 @@
     },
     "hint": "Press Enter or comma to add",
     "save": "Save preferences",
-    "back": "← Back to recommendations"
+    "back": "← Back to recommendations",
+    "streaming": {
+      "title": "Your Streamings",
+      "subtitle": "Select the platforms you subscribe to"
+    }
   },
   "language": {
     "label": "Language",

@@ -1,6 +1,6 @@
 # app/schemas/user_schema.py
 from uuid import UUID
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from app.models.user_model import UserRole
 
 
@@ -19,6 +19,7 @@ class ProfileBase(BaseModel):
     favorite_movies:    list[str] = []
     favorite_actors:    list[str] = []
     favorite_directors: list[str] = []
+    streaming_platforms: list[str] = []
 
 
 class ProfileCreate(ProfileBase):
@@ -58,8 +59,14 @@ class ProfileUpdate(ProfileBase):
 
 
 class ProfileResponse(ProfileBase):
-    id:      UUID
-    user_id: UUID
+    id:               UUID
+    user_id:          UUID
+    streaming_platforms: list[str] = []
+
+    @field_validator('streaming_platforms', mode='before')
+    @classmethod
+    def coerce_streaming(cls, v):
+        return v or []
 
     class Config:
         from_attributes = True

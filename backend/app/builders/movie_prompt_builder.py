@@ -37,7 +37,8 @@ class MoviePromptBuilder(IPromptBuilder):
         genres    = names(profile.favorite_genres,    PROMPT_LIMITS['genres'])
         movies    = names(profile.favorite_movies,    PROMPT_LIMITS['movies'])
         actors    = names(profile.favorite_actors,    PROMPT_LIMITS['actors'])
-        directors = names(profile.favorite_directors, PROMPT_LIMITS['directors'])
+        directors  = names(profile.favorite_directors, PROMPT_LIMITS['directors'])
+        streamings = (profile.streaming_platforms or [])
 
         parts = ["Recomende 6 filmes para um usuário com as seguintes preferências:"]
 
@@ -52,6 +53,10 @@ class MoviePromptBuilder(IPromptBuilder):
 
         if directors:
             parts.append(f"- Diretores favoritos: {', '.join(directors)}")
+
+        if streamings:
+            parts.append(f"- Plataformas de streaming que o usuário tem acesso: {', '.join(streamings)}")
+            parts.append("- PRIORIZE filmes disponíveis nessas plataformas, mas pode recomendar outros se forem muito relevantes")
 
         if not any([genres, movies, actors, directors]):
             parts.append("- Sem preferências específicas: recomende filmes variados e populares")

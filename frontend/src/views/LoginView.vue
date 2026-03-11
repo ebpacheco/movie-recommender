@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card-header">
         <div class="logo">
-          <img src="/logo.svg" alt="CineMAGIC" class="logo-img" />
+          <img src="/logo.png" alt="CineMAGIC" class="logo-img" />
         </div>
         <h1>{{ t('login.title') }}</h1>
         <p>{{ t('login.subtitle') }}</p>

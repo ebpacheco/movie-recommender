@@ -87,6 +87,61 @@
           :empty-hint="t('profile.directors.emptyHint')"
         />
 
+        <!-- Streamings -->
+        <section class="section">
+          <div class="section-header">
+            <span class="section-icon">📺</span>
+            <div>
+              <h2>{{ t('profile.streaming.title') }}</h2>
+              <p>{{ t('profile.streaming.subtitle') }}</p>
+            </div>
+            <span class="limit-badge" v-if="profile.streaming_platforms.length">
+              {{ profile.streaming_platforms.length }} selecionado{{ profile.streaming_platforms.length > 1 ? 's' : '' }}
+            </span>
+          </div>
+
+          <div v-if="providersLoading" class="providers-loading">
+            <div class="spinner-sm"></div>
+            <span>Carregando plataformas...</span>
+          </div>
+
+          <template v-else>
+            <!-- Populares -->
+            <div class="providers-group-label">Populares</div>
+            <div class="providers-grid providers-grid--popular">
+              <button
+                v-for="provider in popularProviders"
+                :key="provider.id"
+                type="button"
+                class="provider-logo-btn"
+                :class="{ active: profile.streaming_platforms.includes(provider.id) }"
+                @click="toggleStreaming(provider.id)"
+                :title="provider.name"
+              >
+                <img :src="provider.logo" :alt="provider.name" />
+                <div class="provider-check">✓</div>
+              </button>
+            </div>
+
+            <!-- Outros -->
+            <div class="providers-group-label" style="margin-top: 1rem">Outros</div>
+            <div class="providers-grid providers-grid--others">
+              <button
+                v-for="provider in otherProviders"
+                :key="provider.id"
+                type="button"
+                class="provider-logo-btn provider-logo-btn--sm"
+                :class="{ active: profile.streaming_platforms.includes(provider.id) }"
+                @click="toggleStreaming(provider.id)"
+                :title="provider.name"
+              >
+                <img :src="provider.logo" :alt="provider.name" />
+                <div class="provider-check">✓</div>
+              </button>
+            </div>
+          </template>
+        </section>
+
       </div>
     </div>
   </div>
@@ -98,7 +153,8 @@ import { useI18n }            from 'vue-i18n'
 import NavBar            from '@/components/NavBar.vue'
 import AutocompleteInput from '@/components/AutocompleteInput.vue'
 import api               from '@/services/api'
-import { enrichItems }        from '@/composables/useTmdbImages'
+import { enrichItems }             from '@/composables/useTmdbImages'
+import { useStreamingProviders }   from '@/composables/useStreamingProviders'
 import { useProfileAutosave } from '@/composables/useProfileAutosave'
 
 const { t } = useI18n()
@@ -106,13 +162,15 @@ const { t } = useI18n()
 const loading = ref(true)
 
 const profile = reactive({
-  favorite_genres:    [],
-  favorite_movies:    [],
-  favorite_actors:    [],
-  favorite_directors: [],
+  favorite_genres:     [],
+  favorite_movies:     [],
+  favorite_actors:     [],
+  favorite_directors:  [],
+  streaming_platforms: [],
 })
 
 const { saveStatus, ready } = useProfileAutosave(profile)
+const { popular: popularProviders, others: otherProviders, loading: providersLoading } = useStreamingProviders()
 
 const genreOptions = [
   { value: 'Ação',               label: 'Ação',               emoji: '💥' },
@@ -149,10 +207,11 @@ async function fetchProfile() {
 
     // Exibe nomes imediatamente sem foto
     Object.assign(profile, {
-      favorite_genres:    data.favorite_genres || [],
-      favorite_movies:    (data.favorite_movies    || []).map(n => ({ id: n, name: n, image: null })),
-      favorite_actors:    (data.favorite_actors    || []).map(n => ({ id: n, name: n, image: null })),
-      favorite_directors: (data.favorite_directors || []).map(n => ({ id: n, name: n, image: null })),
+      favorite_genres:     data.favorite_genres     || [],
+      favorite_movies:     (data.favorite_movies    || []).map(n => ({ id: n, name: n, image: null })),
+      favorite_actors:     (data.favorite_actors    || []).map(n => ({ id: n, name: n, image: null })),
+      favorite_directors:  (data.favorite_directors || []).map(n => ({ id: n, name: n, image: null })),
+      streaming_platforms: data.streaming_platforms || [],
     })
 
     loading.value = false
@@ -177,6 +236,12 @@ async function fetchProfile() {
     loading.value = false
     setTimeout(() => ready.value = true, 100)
   }
+}
+
+function toggleStreaming(id) {
+  const idx = profile.streaming_platforms.indexOf(id)
+  if (idx >= 0) profile.streaming_platforms.splice(idx, 1)
+  else profile.streaming_platforms.push(id)
 }
 
 onMounted(fetchProfile)
@@ -234,4 +299,70 @@ h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af37; 
 .genre-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* Providers grid */
+.providers-loading { display: flex; align-items: center; gap: 0.75rem; color: #6b6050; font-size: 0.85rem; padding: 1rem 0; }
+.spinner-sm { width: 18px; height: 18px; border: 2px solid rgba(212,175,55,0.15); border-top-color: #d4af37; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
+
+.providers-group-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #3a3228;
+  margin-bottom: 0.6rem;
+}
+
+.providers-grid { display: flex; flex-wrap: wrap; }
+
+.providers-grid--popular { gap: 0.6rem; }
+.providers-grid--others  { gap: 0.4rem; }
+
+/* Botão só com logo */
+.provider-logo-btn {
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.18s;
+  flex-shrink: 0;
+}
+.provider-logo-btn img {
+  display: block;
+  object-fit: cover;
+}
+
+/* Tamanho grande — populares */
+.provider-logo-btn { width: 52px; height: 52px; border-radius: 12px; }
+.provider-logo-btn img { width: 52px; height: 52px; }
+
+/* Tamanho pequeno — outros */
+.provider-logo-btn--sm { width: 36px; height: 36px; border-radius: 8px; }
+.provider-logo-btn--sm img { width: 36px; height: 36px; }
+
+.provider-logo-btn:hover { border-color: rgba(212,175,55,0.3); transform: scale(1.06); }
+
+.provider-logo-btn.active {
+  border-color: #d4af37;
+  box-shadow: 0 0 12px rgba(212,175,55,0.3);
+}
+
+/* Check overlay quando ativo */
+.provider-check {
+  position: absolute;
+  inset: 0;
+  background: rgba(212,175,55,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #d4af37;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.provider-logo-btn.active .provider-check { opacity: 1; }
 </style>

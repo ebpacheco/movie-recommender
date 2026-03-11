@@ -28,6 +28,7 @@
         <span class="movie-year" v-if="movie.year">{{ movie.year }}</span>
       </div>
       <span class="movie-genre">{{ movie.genre }}</span>
+
       <div class="ratings" v-if="movie.imdb || movie.rottenTomatoes">
         <span class="rating imdb" v-if="movie.imdb">
           <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" alt="IMDb" />
@@ -35,6 +36,25 @@
         </span>
         <span class="rating rt" v-if="movie.rottenTomatoes">🍅 {{ movie.rottenTomatoes }}</span>
       </div>
+
+      <!-- Streaming providers -->
+      <div class="streaming" v-if="movie.streamingProviders?.length">
+        <span class="streaming-label">Disponível em</span>
+        <div class="streaming-logos">
+          <div
+            v-for="provider in movie.streamingProviders.slice(0, 5)"
+            :key="provider.name"
+            class="provider-logo"
+            :title="provider.name"
+          >
+            <img :src="provider.logo" :alt="provider.name" />
+          </div>
+        </div>
+      </div>
+      <div class="streaming streaming--unavailable" v-else-if="movie.tmdbId">
+        <span>Não disponível no streaming BR</span>
+      </div>
+
       <p class="movie-desc">{{ movie.description }}</p>
     </div>
   </div>
@@ -85,23 +105,12 @@ defineEmits(['click'])
 .movie-card.curinga:hover   { transform: translateY(-5px); box-shadow: 0 16px 42px rgba(46, 125, 50, 0.16),  0 0 0 1px rgba(46, 125, 50, 0.3); }
 
 .rank-badge {
-  position: absolute;
-  top: -14px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.28rem 0.85rem;
-  border-radius: 50px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  z-index: 10;
-  border: 1px solid;
+  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 0.35rem;
+  padding: 0.28rem 0.85rem; border-radius: 50px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+  white-space: nowrap; z-index: 10; border: 1px solid;
 }
-
 .rank-badge.joia      { background: linear-gradient(135deg, #040e1a, #081828); border-color: rgba(30, 144, 255, 0.5); color: #60b8ff; box-shadow: 0 4px 16px rgba(30, 144, 255, 0.25); }
 .rank-badge.preciosa  { background: linear-gradient(135deg, #130820, #1e0f30); border-color: rgba(155, 48, 232, 0.5); color: #c084fc; box-shadow: 0 4px 16px rgba(155, 48, 232, 0.22); }
 .rank-badge.fragmento { background: linear-gradient(135deg, #1a1400, #2a2000); border-color: rgba(245, 197, 24, 0.45); color: #f5c518; box-shadow: 0 4px 16px rgba(245, 197, 24, 0.2); }
@@ -118,7 +127,6 @@ defineEmits(['click'])
 
 .play-overlay { position: absolute; inset: 0; background: rgba(8, 8, 12, 0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; opacity: 0; transition: opacity 0.25s; }
 .movie-card:hover .play-overlay { opacity: 1; }
-
 .play-btn { width: 56px; height: 56px; border-radius: 50%; background: rgba(212, 175, 55, 0.92); display: flex; align-items: center; justify-content: center; color: #08080c; box-shadow: 0 4px 24px rgba(212, 175, 55, 0.55); transition: transform 0.2s; }
 .movie-card:hover .play-btn { transform: scale(1.1); }
 .play-label { font-size: 0.75rem; font-weight: 500; color: #fff; letter-spacing: 0.05em; text-shadow: 0 1px 6px rgba(0,0,0,0.9); }
@@ -134,6 +142,44 @@ defineEmits(['click'])
 .rating.imdb { background: rgba(245, 197, 24, 0.1); border: 1px solid rgba(245, 197, 24, 0.2); color: #f5c518; }
 .rating.imdb img { height: 12px; width: auto; }
 .rating.rt { background: rgba(250, 80, 80, 0.08); border: 1px solid rgba(250, 80, 80, 0.2); color: #fa7070; }
+
+/* Streaming */
+.streaming {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.1rem;
+}
+.streaming-label {
+  font-size: 0.7rem;
+  color: #6b6050;
+  white-space: nowrap;
+}
+.streaming-logos {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+.provider-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.provider-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.streaming--unavailable span {
+  font-size: 0.7rem;
+  color: #3a3228;
+  font-style: italic;
+}
 
 .movie-desc { font-size: 0.82rem; color: #6b6050; line-height: 1.55; margin: 0; }
 </style>

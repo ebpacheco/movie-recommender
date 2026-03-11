@@ -1,5 +1,5 @@
 // src/composables/useMovieEnrich.js
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import api from '@/services/api'
@@ -7,6 +7,7 @@ import api from '@/services/api'
 const TMDB_TOKEN   = import.meta.env.VITE_TMDB_TOKEN
 const OMDB_KEY     = import.meta.env.VITE_OMDB_API_KEY
 const TMDB_IMG_URL = 'https://image.tmdb.org/t/p/w342'
+const TMDB_LOGO_URL = 'https://image.tmdb.org/t/p/w45'
 
 function tmdbLocale(lang) {
   return lang === 'pt' ? 'pt-BR' : lang === 'es' ? 'es-ES' : 'en-US'
@@ -20,10 +21,11 @@ export async function fetchPoster(title, year, lang) {
     })
     const result = data.results?.[0]
     return {
+      tmdbId:     result?.id || null,
       poster:     result?.poster_path ? `${TMDB_IMG_URL}${result.poster_path}` : null,
-      localTitle: result?.title       || title,
+      localTitle: result?.title || title,
     }
-  } catch { return { poster: null, localTitle: title } }
+  } catch { return { tmdbId: null, poster: null, localTitle: title } }
 }
 
 export async function fetchRatings(title, year) {
@@ -34,7 +36,7 @@ export async function fetchRatings(title, year) {
     if (data.Response === 'False') return {}
     const rt = data.Ratings?.find(r => r.Source === 'Rotten Tomatoes')
     return {
-      imdb:          data.imdbRating !== 'N/A' ? data.imdbRating : null,
+      imdb:           data.imdbRating !== 'N/A' ? data.imdbRating : null,
       rottenTomatoes: rt?.Value || null,
     }
   } catch { return {} }
@@ -65,14 +67,35 @@ export async function fetchTrailerKey(title, year) {
   } catch { return null }
 }
 
+export async function fetchStreamingProviders(tmdbId) {
+  if (!tmdbId) return []
+  try {
+    const { data } = await axios.get(
+      `https://api.themoviedb.org/3/movie/${tmdbId}/watch/providers`,
+      { headers: { Authorization: `Bearer ${TMDB_TOKEN}` } }
+    )
+    const br = data.results?.BR
+    // flatrate = assinatura (Netflix, Prime, Disney+, etc.)
+    const providers = br?.flatrate || []
+    return providers.map(p => ({
+      name: p.provider_name,
+      logo: `${TMDB_LOGO_URL}${p.logo_path}`,
+    }))
+  } catch { return [] }
+}
+
 export async function enrichMovies(list, lang) {
   return Promise.all(
     list.map(async (movie) => {
-      const [{ poster, localTitle }, ratings] = await Promise.all([
+      const [{ tmdbId, poster, localTitle }, ratings] = await Promise.all([
         fetchPoster(movie.title, movie.year, lang),
         fetchRatings(movie.title, movie.year),
       ])
-      return { ...movie, poster, localTitle, ...ratings }
+
+      // Busca providers usando o tmdbId já obtido
+      const streamingProviders = await fetchStreamingProviders(tmdbId)
+
+      return { ...movie, tmdbId, poster, localTitle, ...ratings, streamingProviders }
     })
   )
 }
