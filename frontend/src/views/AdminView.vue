@@ -65,21 +65,17 @@
 
         <!-- Paginação -->
         <div class="pagination" v-if="totalPages > 1">
-          <button class="page-btn" @click="goTo(1)"        :disabled="page === 1">««</button>
-          <button class="page-btn" @click="goTo(page - 1)" :disabled="page === 1">‹</button>
-
+          <button class="page-btn" @click="goTo(1)"            :disabled="page === 1">««</button>
+          <button class="page-btn" @click="goTo(page - 1)"     :disabled="page === 1">‹</button>
           <button
-            v-for="p in visiblePages"
-            :key="p"
+            v-for="p in visiblePages" :key="p"
             class="page-btn"
             :class="{ active: p === page, ellipsis: p === '...' }"
             :disabled="p === '...'"
             @click="p !== '...' && goTo(p)"
           >{{ p }}</button>
-
-          <button class="page-btn" @click="goTo(page + 1)" :disabled="page === totalPages">›</button>
-          <button class="page-btn" @click="goTo(totalPages)" :disabled="page === totalPages">»»</button>
-
+          <button class="page-btn" @click="goTo(page + 1)"     :disabled="page === totalPages">›</button>
+          <button class="page-btn" @click="goTo(totalPages)"   :disabled="page === totalPages">»»</button>
           <span class="page-info">Página {{ page }} de {{ totalPages }}</span>
         </div>
       </template>
@@ -87,7 +83,7 @@
       <div v-if="error" class="api-error">{{ error }}</div>
     </div>
 
-    <!-- Modal de confirmação de exclusão -->
+    <!-- Modal exclusão -->
     <transition name="modal">
       <div class="modal-overlay" v-if="deleteTarget" @click.self="deleteTarget = null">
         <div class="modal-confirm">
@@ -106,114 +102,19 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import NavBar from '@/components/NavBar.vue'
-import api from '@/services/api'
-import { useAuthStore } from '@/stores/auth'
+import { onMounted } from 'vue'
+import NavBar           from '@/components/NavBar.vue'
+import { useAdminUsers } from '@/composables/useAdminUsers'
 
-const auth         = useAuthStore()
-const users        = ref([])
-const loading      = ref(false)
-const saving       = ref(false)
-const error        = ref('')
-const editingId    = ref(null)
-const editForm     = ref({ name: '', email: '', role: 'free' })
-const deleteTarget = ref(null)
-
-// Paginação
-const page       = ref(1)
-const pageSize   = 20
-const total      = ref(0)
-const totalPages = ref(1)
-
-const currentUserId = computed(() => auth.user?.id)
-const rangeStart    = computed(() => total.value === 0 ? 0 : (page.value - 1) * pageSize + 1)
-const rangeEnd      = computed(() => Math.min(page.value * pageSize, total.value))
-
-// Gera array de páginas visíveis com reticências: [1, '...', 4, 5, 6, '...', 12]
-const visiblePages = computed(() => {
-  const total = totalPages.value
-  const cur   = page.value
-  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
-
-  const pages = []
-  if (cur <= 4) {
-    pages.push(1, 2, 3, 4, 5, '...', total)
-  } else if (cur >= total - 3) {
-    pages.push(1, '...', total - 4, total - 3, total - 2, total - 1, total)
-  } else {
-    pages.push(1, '...', cur - 1, cur, cur + 1, '...', total)
-  }
-  return pages
-})
-
-async function loadUsers() {
-  loading.value = true
-  error.value   = ''
-  try {
-    const { data } = await api.get('/users/admin/users', {
-      params: { page: page.value, page_size: pageSize },
-    })
-    users.value      = data.items
-    total.value      = data.total
-    totalPages.value = data.pages
-  } catch {
-    error.value = 'Erro ao carregar usuários.'
-  } finally {
-    loading.value = false
-  }
-}
-
-async function goTo(p) {
-  if (p < 1 || p > totalPages.value || p === page.value) return
-  page.value = p
-  cancelEdit()
-  await loadUsers()
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-
-function startEdit(user) {
-  editingId.value = user.id
-  editForm.value  = { name: user.name, email: user.email, role: user.role }
-}
-
-function cancelEdit() {
-  editingId.value = null
-}
-
-async function saveUser(userId) {
-  saving.value = true
-  error.value  = ''
-  try {
-    await api.patch(`/users/admin/users/${userId}`, editForm.value)
-    await loadUsers()
-    editingId.value = null
-  } catch (e) {
-    error.value = e.response?.data?.detail || 'Erro ao salvar usuário.'
-  } finally {
-    saving.value = false
-  }
-}
-
-function confirmDelete(user) {
-  deleteTarget.value = user
-}
-
-async function deleteUser() {
-  saving.value = true
-  error.value  = ''
-  try {
-    await api.delete(`/users/admin/users/${deleteTarget.value.id}`)
-    deleteTarget.value = null
-    // Se era o último da página, volta uma página
-    if (users.value.length === 1 && page.value > 1) page.value--
-    await loadUsers()
-  } catch (e) {
-    error.value = e.response?.data?.detail || 'Erro ao excluir usuário.'
-  } finally {
-    saving.value = false
-  }
-}
+const {
+  users, loading, saving, error,
+  page, total, totalPages,
+  editingId, editForm, deleteTarget,
+  currentUserId, rangeStart, rangeEnd, visiblePages,
+  loadUsers, goTo,
+  startEdit, cancelEdit, saveUser,
+  confirmDelete, deleteUser,
+} = useAdminUsers()
 
 onMounted(loadUsers)
 </script>
@@ -223,20 +124,19 @@ onMounted(loadUsers)
 
 * { box-sizing: border-box; }
 
-.page { min-height: 100vh; background: #08080c; font-family: 'DM Sans', sans-serif; color: #e8e0d0; }
+.page    { min-height: 100vh; background: #08080c; font-family: 'DM Sans', sans-serif; color: #e8e0d0; }
 .content { max-width: 1000px; margin: 0 auto; padding: 96px 2rem 4rem; display: flex; flex-direction: column; gap: 1.75rem; }
 
 .hero { padding: 1.5rem 0 0.5rem; }
 h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0 0 0.4rem; color: #e8e0d0; font-weight: 600; }
-.gold { color: #d4af37; }
+.gold  { color: #d4af37; }
 .hero p { color: #6b6050; font-size: 0.9rem; margin: 0; }
 
-.loading-bar { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; font-size: 0.82rem; color: #8a7a5a; }
+.loading-bar  { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.15); border-radius: 10px; font-size: 0.82rem; color: #8a7a5a; }
 .spinner-mini { width: 13px; height: 13px; border: 2px solid rgba(212,175,55,0.15); border-top-color: #d4af37; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .users-table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid rgba(212,175,55,0.15); }
-
 .users-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
 .users-table thead tr { background: rgba(212,175,55,0.06); border-bottom: 1px solid rgba(212,175,55,0.15); }
 .users-table th { padding: 0.875rem 1rem; text-align: left; font-size: 0.72rem; font-weight: 600; color: #8a7a5a; letter-spacing: 0.06em; text-transform: uppercase; }
@@ -247,7 +147,7 @@ h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0 0 0.4rem
 .users-table td { padding: 0.875rem 1rem; color: #c8b898; vertical-align: middle; }
 .muted { color: #6b6050; }
 
-.edit-input { background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; color: #e8e0d0; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; padding: 0.35rem 0.6rem; outline: none; width: 100%; }
+.edit-input  { background: rgba(255,255,255,0.05); border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; color: #e8e0d0; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; padding: 0.35rem 0.6rem; outline: none; width: 100%; }
 .edit-input:focus { border-color: rgba(212,175,55,0.6); }
 .edit-select { background: #0f0f15; border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; color: #e8e0d0; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; padding: 0.35rem 0.6rem; outline: none; cursor: pointer; }
 
@@ -260,65 +160,36 @@ h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0 0 0.4rem
 
 .btn-edit   { padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid rgba(212,175,55,0.2); background: rgba(212,175,55,0.05); color: #d4af37; font-size: 0.78rem; cursor: pointer; transition: all 0.15s; }
 .btn-edit:hover { background: rgba(212,175,55,0.12); border-color: rgba(212,175,55,0.4); }
-
 .btn-delete { padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid rgba(220,60,60,0.2); background: rgba(220,60,60,0.05); color: #e05555; font-size: 0.78rem; cursor: pointer; transition: all 0.15s; }
 .btn-delete:hover:not(:disabled) { background: rgba(220,60,60,0.12); border-color: rgba(220,60,60,0.4); }
 .btn-delete:disabled { opacity: 0.3; cursor: not-allowed; }
-
 .btn-save   { padding: 0.3rem 0.75rem; border-radius: 6px; border: none; background: linear-gradient(135deg, #d4af37, #b8860b); color: #08080c; font-size: 0.78rem; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
 .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
-
 .btn-cancel { padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); color: #6b6050; font-size: 0.78rem; cursor: pointer; transition: all 0.15s; }
 .btn-cancel:hover { background: rgba(255,255,255,0.08); color: #c8b898; }
 
-/* Paginação */
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.page-btn {
-  min-width: 36px;
-  height: 36px;
-  padding: 0 0.5rem;
-  border-radius: 8px;
-  border: 1px solid rgba(212,175,55,0.15);
-  background: rgba(212,175,55,0.04);
-  color: #8a7a5a;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.pagination { display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
+.page-btn { min-width: 36px; height: 36px; padding: 0 0.5rem; border-radius: 8px; border: 1px solid rgba(212,175,55,0.15); background: rgba(212,175,55,0.04); color: #8a7a5a; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
 .page-btn:hover:not(:disabled):not(.ellipsis) { background: rgba(212,175,55,0.1); border-color: rgba(212,175,55,0.35); color: #d4af37; }
-.page-btn.active { background: linear-gradient(135deg, #d4af37, #b8860b); border-color: transparent; color: #08080c; font-weight: 600; cursor: default; }
+.page-btn.active   { background: linear-gradient(135deg, #d4af37, #b8860b); border-color: transparent; color: #08080c; font-weight: 600; cursor: default; }
 .page-btn:disabled:not(.active) { opacity: 0.3; cursor: not-allowed; }
 .page-btn.ellipsis { border-color: transparent; background: none; cursor: default; color: #4a4030; }
-
 .page-info { margin-left: 0.5rem; font-size: 0.8rem; color: #4a4030; }
 
 .api-error { background: rgba(220,80,80,0.1); border: 1px solid rgba(220,80,80,0.3); border-radius: 10px; padding: 0.875rem 1rem; color: #e05555; font-size: 0.875rem; }
 
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(4,4,8,0.88); backdrop-filter: blur(12px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-
-.modal-confirm { background: #0f0f15; border: 1px solid rgba(220,60,60,0.25); border-radius: 16px; padding: 2rem; max-width: 400px; width: 100%; box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
+.modal-overlay  { position: fixed; inset: 0; background: rgba(4,4,8,0.88); backdrop-filter: blur(12px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+.modal-confirm  { background: #0f0f15; border: 1px solid rgba(220,60,60,0.25); border-radius: 16px; padding: 2rem; max-width: 400px; width: 100%; box-shadow: 0 30px 80px rgba(0,0,0,0.8); }
 .modal-confirm h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: #e8e0d0; margin: 0 0 0.75rem; }
 .modal-confirm p  { font-size: 0.875rem; color: #6b6050; line-height: 1.55; margin: 0 0 1.5rem; }
 .modal-confirm strong { color: #c8b898; }
-.modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
-
+.modal-actions  { display: flex; gap: 0.75rem; justify-content: flex-end; }
 .btn-delete-confirm { padding: 0.55rem 1.25rem; border-radius: 8px; border: none; background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: opacity 0.15s; }
 .btn-delete-confirm:hover:not(:disabled) { opacity: 0.88; }
 .btn-delete-confirm:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .modal-enter-active, .modal-leave-active { transition: opacity 0.2s ease; }
-.modal-enter-from, .modal-leave-to { opacity: 0; }
+.modal-enter-from,   .modal-leave-to     { opacity: 0; }
 .modal-enter-active .modal-confirm { transition: transform 0.22s cubic-bezier(0.34, 1.3, 0.64, 1); }
-.modal-enter-from .modal-confirm { transform: scale(0.94) translateY(12px); }
+.modal-enter-from   .modal-confirm { transform: scale(0.94) translateY(12px); }
 </style>

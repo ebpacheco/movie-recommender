@@ -4,9 +4,7 @@
 
     <div class="card">
       <div class="card-header">
-        <div class="logo">
-          <img src="/logo.png" alt="CineMAGIC" class="logo-img" />
-        </div>
+        <img src="/logo.svg" alt="CineMAGIC" class="logo-img" />
         <h1>{{ t('register.title') }}</h1>
         <p>{{ t('register.subtitle') }}</p>
       </div>
@@ -97,75 +95,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useAuthStore } from '@/stores/auth'
-import PasswordInput from '@/components/PasswordInput.vue'
+import PasswordInput      from '@/components/PasswordInput.vue'
+import { useRegisterForm } from '@/composables/useRegisterForm'
 
-const { t }  = useI18n()
-const router = useRouter()
-const auth   = useAuthStore()
+const { t } = useI18n()
 
-const form    = reactive({ name: '', email: '', cpf: '', password: '', confirmPassword: '' })
-const errors  = reactive({ name: '', email: '', cpf: '', password: '', confirmPassword: '' })
-const touched = reactive({ name: false, email: false, cpf: false, password: false, confirmPassword: false })
-const loading  = ref(false)
-const apiError = ref('')
-
-const rules = computed(() => ({
-  length:  form.password.length >= 8,
-  upper:   /[A-Z]/.test(form.password),
-  number:  /[0-9]/.test(form.password),
-  special: /[!@#$%^&*(),.?":{}|<>]/.test(form.password),
-}))
-
-const isPasswordValid = computed(() => Object.values(rules.value).every(Boolean))
-
-const isFormValid = computed(() =>
-  form.name && form.email && form.cpf && isPasswordValid.value &&
-  form.password === form.confirmPassword &&
-  !Object.values(errors).some(Boolean)
-)
-
-function touch(field) { touched[field] = true }
-
-function validateName()     { errors.name    = form.name.trim().length < 2 ? t('register.errors.name') : '' }
-function validateEmail()    { errors.email   = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? '' : t('register.errors.email') }
-function validateCpf()      { errors.cpf     = form.cpf.replace(/\D/g, '').length !== 11 ? t('register.errors.cpf') : '' }
-function validatePassword() { errors.password = isPasswordValid.value ? '' : t('register.errors.password') }
-function validateConfirm()  { errors.confirmPassword = form.password !== form.confirmPassword ? t('register.errors.confirmPassword') : '' }
-
-function formatCpf() {
-  let v = form.cpf.replace(/\D/g, '')
-  if      (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4')
-  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
-  else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2')
-  form.cpf = v
-  touched.cpf && validateCpf()
-}
-
-async function handleRegister() {
-  touch('name'); touch('email'); touch('cpf'); touch('password'); touch('confirmPassword')
-  validateName(); validateEmail(); validateCpf(); validatePassword(); validateConfirm()
-  if (!isFormValid.value) return
-
-  loading.value  = true
-  apiError.value = ''
-  try {
-    await auth.register({
-      name:     form.name,
-      email:    form.email,
-      cpf:      form.cpf.replace(/\D/g, ''),
-      password: form.password,
-    })
-    router.push('/recommendations')
-  } catch (e) {
-    apiError.value = e.response?.data?.detail || 'Erro ao criar conta. Tente novamente.'
-  } finally {
-    loading.value = false
-  }
-}
+const {
+  form, errors, touched, loading, apiError,
+  rules, isFormValid,
+  touch, validateName, validateEmail, validateCpf, validatePassword, validateConfirm,
+  formatCpf, handleRegister,
+} = useRegisterForm()
 </script>
 
 <style scoped>
@@ -205,12 +146,12 @@ async function handleRegister() {
 
 .card-header { text-align: center; margin-bottom: 2rem; }
 
-.logo { margin-bottom: 1rem; }
 .logo-img {
   width: 72px;
   height: 72px;
   object-fit: contain;
   filter: drop-shadow(0 0 12px rgba(245, 197, 24, 0.45));
+  margin-bottom: 1rem;
 }
 
 h1 { font-family: 'Playfair Display', serif; font-size: 1.75rem; color: #e8e0d0; margin: 0 0 0.5rem; font-weight: 600; }
@@ -241,22 +182,14 @@ input {
   box-sizing: border-box;
 }
 input::placeholder { color: #3a3228; }
-input:focus   { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
+input:focus    { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
 .field.error   input { border-color: rgba(220, 80, 80, 0.5); }
 .field.success input { border-color: rgba(80, 200, 120, 0.3); }
 
 .field-msg { font-size: 0.78rem; color: #e05555; }
 
 .password-rules { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.35rem; }
-
-.rule {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.78rem;
-  color: #5a5040;
-  transition: color 0.2s;
-}
+.rule { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #5a5040; transition: color 0.2s; }
 .rule.ok { color: #50c878; }
 .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
