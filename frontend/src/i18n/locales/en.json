@@ -16,7 +16,8 @@
     "loading": "Signing in...",
     "noAccount": "Don't have an account?",
     "register": "Sign up",
-    "error": "Incorrect email or password"
+    "error": "Incorrect email or password",
+    "forgotPassword": "Forgot your password?"
   },
   "register": {
     "title": "Create account",
@@ -129,5 +130,32 @@
     "pt": "Português",
     "en": "English",
     "es": "Español"
+  },
+  "forgotPassword": {
+    "title": "Recover password",
+    "subtitle": "Enter your email and we'll send you a link to create a new password.",
+    "emailLabel": "Registered email",
+    "emailPlaceholder": "your@email.com",
+    "submit": "Send recovery link",
+    "sentTitle": "Email sent!",
+    "sentMessage": "If this email is registered, you'll receive the link shortly.",
+    "sentHint": "Check your spam folder too.",
+    "backToLogin": "Back to login"
+  },
+  "resetPassword": {
+    "title": "New password",
+    "subtitle": "Create a strong password for your account.",
+    "passwordLabel": "New password",
+    "passwordPlaceholder": "At least 8 characters",
+    "confirmLabel": "Confirm new password",
+    "confirmPlaceholder": "Repeat your new password",
+    "submit": "Save new password",
+    "successTitle": "Password reset!",
+    "successMessage": "Your password has been updated successfully.",
+    "goToLogin": "Go to login",
+    "invalidTitle": "Invalid link",
+    "invalidMessage": "This link is invalid or has expired. Please request a new one.",
+    "requestNew": "Request new link",
+    "errorGeneric": "Could not reset password. Please try again."
   }
 }

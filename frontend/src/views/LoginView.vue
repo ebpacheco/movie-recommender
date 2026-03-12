@@ -32,6 +32,10 @@
           @blur="touched.password = true"
         />
 
+        <router-link to="/forgot-password" class="forgot-link">
+          {{ t('login.forgotPassword') }}
+        </router-link>
+
         <div class="api-error" v-if="error">{{ error }}</div>
 
         <button type="submit" class="btn-submit" :disabled="loading">
@@ -153,6 +157,16 @@ input {
 input::placeholder { color: #3a3228; }
 input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
 .field.error input { border-color: rgba(220, 80, 80, 0.4); }
+
+.forgot-link {
+  font-size: 0.82rem;
+  color: #6b6050;
+  text-decoration: none;
+  text-align: right;
+  transition: color 0.2s;
+  margin-top: -0.5rem;
+}
+.forgot-link:hover { color: #d4af37; }
 
 .api-error {
   background: rgba(220, 80, 80, 0.1);

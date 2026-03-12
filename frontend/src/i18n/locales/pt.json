@@ -16,7 +16,8 @@
     "loading": "Entrando...",
     "noAccount": "Não tem conta?",
     "register": "Cadastre-se",
-    "error": "E-mail ou senha incorretos"
+    "error": "E-mail ou senha incorretos",
+    "forgotPassword": "Esqueceu a senha?"
   },
   "register": {
     "title": "Criar conta",
@@ -129,5 +130,32 @@
     "pt": "Português",
     "en": "English",
     "es": "Español"
+  },
+  "forgotPassword": {
+    "title": "Recuperar senha",
+    "subtitle": "Informe seu e-mail e enviaremos um link para criar uma nova senha.",
+    "emailLabel": "E-mail cadastrado",
+    "emailPlaceholder": "seu@email.com",
+    "submit": "Enviar link de recuperação",
+    "sentTitle": "E-mail enviado!",
+    "sentMessage": "Se este e-mail estiver cadastrado, você receberá o link em instantes.",
+    "sentHint": "Verifique também a pasta de spam.",
+    "backToLogin": "Voltar para o login"
+  },
+  "resetPassword": {
+    "title": "Nova senha",
+    "subtitle": "Crie uma senha forte para sua conta.",
+    "passwordLabel": "Nova senha",
+    "passwordPlaceholder": "Mínimo 8 caracteres",
+    "confirmLabel": "Confirmar nova senha",
+    "confirmPlaceholder": "Repita a nova senha",
+    "submit": "Salvar nova senha",
+    "successTitle": "Senha redefinida!",
+    "successMessage": "Sua senha foi atualizada com sucesso.",
+    "goToLogin": "Ir para o login",
+    "invalidTitle": "Link inválido",
+    "invalidMessage": "Este link é inválido ou já expirou. Solicite um novo.",
+    "requestNew": "Solicitar novo link",
+    "errorGeneric": "Não foi possível redefinir a senha. Tente novamente."
   }
 }

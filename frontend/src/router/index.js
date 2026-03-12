@@ -7,15 +7,19 @@ import RecommendationsView  from '@/views/RecommendationsView.vue'
 import ProfileView          from '@/views/ProfileView.vue'
 import UserPreferencesView  from '@/views/UserPreferencesView.vue'
 import AdminView            from '@/views/AdminView.vue'
+import ForgotPasswordView   from '@/views/ForgotPasswordView.vue'
+import ResetPasswordView    from '@/views/ResetPasswordView.vue'
 
 const routes = [
-  { path: '/',                  redirect: '/recommendations' },
-  { path: '/login',             component: LoginView,           meta: { public: true } },
-  { path: '/register',          component: RegisterView,        meta: { public: true } },
-  { path: '/recommendations',   component: RecommendationsView, meta: { requiresAuth: true } },
-  { path: '/profile',           component: ProfileView,         meta: { requiresAuth: true } },
-  { path: '/user-preferences',  component: UserPreferencesView, meta: { requiresAuth: true } },
-  { path: '/admin',             component: AdminView,           meta: { requiresAuth: true, requiresAdmin: true } },
+  { path: '/',                   redirect: '/recommendations' },
+  { path: '/login',              component: LoginView,           meta: { public: true } },
+  { path: '/register',           component: RegisterView,        meta: { public: true } },
+  { path: '/forgot-password',    component: ForgotPasswordView,  meta: { public: true } },
+  { path: '/reset-password',     component: ResetPasswordView,   meta: { public: true } },
+  { path: '/recommendations',    component: RecommendationsView, meta: { requiresAuth: true } },
+  { path: '/profile',            component: ProfileView,         meta: { requiresAuth: true } },
+  { path: '/user-preferences',   component: UserPreferencesView, meta: { requiresAuth: true } },
+  { path: '/admin',              component: AdminView,           meta: { requiresAuth: true, requiresAdmin: true } },
 ]
 
 const router = createRouter({

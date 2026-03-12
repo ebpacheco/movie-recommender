@@ -16,7 +16,8 @@
     "loading": "Iniciando sesión...",
     "noAccount": "¿No tienes cuenta?",
     "register": "Regístrate",
-    "error": "Correo o contraseña incorrectos"
+    "error": "Correo o contraseña incorrectos",
+    "forgotPassword": "¿Olvidaste tu contraseña?"
   },
   "register": {
     "title": "Crear cuenta",
@@ -129,5 +130,32 @@
     "pt": "Português",
     "en": "English",
     "es": "Español"
+  },
+  "forgotPassword": {
+    "title": "Recuperar contraseña",
+    "subtitle": "Ingresa tu correo y te enviaremos un enlace para crear una nueva contraseña.",
+    "emailLabel": "Correo registrado",
+    "emailPlaceholder": "tu@correo.com",
+    "submit": "Enviar enlace de recuperación",
+    "sentTitle": "¡Correo enviado!",
+    "sentMessage": "Si este correo está registrado, recibirás el enlace en instantes.",
+    "sentHint": "Revisa también tu carpeta de spam.",
+    "backToLogin": "Volver al inicio de sesión"
+  },
+  "resetPassword": {
+    "title": "Nueva contraseña",
+    "subtitle": "Crea una contraseña segura para tu cuenta.",
+    "passwordLabel": "Nueva contraseña",
+    "passwordPlaceholder": "Mínimo 8 caracteres",
+    "confirmLabel": "Confirmar nueva contraseña",
+    "confirmPlaceholder": "Repite la nueva contraseña",
+    "submit": "Guardar nueva contraseña",
+    "successTitle": "¡Contraseña restablecida!",
+    "successMessage": "Tu contraseña ha sido actualizada correctamente.",
+    "goToLogin": "Ir al inicio de sesión",
+    "invalidTitle": "Enlace inválido",
+    "invalidMessage": "Este enlace es inválido o ya expiró. Solicita uno nuevo.",
+    "requestNew": "Solicitar nuevo enlace",
+    "errorGeneric": "No se pudo restablecer la contraseña. Inténtalo de nuevo."
   }
 }

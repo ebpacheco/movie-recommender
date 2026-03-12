@@ -1,4 +1,5 @@
 # app/main.py
+from backend.app.routers import password_reset_router
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -59,6 +60,7 @@ app.include_router(auth_router.router,           prefix=PREFIX)
 app.include_router(user_router.router,           prefix=PREFIX)
 app.include_router(recommendation_router.router, prefix=PREFIX)
 app.include_router(translation_router.router,    prefix=PREFIX)
+app.include_router(password_reset_router.router, prefix=PREFIX)
 
 
 @app.get("/health")
