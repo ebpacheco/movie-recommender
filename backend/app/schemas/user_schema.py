@@ -77,7 +77,6 @@ class ProfileResponse(ProfileBase):
 class UserCreate(BaseModel):
     name:       str
     email:      EmailStr
-    cpf:        str
     password:   str
     birth_date: date | None = None
     profile:    ProfileCreate

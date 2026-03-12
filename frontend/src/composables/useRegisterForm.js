@@ -13,7 +13,6 @@ export function useRegisterForm() {
   const form = reactive({
     name:            '',
     email:           '',
-    cpf:             '',
     password:        '',
     confirmPassword: '',
     country:         'BR',
@@ -23,7 +22,6 @@ export function useRegisterForm() {
   const errors = reactive({
     name:            '',
     email:           '',
-    cpf:             '',
     password:        '',
     confirmPassword: '',
     birthDate:       '',
@@ -32,7 +30,6 @@ export function useRegisterForm() {
   const touched = reactive({
     name:            false,
     email:           false,
-    cpf:             false,
     password:        false,
     confirmPassword: false,
     birthDate:       false,
@@ -41,11 +38,7 @@ export function useRegisterForm() {
   const loading  = ref(false)
   const apiError = ref('')
 
-  // Auto-detecta país ao montar — mantém BR se não detectar nada
-  onMounted(async () => {
-    const detected = await detectCountry()
-    form.country = detected || 'BR'
-  })
+  // País fixo BR como padrão
 
   // ── Regras de senha ──────────────────────────────────────────────────────────
 
@@ -59,7 +52,7 @@ export function useRegisterForm() {
   const isPasswordValid = computed(() => Object.values(rules.value).every(Boolean))
 
   const isFormValid = computed(() =>
-    form.name && form.email && form.cpf && form.birthDate &&
+    form.name && form.email && form.birthDate &&
     isPasswordValid.value &&
     form.password === form.confirmPassword &&
     !Object.values(errors).some(Boolean)
@@ -76,11 +69,6 @@ export function useRegisterForm() {
   function validateEmail() {
     errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)
       ? '' : t('register.errors.email')
-  }
-
-  function validateCpf() {
-    errors.cpf = form.cpf.replace(/\D/g, '').length !== 11
-      ? t('register.errors.cpf') : ''
   }
 
   function validateBirthDate() {
@@ -113,21 +101,12 @@ export function useRegisterForm() {
 
   // ── Formatação CPF ───────────────────────────────────────────────────────────
 
-  function formatCpf() {
-    let v = form.cpf.replace(/\D/g, '')
-    if      (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4')
-    else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3')
-    else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2')
-    form.cpf = v
-    touched.cpf && validateCpf()
-  }
-
   // ── Submit ───────────────────────────────────────────────────────────────────
 
   async function handleRegister() {
-    const fields = ['name', 'email', 'cpf', 'birthDate', 'password', 'confirmPassword']
+    const fields = ['name', 'email', 'birthDate', 'password', 'confirmPassword']
     fields.forEach(touch)
-    validateName(); validateEmail(); validateCpf(); validateBirthDate(); validatePassword(); validateConfirm()
+    validateName(); validateEmail(); validateBirthDate(); validatePassword(); validateConfirm()
 
     if (!isFormValid.value) return
 
@@ -137,7 +116,6 @@ export function useRegisterForm() {
       await auth.register({
         name:       form.name,
         email:      form.email,
-        cpf:        form.cpf.replace(/\D/g, ''),
         password:   form.password,
         birth_date: form.birthDate || null,
         profile:    { country: form.country },
@@ -153,7 +131,7 @@ export function useRegisterForm() {
   return {
     form, errors, touched, loading, apiError,
     rules, isPasswordValid, isFormValid,
-    touch, validateName, validateEmail, validateCpf, validateBirthDate, validatePassword, validateConfirm,
-    formatCpf, handleRegister,
+    touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm,
+    handleRegister,
   }
 }

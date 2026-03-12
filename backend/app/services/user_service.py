@@ -25,13 +25,9 @@ class UserService:
         if self.user_repo.find_by_email(data.email):
             raise HTTPException(status.HTTP_409_CONFLICT, "E-mail já cadastrado")
 
-        if self.user_repo.find_by_cpf(data.cpf):
-            raise HTTPException(status.HTTP_409_CONFLICT, "CPF já cadastrado")
-
         user = User(
             name          = data.name,
             email         = data.email,
-            cpf           = data.cpf,
             password_hash = self.auth_service.hash_password(data.password),
             birth_date    = data.birth_date,
         )

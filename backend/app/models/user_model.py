@@ -20,7 +20,6 @@ class User(Base):
     id            = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name          = Column(String, nullable=False)
     email         = Column(String, unique=True, nullable=False, index=True)
-    cpf           = Column(String(11), unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
     role          = Column(Enum(UserRole), nullable=False, default=UserRole.free)
     birth_date    = Column(Date, nullable=True)

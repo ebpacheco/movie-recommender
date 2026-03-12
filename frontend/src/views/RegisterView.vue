@@ -29,16 +29,6 @@
           <span class="field-msg" v-if="errors.email">{{ errors.email }}</span>
         </div>
 
-        <!-- CPF -->
-        <div class="field" :class="{ error: errors.cpf, success: touched.cpf && !errors.cpf }">
-          <label>{{ t('register.cpf') }}</label>
-          <input v-model="form.cpf" type="text" :placeholder="t('register.cpfPlaceholder')"
-            maxlength="14"
-            @blur="touch('cpf'); validateCpf()"
-            @input="formatCpf" />
-          <span class="field-msg" v-if="errors.cpf">{{ errors.cpf }}</span>
-        </div>
-
         <!-- Data de nascimento -->
         <div class="field" :class="{ error: errors.birthDate, success: touched.birthDate && !errors.birthDate }">
           <label>{{ t('register.birthDate') }}</label>
@@ -128,8 +118,8 @@ const { t } = useI18n()
 const {
   form, errors, touched, loading, apiError,
   rules, isFormValid,
-  touch, validateName, validateEmail, validateCpf, validateBirthDate, validatePassword, validateConfirm,
-  formatCpf, handleRegister,
+  touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm,
+  handleRegister,
 } = useRegisterForm()
 
 // Data máxima = hoje (não permite data futura)

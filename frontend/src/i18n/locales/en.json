@@ -26,8 +26,6 @@
     "namePlaceholder": "Your name",
     "email": "Email",
     "emailPlaceholder": "your@email.com",
-    "cpf": "CPF",
-    "cpfPlaceholder": "000.000.000-00",
     "country": "Country",
     "countryHint": "Used to filter films available in your region",
     "password": "Password",
@@ -47,7 +45,6 @@
     "errors": {
       "name": "Name too short",
       "email": "Invalid email",
-      "cpf": "Invalid CPF",
       "password": "Password does not meet requirements",
       "confirmPassword": "Passwords do not match",
       "api": "Error creating account. Please try again.",

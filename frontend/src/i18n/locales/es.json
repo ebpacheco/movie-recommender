@@ -26,8 +26,6 @@
     "namePlaceholder": "Tu nombre",
     "email": "Correo electrónico",
     "emailPlaceholder": "tu@correo.com",
-    "cpf": "CPF",
-    "cpfPlaceholder": "000.000.000-00",
     "country": "País",
     "countryHint": "Usado para filtrar películas disponibles en tu región",
     "password": "Contraseña",
@@ -47,7 +45,6 @@
     "errors": {
       "name": "Nombre demasiado corto",
       "email": "Correo inválido",
-      "cpf": "CPF inválido",
       "password": "La contraseña no cumple los requisitos",
       "confirmPassword": "Las contraseñas no coinciden",
       "api": "Error al crear la cuenta. Inténtalo de nuevo.",
