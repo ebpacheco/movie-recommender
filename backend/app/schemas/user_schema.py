@@ -75,11 +75,12 @@ class ProfileResponse(ProfileBase):
 # --- User ---
 
 class UserCreate(BaseModel):
-    name:       str
-    email:      EmailStr
-    password:   str
-    birth_date: date | None = None
-    profile:    ProfileCreate
+    name:           str
+    email:          EmailStr
+    password:       str
+    birth_date:     date | None = None
+    terms_accepted: bool = False
+    profile:        ProfileCreate
 
 
 class UserResponse(BaseModel):

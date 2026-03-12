@@ -17,6 +17,7 @@ export function useRegisterForm() {
     confirmPassword: '',
     country:         'BR',
     birthDate:       '',
+    termsAccepted:   false,
   })
 
   const errors = reactive({
@@ -25,6 +26,7 @@ export function useRegisterForm() {
     password:        '',
     confirmPassword: '',
     birthDate:       '',
+    terms:           '',
   })
 
   const touched = reactive({
@@ -33,6 +35,7 @@ export function useRegisterForm() {
     password:        false,
     confirmPassword: false,
     birthDate:       false,
+    terms:           false,
   })
 
   const loading  = ref(false)
@@ -52,10 +55,12 @@ export function useRegisterForm() {
   const isPasswordValid = computed(() => Object.values(rules.value).every(Boolean))
 
   const isFormValid = computed(() =>
-    form.name && form.email && form.birthDate &&
+    form.name.trim().length >= 2 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
+    form.birthDate &&
+    form.termsAccepted &&
     isPasswordValid.value &&
-    form.password === form.confirmPassword &&
-    !Object.values(errors).some(Boolean)
+    form.password === form.confirmPassword
   )
 
   // ── Validações ───────────────────────────────────────────────────────────────
@@ -101,12 +106,16 @@ export function useRegisterForm() {
 
   // ── Formatação CPF ───────────────────────────────────────────────────────────
 
+  function validateTerms() {
+    errors.terms = !form.termsAccepted ? t('register.errors.terms') : ''
+  }
+
   // ── Submit ───────────────────────────────────────────────────────────────────
 
   async function handleRegister() {
-    const fields = ['name', 'email', 'birthDate', 'password', 'confirmPassword']
+    const fields = ['name', 'email', 'birthDate', 'password', 'confirmPassword', 'terms']
     fields.forEach(touch)
-    validateName(); validateEmail(); validateBirthDate(); validatePassword(); validateConfirm()
+    validateName(); validateEmail(); validateBirthDate(); validatePassword(); validateConfirm(); validateTerms()
 
     if (!isFormValid.value) return
 
@@ -114,15 +123,23 @@ export function useRegisterForm() {
     apiError.value = ''
     try {
       await auth.register({
-        name:       form.name,
-        email:      form.email,
-        password:   form.password,
-        birth_date: form.birthDate || null,
-        profile:    { country: form.country },
+        name:           form.name,
+        email:          form.email,
+        password:       form.password,
+        birth_date:     form.birthDate || null,
+        terms_accepted: form.termsAccepted,
+        profile:        { country: form.country },
       })
       router.push('/recommendations')
     } catch (e) {
-      apiError.value = e.response?.data?.detail || t('register.errors.api')
+      const status = e.response?.status
+      const detail = e.response?.data?.detail || ''
+
+      if (status === 409 && detail.includes('E-mail')) {
+        apiError.value = t('register.errors.emailTaken')
+      } else {
+        apiError.value = t('register.errors.api')
+      }
     } finally {
       loading.value = false
     }
@@ -131,7 +148,7 @@ export function useRegisterForm() {
   return {
     form, errors, touched, loading, apiError,
     rules, isPasswordValid, isFormValid,
-    touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm,
+    touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms,
     handleRegister,
   }
 }

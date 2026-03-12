@@ -1,4 +1,5 @@
 # app/services/recommendation_service.py
+import json
 from uuid import UUID
 from datetime import timedelta
 
@@ -29,22 +30,20 @@ class RecommendationService:
         self.prompt_builder      = prompt_builder
 
     def _to_response(self, rec: Recommendation, cached: bool, is_admin: bool = False) -> dict:
-        # Admin não recebe next_available_at — pode gerar a qualquer momento
         next_at = None if is_admin else rec.created_at + timedelta(hours=CACHE_HOURS)
         return {
             "movies":            rec.response,
+            "message":           getattr(rec, 'message', None),
             "cached":            cached,
             "created_at":        rec.created_at,
             "next_available_at": next_at,
         }
 
     def get_cached(self, user_id: UUID) -> dict | None:
-        """Retorna a recomendação em cache das últimas 12h, ou None."""
         profile = self.profile_repo.find_by_user_id(user_id)
         if not profile:
             return None
 
-        # Admin nunca retorna cache no GET /today — sempre pode gerar novo
         if profile.user.role == UserRole.admin:
             return None
 
@@ -52,6 +51,25 @@ class RecommendationService:
         if not rec:
             return None
         return self._to_response(rec, cached=True, is_admin=False)
+
+    def _parse_ai_response(self, raw) -> tuple[list, str | None]:
+        """
+        Extrai (movies, message) da resposta da IA.
+        Suporta o novo formato {message, movies} e o formato legado [array].
+        """
+        if isinstance(raw, dict):
+            return raw.get('movies', []), raw.get('message')
+        if isinstance(raw, list):
+            return raw, None
+        try:
+            parsed = json.loads(raw) if isinstance(raw, str) else raw
+            if isinstance(parsed, dict):
+                return parsed.get('movies', []), parsed.get('message')
+            if isinstance(parsed, list):
+                return parsed, None
+        except Exception:
+            pass
+        return [], None
 
     def generate(
         self,
@@ -76,9 +94,12 @@ class RecommendationService:
         print("="*60)
         print(prompt)
         print("="*60 + "\n")
-        movies = self.ai_provider.get_recommendations(prompt)
 
-        rec = Recommendation(user_id=user_id, prompt_used=prompt, response=movies)
-        rec = self.recommendation_repo.upsert(rec)
+        raw            = self.ai_provider.get_recommendations(prompt)
+        movies, message = self._parse_ai_response(raw)
+
+        rec         = Recommendation(user_id=user_id, prompt_used=prompt, response=movies)
+        rec.message = message
+        rec         = self.recommendation_repo.upsert(rec)
 
         return self._to_response(rec, cached=False, is_admin=is_admin)

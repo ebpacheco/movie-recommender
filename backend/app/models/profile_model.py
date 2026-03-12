@@ -18,6 +18,6 @@ class Profile(Base):
     favorite_directors  = Column(ARRAY(String), default=[])
     language            = Column(String,    nullable=False, server_default='pt')
     country             = Column(String(2), nullable=False, server_default='BR')
-    streaming_platforms = Column(ARRAY(String), nullable=False, server_default='{}')
+    streaming_platforms = Column(ARRAY(String), nullable=False, default=list, server_default='{}')
 
     user = relationship("User", back_populates="profile")

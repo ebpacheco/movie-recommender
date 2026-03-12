@@ -10,7 +10,7 @@
     "subtitle": "Your personal cinema guide",
     "email": "Email",
     "password": "Password",
-    "emailPlaceholder": "your@email.com",
+    "emailPlaceholder": "your{'@'}email.com",
     "passwordPlaceholder": "Your password",
     "submit": "Sign in",
     "loading": "Signing in...",
@@ -25,7 +25,7 @@
     "name": "Full name",
     "namePlaceholder": "Your name",
     "email": "Email",
-    "emailPlaceholder": "your@email.com",
+    "emailPlaceholder": "your{'@'}email.com",
     "country": "Country",
     "countryHint": "Used to filter films available in your region",
     "password": "Password",
@@ -49,9 +49,16 @@
       "confirmPassword": "Passwords do not match",
       "api": "Error creating account. Please try again.",
       "birthDate": "Date of birth is required",
-      "birthDateInvalid": "Invalid date of birth"
+      "birthDateInvalid": "Invalid date of birth",
+      "terms": "You must accept the Terms of Use to continue",
+      "emailTaken": "This email is already registered. Try logging in or use a different email."
     },
-    "birthDate": "Date of birth"
+    "birthDate": "Date of birth",
+    "termsPrefix": "I have read and agree to the",
+    "termsLink": "Terms of Use",
+    "termsMiddle": "and the",
+    "privacyLink": "Privacy Policy",
+    "termsSuffix": "My preferences will be used exclusively to generate personalized recommendations."
   },
   "recommendations": {
     "hello": "Hello,",
@@ -63,8 +70,18 @@
     "history": "History",
     "movies": "movies",
     "error": "Error generating recommendations",
-    "moodLabel": "How are you feeling today?",
-    "moodPlaceholder": "E.g.: excited, tired, nostalgic, up for an adventure..."
+    "moodLabel": "Your day already has too many decisions. Finding something to watch doesn't need to be another one. Tell me how your day went — and I'll find the perfect film for you.",
+    "moodPlaceholder": "Keep it simple: \"tired\", \"excited\", \"need a good cry\", \"want to laugh\"...",
+    "heroSubtitle": "",
+    "promptHint": "",
+    "nextIn": "Next recommendation in",
+    "translating": "Translating...",
+    "incompleteTitle": "Complete your profile to get started",
+    "incompleteSubtitle": "To find the perfect film for you, I need to know your taste. Takes less than 2 minutes.",
+    "incompletePlatform": "At least 1 streaming platform",
+    "incompleteGenres": "At least 3 favorite genres",
+    "incompleteMovies": "At least 3 favorite movies",
+    "incompleteButton": "Complete profile →"
   },
   "ranks": {
     "joia": "Raw Gem",
@@ -132,7 +149,7 @@
     "title": "Recover password",
     "subtitle": "Enter your email and we'll send you a link to create a new password.",
     "emailLabel": "Registered email",
-    "emailPlaceholder": "your@email.com",
+    "emailPlaceholder": "your{'@'}email.com",
     "submit": "Send recovery link",
     "sentTitle": "Email sent!",
     "sentMessage": "If this email is registered, you'll receive the link shortly.",

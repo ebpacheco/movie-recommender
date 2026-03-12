@@ -16,7 +16,8 @@ class RecommendationRequest(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
-    movies:           list[MovieResult]
-    cached:           bool = False
-    created_at:       datetime | None = None
-    next_available_at: datetime | None = None  # created_at + 24h — usado no countdown do frontend
+    movies:            list[MovieResult]
+    message:           str | None = None
+    cached:            bool = False
+    created_at:        datetime | None = None
+    next_available_at: datetime | None = None

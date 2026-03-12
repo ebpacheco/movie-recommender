@@ -11,31 +11,32 @@ from app.core.config import settings
 class GeminiProvider(IAIProvider):
 
     SYSTEM_PROMPT = """
-You are a cinema expert. Return ONLY a valid JSON array with exactly 6 movies.
-The movies must be ordered from most recommended to least recommended.
-The first is the best match, the last is a wildcard suggestion.
+You are a cinema expert. Return ONLY a valid JSON object with exactly two fields: "message" and "movies".
 
 Required format:
-[
-  {
-    "title": "Original movie title",
-    "year": 1994,
-    "genre": "Genre in the user's language",
-    "description": "Brief personalized description in the user's language explaining why this movie matches."
-  }
-]
+{
+  "message": "A short, empathetic message in the user's language (2-4 sentences)",
+  "movies": [
+    {
+      "title": "Original movie title",
+      "year": 1994,
+      "genre": "Genre in the user's language",
+      "description": "Brief personalized description in the user's language explaining why this movie matches."
+    }
+  ]
+}
 
 Rules:
-- Return exactly 6 movies
-- Write genre and description in the language specified in the prompt
+- Return exactly 20 movies in the "movies" array
+- Write message, genre and description in the language specified in the prompt
 - Keep the original movie title (do not translate titles)
-- No extra text, only the JSON array
+- No extra text outside the JSON object, no markdown, no ```json
 """
 
     def __init__(self):
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-    def get_recommendations(self, prompt: str) -> list[dict]:
+    def get_recommendations(self, prompt: str) -> dict:
         response = self.client.models.generate_content(
             model="gemini-2.5-flash-lite",
             contents=prompt,
@@ -47,11 +48,36 @@ Rules:
 
         text = response.text.strip()
 
+        # Remove markdown code fences se existirem
         if text.startswith("```"):
-            text = text.replace("```json", "").replace("```", "").strip()
+            text = re.sub(r"^```[a-z]*\n?", "", text)
+            text = re.sub(r"\n?```$", "", text)
+            text = text.strip()
 
+        # Tenta parsear como objeto {message, movies}
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, dict) and "movies" in parsed:
+                return parsed
+            # Formato legado: array direto
+            if isinstance(parsed, list):
+                return {"message": None, "movies": parsed}
+        except json.JSONDecodeError:
+            pass
+
+        # Fallback: extrai objeto JSON do texto
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            try:
+                parsed = json.loads(match.group(0))
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+
+        # Último recurso: tenta extrair só o array
         match = re.search(r"\[.*\]", text, re.DOTALL)
         if match:
-            text = match.group(0)
+            return {"message": None, "movies": json.loads(match.group(0))}
 
-        return json.loads(text)
+        return {"message": None, "movies": []}

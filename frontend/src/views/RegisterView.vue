@@ -92,9 +92,28 @@
           <span class="field-msg" v-if="errors.confirmPassword">{{ errors.confirmPassword }}</span>
         </PasswordInput>
 
+        <!-- Termos de uso -->
+        <div class="terms-field" :class="{ error: errors.terms }">
+          <label class="terms-label">
+            <input
+              type="checkbox"
+              v-model="form.termsAccepted"
+              @change="touch('terms'); validateTerms()"
+            />
+            <span>
+              {{ t('register.termsPrefix') }}
+              <a href="/terms" target="_blank">{{ t('register.termsLink') }}</a>
+              {{ t('register.termsMiddle') }}
+              <a href="/privacy" target="_blank">{{ t('register.privacyLink') }}</a>.
+              {{ t('register.termsSuffix') }}
+            </span>
+          </label>
+          <span class="field-msg" v-if="errors.terms">{{ errors.terms }}</span>
+        </div>
+
         <div class="api-error" v-if="apiError">{{ apiError }}</div>
 
-        <button type="submit" class="btn-submit" :disabled="loading || !isFormValid">
+        <button type="submit" class="btn-submit" :disabled="loading">
           <span v-if="loading" class="spinner"></span>
           <span v-else>{{ t('register.submit') }}</span>
         </button>
@@ -118,7 +137,7 @@ const { t } = useI18n()
 const {
   form, errors, touched, loading, apiError,
   rules, isFormValid,
-  touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm,
+  touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms,
   handleRegister,
 } = useRegisterForm()
 
@@ -254,6 +273,14 @@ input:focus    { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 17
 .field-hint { font-size: 0.75rem; color: #3a3228; }
 
 .field-msg { font-size: 0.78rem; color: #e05555; }
+
+.terms-field { display: flex; flex-direction: column; gap: 0.4rem; }
+.terms-label { display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer; }
+.terms-label input[type="checkbox"] { margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; accent-color: #d4af37; cursor: pointer; }
+.terms-label span { font-size: 0.83rem; color: #8a7a5a; line-height: 1.5; }
+.terms-label a { color: #d4af37; text-decoration: none; }
+.terms-label a:hover { text-decoration: underline; }
+.terms-field.error .terms-label span { color: #e05555; }
 
 .password-rules { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.35rem; }
 .rule { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #5a5040; transition: color 0.2s; }

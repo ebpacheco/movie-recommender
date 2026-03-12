@@ -1,5 +1,6 @@
 # app/services/user_service.py
 from uuid import UUID
+from datetime import datetime
 from fastapi import HTTPException, status
 
 from app.models.user_model import User, UserRole
@@ -25,21 +26,26 @@ class UserService:
         if self.user_repo.find_by_email(data.email):
             raise HTTPException(status.HTTP_409_CONFLICT, "E-mail já cadastrado")
 
+        if not data.terms_accepted:
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "É necessário aceitar os Termos de Uso para se cadastrar")
+
         user = User(
-            name          = data.name,
-            email         = data.email,
-            password_hash = self.auth_service.hash_password(data.password),
-            birth_date    = data.birth_date,
+            name              = data.name,
+            email             = data.email,
+            password_hash     = self.auth_service.hash_password(data.password),
+            birth_date        = data.birth_date,
+            terms_accepted_at = datetime.utcnow() if data.terms_accepted else None,
         )
         self.user_repo.save(user)
 
         profile = Profile(
-            user_id            = user.id,
-            favorite_genres    = data.profile.favorite_genres,
-            favorite_movies    = data.profile.favorite_movies,
-            favorite_actors    = data.profile.favorite_actors,
-            favorite_directors = data.profile.favorite_directors,
-            country            = data.profile.country,
+            user_id             = user.id,
+            favorite_genres     = data.profile.favorite_genres,
+            favorite_movies     = data.profile.favorite_movies,
+            favorite_actors     = data.profile.favorite_actors,
+            favorite_directors  = data.profile.favorite_directors,
+            country             = data.profile.country,
+            streaming_platforms = [],
         )
         self.profile_repo.save(profile)
 

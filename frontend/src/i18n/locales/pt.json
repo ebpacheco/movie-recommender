@@ -10,7 +10,7 @@
     "subtitle": "Seu guia pessoal de cinema",
     "email": "E-mail",
     "password": "Senha",
-    "emailPlaceholder": "seu@email.com",
+    "emailPlaceholder": "seu{'@'}email.com",
     "passwordPlaceholder": "Sua senha",
     "submit": "Entrar",
     "loading": "Entrando...",
@@ -25,7 +25,7 @@
     "name": "Nome completo",
     "namePlaceholder": "Seu nome",
     "email": "E-mail",
-    "emailPlaceholder": "seu@email.com",
+    "emailPlaceholder": "seu{'@'}email.com",
     "country": "País",
     "countryHint": "Usado para filtrar filmes disponíveis no seu país",
     "password": "Senha",
@@ -49,9 +49,16 @@
       "confirmPassword": "As senhas não coincidem",
       "api": "Erro ao criar conta. Tente novamente.",
       "birthDate": "Data de nascimento obrigatória",
-      "birthDateInvalid": "Data de nascimento inválida"
+      "birthDateInvalid": "Data de nascimento inválida",
+      "terms": "Você precisa aceitar os Termos de Uso para continuar",
+      "emailTaken": "Este e-mail já está cadastrado. Tente fazer login ou use outro e-mail."
     },
-    "birthDate": "Data de nascimento"
+    "birthDate": "Data de nascimento",
+    "termsPrefix": "Li e aceito os",
+    "termsLink": "Termos de Uso",
+    "termsMiddle": "e a",
+    "privacyLink": "Política de Privacidade",
+    "termsSuffix": "Minhas preferências serão usadas exclusivamente para gerar recomendações personalizadas."
   },
   "recommendations": {
     "hello": "Olá,",
@@ -63,8 +70,18 @@
     "history": "Histórico",
     "movies": "filmes",
     "error": "Erro ao gerar recomendações",
-    "moodLabel": "Como você está se sentindo hoje?",
-    "moodPlaceholder": "Ex: animado, cansado, melancólico, querendo aventura..."
+    "moodLabel": "Seu dia já tem decisões demais. Encontrar algo para assistir não precisa ser mais uma. Me conte como foi o seu dia — e eu encontro o filme perfeito para você.",
+    "moodPlaceholder": "Pode ser simples: \"cansado\", \"animado\", \"quero chorar\", \"preciso rir\"...",
+    "heroSubtitle": "",
+    "promptHint": "",
+    "nextIn": "Próxima recomendação em",
+    "translating": "Traduzindo...",
+    "incompleteTitle": "Complete seu perfil para começar",
+    "incompleteSubtitle": "Para encontrar o filme perfeito para você, preciso conhecer seus gostos. Leva menos de 2 minutos.",
+    "incompletePlatform": "Pelo menos 1 plataforma de streaming",
+    "incompleteGenres": "Pelo menos 3 gêneros favoritos",
+    "incompleteMovies": "Pelo menos 3 filmes favoritos",
+    "incompleteButton": "Completar perfil →"
   },
   "ranks": {
     "joia": "Joia Bruta",
@@ -132,7 +149,7 @@
     "title": "Recuperar senha",
     "subtitle": "Informe seu e-mail e enviaremos um link para criar uma nova senha.",
     "emailLabel": "E-mail cadastrado",
-    "emailPlaceholder": "seu@email.com",
+    "emailPlaceholder": "seu{'@'}email.com",
     "submit": "Enviar link de recuperação",
     "sentTitle": "E-mail enviado!",
     "sentMessage": "Se este e-mail estiver cadastrado, você receberá o link em instantes.",

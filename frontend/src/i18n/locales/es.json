@@ -10,7 +10,7 @@
     "subtitle": "Tu guía personal de cine",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "emailPlaceholder": "tu@correo.com",
+    "emailPlaceholder": "tu{'@'}correo.com",
     "passwordPlaceholder": "Tu contraseña",
     "submit": "Iniciar sesión",
     "loading": "Iniciando sesión...",
@@ -25,7 +25,7 @@
     "name": "Nombre completo",
     "namePlaceholder": "Tu nombre",
     "email": "Correo electrónico",
-    "emailPlaceholder": "tu@correo.com",
+    "emailPlaceholder": "tu{'@'}correo.com",
     "country": "País",
     "countryHint": "Usado para filtrar películas disponibles en tu región",
     "password": "Contraseña",
@@ -49,9 +49,16 @@
       "confirmPassword": "Las contraseñas no coinciden",
       "api": "Error al crear la cuenta. Inténtalo de nuevo.",
       "birthDate": "La fecha de nacimiento es obligatoria",
-      "birthDateInvalid": "Fecha de nacimiento inválida"
+      "birthDateInvalid": "Fecha de nacimiento inválida",
+      "terms": "Debes aceptar los Términos de Uso para continuar",
+      "emailTaken": "Este correo ya está registrado. Intenta iniciar sesión o usa otro correo."
     },
-    "birthDate": "Fecha de nacimiento"
+    "birthDate": "Fecha de nacimiento",
+    "termsPrefix": "He leído y acepto los",
+    "termsLink": "Términos de Uso",
+    "termsMiddle": "y la",
+    "privacyLink": "Política de Privacidad",
+    "termsSuffix": "Mis preferencias se usarán exclusivamente para generar recomendaciones personalizadas."
   },
   "recommendations": {
     "hello": "Hola,",
@@ -63,8 +70,18 @@
     "history": "Historial",
     "movies": "películas",
     "error": "Error al generar recomendaciones",
-    "moodLabel": "¿Cómo te sientes hoy?",
-    "moodPlaceholder": "Ej: animado, cansado, nostálgico, con ganas de aventura..."
+    "moodLabel": "Tu día ya tiene demasiadas decisiones. Encontrar algo para ver no necesita ser una más. Cuéntame cómo fue tu día — y yo encuentro la película perfecta para ti.",
+    "moodPlaceholder": "Puede ser simple: \"cansado\", \"animado\", \"quiero llorar\", \"necesito reír\"...",
+    "heroSubtitle": "",
+    "promptHint": "",
+    "nextIn": "Próxima recomendación en",
+    "translating": "Traduciendo...",
+    "incompleteTitle": "Completa tu perfil para empezar",
+    "incompleteSubtitle": "Para encontrar la película perfecta para ti, necesito conocer tus gustos. Tarda menos de 2 minutos.",
+    "incompletePlatform": "Al menos 1 plataforma de streaming",
+    "incompleteGenres": "Al menos 3 géneros favoritos",
+    "incompleteMovies": "Al menos 3 películas favoritas",
+    "incompleteButton": "Completar perfil →"
   },
   "ranks": {
     "joia": "Gema Bruta",
@@ -132,7 +149,7 @@
     "title": "Recuperar contraseña",
     "subtitle": "Ingresa tu correo y te enviaremos un enlace para crear una nueva contraseña.",
     "emailLabel": "Correo registrado",
-    "emailPlaceholder": "tu@correo.com",
+    "emailPlaceholder": "tu{'@'}correo.com",
     "submit": "Enviar enlace de recuperación",
     "sentTitle": "¡Correo enviado!",
     "sentMessage": "Si este correo está registrado, recibirás el enlace en instantes.",

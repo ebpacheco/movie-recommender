@@ -114,28 +114,38 @@ class MoviePromptBuilder(IPromptBuilder):
         mood_or_context = ' + '.join(filter(None, [mood, extra_context])) or 'preferências gerais do usuário'
 
         parts.append(f"""
-FORMATO DE RESPOSTA:
-- Escreva "description" em {lang_name}
-- "title" deve ser o título original (inglês ou idioma original)
-- "genre" deve ser escrito em {lang_name}
-- ORDENAÇÃO OBRIGATÓRIA: ordene os 20 filmes do que melhor atende ao pedido específico e humor do usuário para o que atende menos. O primeiro filme deve ser o que mais combina com "{mood_or_context}", o último o que menos combina.
+TAREFA DUPLA — retorne um JSON com dois campos: "message" e "movies".
 
-Retorne APENAS um JSON válido com exatamente 20 filmes:
+1. "message": Uma mensagem curta (2-4 frases) em {lang_name}, sensível e humana, dirigida diretamente ao usuário.
+   - Reconheça como ele está se sentindo (baseado em: "{mood_or_context}")
+   - Conecte esse sentimento com a experiência de assistir um filme
+   - Tom: acolhedor, poético, como um amigo que entende
+   - Sem frases genéricas como "Que ótimo!" ou "Entendo como você se sente"
+   - Termine sugerindo que os filmes abaixo foram escolhidos especialmente para esse momento
 
-[
-  {{
-    "title": "Nome original do filme",
-    "year": 2000,
-    "genre": "Gênero principal",
-    "description": "Por que este filme combina com o perfil do usuário"
-  }}
-]
+2. "movies": Lista de exatamente 20 filmes ordenados do que melhor atende "{mood_or_context}" para o que atende menos.
+   - Escreva "description" e "genre" em {lang_name}
+   - "title" deve ser o título original
+   - Todos OBRIGATORIAMENTE disponíveis nas plataformas listadas
+
+Retorne APENAS este JSON válido, sem explicações, sem ```json:
+
+{{
+  "message": "Sua mensagem empática aqui...",
+  "movies": [
+    {{
+      "title": "Nome original do filme",
+      "year": 2000,
+      "genre": "Gênero principal",
+      "description": "Por que este filme combina com o momento do usuário"
+    }}
+  ]
+}}
 
 Regras absolutas:
 - Exatamente 20 filmes
 - Nenhum filme fora das plataformas listadas
-- Sem explicações fora do JSON
-- Sem ```json ou markdown
+- Sem nenhum texto fora do JSON
 """)
 
         return "\n".join(parts)
