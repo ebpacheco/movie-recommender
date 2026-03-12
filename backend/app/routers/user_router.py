@@ -59,11 +59,12 @@ def update_profile(
     session = get_session(user_id)
     language = session["profile"].get("language", "pt") if session else "pt"
     update_profile_session(user_id, {
-        "language":           language,
-        "favorite_genres":    data.favorite_genres,
-        "favorite_movies":    data.favorite_movies,
-        "favorite_actors":    data.favorite_actors,
-        "favorite_directors": data.favorite_directors,
+        "language":            language,
+        "favorite_genres":     data.favorite_genres,
+        "favorite_movies":     data.favorite_movies,
+        "favorite_actors":     data.favorite_actors,
+        "favorite_directors":  data.favorite_directors,
+        "streaming_platforms": data.streaming_platforms,
     })
     return profile
 

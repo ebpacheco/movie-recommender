@@ -4,9 +4,9 @@ import axios from 'axios'
 import { useI18n } from 'vue-i18n'
 import api from '@/services/api'
 
-const TMDB_TOKEN   = import.meta.env.VITE_TMDB_TOKEN
-const OMDB_KEY     = import.meta.env.VITE_OMDB_API_KEY
-const TMDB_IMG_URL = 'https://image.tmdb.org/t/p/w342'
+const TMDB_TOKEN    = import.meta.env.VITE_TMDB_TOKEN
+const OMDB_KEY      = import.meta.env.VITE_OMDB_API_KEY
+const TMDB_IMG_URL  = 'https://image.tmdb.org/t/p/w342'
 const TMDB_LOGO_URL = 'https://image.tmdb.org/t/p/w45'
 
 function tmdbLocale(lang) {
@@ -17,7 +17,7 @@ export async function fetchPoster(title, year, lang) {
   try {
     const { data } = await axios.get('https://api.themoviedb.org/3/search/movie', {
       headers: { Authorization: `Bearer ${TMDB_TOKEN}` },
-      params: { query: title, year: year || undefined, language: tmdbLocale(lang) },
+      params:  { query: title, year: year || undefined, language: tmdbLocale(lang) },
     })
     const result = data.results?.[0]
     return {
@@ -46,7 +46,7 @@ export async function fetchTrailerKey(title, year) {
   try {
     const { data: search } = await axios.get('https://api.themoviedb.org/3/search/movie', {
       headers: { Authorization: `Bearer ${TMDB_TOKEN}` },
-      params: { query: title, year: year || undefined },
+      params:  { query: title, year: year || undefined },
     })
     const tmdbId = search.results?.[0]?.id
     if (!tmdbId) return null
@@ -67,37 +67,57 @@ export async function fetchTrailerKey(title, year) {
   } catch { return null }
 }
 
-export async function fetchStreamingProviders(tmdbId) {
+/**
+ * Busca provedores de streaming para um filme em um país específico.
+ * Retorna array de { id, name, logo } — flatrate (assinatura) apenas.
+ */
+export async function fetchStreamingProviders(tmdbId, watchRegion = 'BR') {
   if (!tmdbId) return []
   try {
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/movie/${tmdbId}/watch/providers`,
       { headers: { Authorization: `Bearer ${TMDB_TOKEN}` } }
     )
-    const br = data.results?.BR
-    // flatrate = assinatura (Netflix, Prime, Disney+, etc.)
-    const providers = br?.flatrate || []
+    const regionData = data.results?.[watchRegion]
+    const providers  = regionData?.flatrate || []
     return providers.map(p => ({
+      id:   String(p.provider_id),
       name: p.provider_name,
       logo: `${TMDB_LOGO_URL}${p.logo_path}`,
     }))
   } catch { return [] }
 }
 
-export async function enrichMovies(list, lang) {
-  return Promise.all(
+/**
+ * Enriquece lista de filmes com poster, ratings e streaming providers.
+ *
+ * @param {Array}  list            - filmes brutos da IA
+ * @param {string} lang            - idioma ('pt' | 'en' | 'es')
+ * @param {object} options
+ * @param {string} options.watchRegion      - código ISO do país (ex: 'BR', 'US')
+ * @param {Array}  options.userPlatformIds  - IDs das plataformas do usuário (ex: ['8','119'])
+ *                                           Se fornecido, filtra filmes não disponíveis
+ */
+export async function enrichMovies(list, lang, { watchRegion = 'BR', userPlatformIds = null } = {}) {
+  const enriched = await Promise.all(
     list.map(async (movie) => {
       const [{ tmdbId, poster, localTitle }, ratings] = await Promise.all([
         fetchPoster(movie.title, movie.year, lang),
         fetchRatings(movie.title, movie.year),
       ])
-
-      // Busca providers usando o tmdbId já obtido
-      const streamingProviders = await fetchStreamingProviders(tmdbId)
-
+      const streamingProviders = await fetchStreamingProviders(tmdbId, watchRegion)
       return { ...movie, tmdbId, poster, localTitle, ...ratings, streamingProviders }
     })
   )
+
+  // Filtro estrito: só filmes disponíveis nas plataformas do usuário, pega os 6 primeiros
+  if (userPlatformIds?.length) {
+    return enriched
+      .filter(m => m.streamingProviders.some(p => userPlatformIds.includes(p.id)))
+      .slice(0, 6)
+  }
+
+  return enriched.slice(0, 6)
 }
 
 // Composable que reage à mudança de locale

@@ -37,7 +37,7 @@ Rules:
 
     def get_recommendations(self, prompt: str) -> list[dict]:
         response = self.client.models.generate_content(
-            model="gemini-2.0-flash-lite",
+            model="gemini-2.5-flash-lite",
             contents=prompt,
             config=types.GenerateContentConfig(
                 system_instruction=self.SYSTEM_PROMPT,

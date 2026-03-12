@@ -1,6 +1,7 @@
 {
   "nav": {
     "preferences": "Preferências de Cinema",
+    "userPreferences": "Preferências de Usuário",
     "logout": "Sair",
     "manageUsers": "Gerenciar Usuários"
   },
@@ -26,6 +27,8 @@
     "emailPlaceholder": "seu@email.com",
     "cpf": "CPF",
     "cpfPlaceholder": "000.000.000-00",
+    "country": "País",
+    "countryHint": "Usado para filtrar filmes disponíveis no seu país",
     "password": "Senha",
     "passwordPlaceholder": "Crie uma senha segura",
     "confirmPassword": "Confirmar senha",
@@ -45,8 +48,12 @@
       "email": "E-mail inválido",
       "cpf": "CPF inválido",
       "password": "A senha não atende aos requisitos",
-      "confirmPassword": "As senhas não coincidem"
-    }
+      "confirmPassword": "As senhas não coincidem",
+      "api": "Erro ao criar conta. Tente novamente.",
+      "birthDate": "Data de nascimento obrigatória",
+      "birthDateInvalid": "Data de nascimento inválida"
+    },
+    "birthDate": "Data de nascimento"
   },
   "recommendations": {
     "hello": "Olá,",
@@ -57,7 +64,9 @@
     "title": "Recomendações",
     "history": "Histórico",
     "movies": "filmes",
-    "error": "Erro ao gerar recomendações"
+    "error": "Erro ao gerar recomendações",
+    "moodLabel": "Como você está se sentindo hoje?",
+    "moodPlaceholder": "Ex: animado, cansado, melancólico, querendo aventura..."
   },
   "ranks": {
     "joia": "Joia Bruta",
@@ -71,6 +80,10 @@
     "saved": "Salvo!",
     "saving": "Salvando...",
     "loading": "Carregando suas preferências...",
+    "country": {
+      "title": "Seu País",
+      "subtitle": "Filtramos recomendações disponíveis no seu catálogo local"
+    },
     "genres": {
       "title": "Gêneros favoritos",
       "subtitle": "Selecione os gêneros que mais gosta"
@@ -103,6 +116,13 @@
       "title": "Seus Streamings",
       "subtitle": "Selecione as plataformas que você assina"
     }
+  },
+  "userPrefs": {
+    "title": "Preferências de Usuário",
+    "subtitle": "Configure seu país e plataformas de streaming",
+    "loadingProviders": "Carregando plataformas...",
+    "popular": "Populares",
+    "others": "Outros"
   },
   "language": {
     "label": "Idioma",

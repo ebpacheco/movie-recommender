@@ -1,6 +1,7 @@
 {
   "nav": {
     "preferences": "Preferencias de Cine",
+    "userPreferences": "Preferencias de Usuario",
     "logout": "Cerrar sesión",
     "manageUsers": "Gestionar Usuarios"
   },
@@ -26,6 +27,8 @@
     "emailPlaceholder": "tu@correo.com",
     "cpf": "CPF",
     "cpfPlaceholder": "000.000.000-00",
+    "country": "País",
+    "countryHint": "Usado para filtrar películas disponibles en tu región",
     "password": "Contraseña",
     "passwordPlaceholder": "Crea una contraseña segura",
     "confirmPassword": "Confirmar contraseña",
@@ -45,8 +48,12 @@
       "email": "Correo inválido",
       "cpf": "CPF inválido",
       "password": "La contraseña no cumple los requisitos",
-      "confirmPassword": "Las contraseñas no coinciden"
-    }
+      "confirmPassword": "Las contraseñas no coinciden",
+      "api": "Error al crear la cuenta. Inténtalo de nuevo.",
+      "birthDate": "La fecha de nacimiento es obligatoria",
+      "birthDateInvalid": "Fecha de nacimiento inválida"
+    },
+    "birthDate": "Fecha de nacimiento"
   },
   "recommendations": {
     "hello": "Hola,",
@@ -57,7 +64,9 @@
     "title": "Recomendaciones",
     "history": "Historial",
     "movies": "películas",
-    "error": "Error al generar recomendaciones"
+    "error": "Error al generar recomendaciones",
+    "moodLabel": "¿Cómo te sientes hoy?",
+    "moodPlaceholder": "Ej: animado, cansado, nostálgico, con ganas de aventura..."
   },
   "ranks": {
     "joia": "Gema Bruta",
@@ -71,6 +80,10 @@
     "saved": "¡Guardado!",
     "saving": "Guardando...",
     "loading": "Cargando tus preferencias...",
+    "country": {
+      "title": "Tu País",
+      "subtitle": "Filtramos recomendaciones disponibles en tu catálogo local"
+    },
     "genres": {
       "title": "Géneros favoritos",
       "subtitle": "Selecciona los géneros que más te gustan"
@@ -103,6 +116,13 @@
       "title": "Tus Streamings",
       "subtitle": "Selecciona las plataformas a las que te suscribes"
     }
+  },
+  "userPrefs": {
+    "title": "Preferencias de Usuario",
+    "subtitle": "Configura tu país y plataformas de streaming",
+    "loadingProviders": "Cargando plataformas...",
+    "popular": "Populares",
+    "others": "Otros"
   },
   "language": {
     "label": "Idioma",

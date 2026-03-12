@@ -31,7 +31,7 @@ def get_recommendation_service(db: Session = Depends(get_db)) -> RecommendationS
     return RecommendationService(
         profile_repo        = ProfileRepository(db),
         recommendation_repo = RecommendationRepository(db),
-        ai_provider         = GeminiProvider(),   # ✅ era OpenAIProvider()
+        ai_provider         = GeminiProvider(),
         prompt_builder      = MoviePromptBuilder(),
     )
 

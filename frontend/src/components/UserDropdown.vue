@@ -14,7 +14,7 @@
     <transition name="dropdown">
       <div class="dropdown" v-if="open">
 
-        <!-- Header: avatar + name + email + role badge -->
+        <!-- Header -->
         <div class="dropdown-header">
           <div class="dropdown-avatar">{{ initials }}</div>
           <div class="dropdown-info">
@@ -26,16 +26,24 @@
 
         <div class="dropdown-divider"></div>
 
-        <!-- Preferences -->
+        <!-- Preferências de usuário -->
+        <router-link to="/user-preferences" class="dropdown-item" @click="open = false">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          {{ t('nav.userPreferences') }}
+        </router-link>
+
+        <!-- Preferências de cinema -->
         <router-link to="/profile" class="dropdown-item" @click="open = false">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
           {{ t('nav.preferences') }}
         </router-link>
 
-        <!-- Manage users (admin only) -->
+        <!-- Gerenciar usuários (admin) -->
         <router-link v-if="user?.role === 'admin'" to="/admin" class="dropdown-item" @click="open = false">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -114,59 +122,36 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .avatar-pill:hover { background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.4); }
 
 .avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   background: linear-gradient(135deg, #d4af37, #b8860b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #08080c;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 500;
+  color: #08080c; flex-shrink: 0;
 }
 
 .user-name { font-family: 'DM Sans', sans-serif; font-size: 0.875rem; color: #e8e0d0; }
 .chevron   { color: #8a7a5a; transition: transform 0.2s; }
 .chevron.open { transform: rotate(180deg); }
 
-/* Dropdown panel */
 .dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 250px;
-  background: #0f0f15;
+  position: absolute; top: calc(100% + 8px); right: 0;
+  min-width: 260px; background: #0f0f15;
   border: 1px solid rgba(212, 175, 55, 0.2);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  z-index: 200;
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6); z-index: 200;
 }
 
 .dropdown-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: rgba(212, 175, 55, 0.05);
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 1rem; background: rgba(212, 175, 55, 0.05);
 }
 
 .dropdown-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 40px; height: 40px; border-radius: 50%;
   background: linear-gradient(135deg, #d4af37, #b8860b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: #08080c;
-  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500;
+  color: #08080c; flex-shrink: 0;
 }
 
 .dropdown-info { display: flex; flex-direction: column; min-width: 0; }
@@ -174,38 +159,22 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 .dropdown-email { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; color: #6b6050; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .role-badge {
-  display: inline-block;
-  margin-top: 5px;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 0.18rem 0.55rem;
-  border-radius: 50px;
-  border: 1px solid;
-  width: fit-content;
+  display: inline-block; margin-top: 5px;
+  font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.18rem 0.55rem; border-radius: 50px; border: 1px solid; width: fit-content;
 }
-.role-badge.free    { color: #6b6050; background: rgba(107, 96, 80, 0.08); border-color: rgba(107, 96, 80, 0.2); }
-.role-badge.premium { color: #f5c518; background: rgba(245, 197, 24, 0.08); border-color: rgba(245, 197, 24, 0.25); }
-.role-badge.admin   { color: #c084fc; background: rgba(192, 132, 252, 0.08); border-color: rgba(192, 132, 252, 0.25); }
+.role-badge.free    { color: #6b6050; background: rgba(107,96,80,0.08);   border-color: rgba(107,96,80,0.2); }
+.role-badge.premium { color: #f5c518; background: rgba(245,197,24,0.08);  border-color: rgba(245,197,24,0.25); }
+.role-badge.admin   { color: #c084fc; background: rgba(192,132,252,0.08); border-color: rgba(192,132,252,0.25); }
 
 .dropdown-divider { height: 1px; background: rgba(212, 175, 55, 0.1); }
 
 .dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  display: flex; align-items: center; gap: 0.75rem;
   padding: 0.875rem 1rem;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.875rem;
-  color: #c8b898;
-  text-decoration: none;
-  transition: all 0.15s;
-  background: none;
-  border: none;
-  width: 100%;
-  cursor: pointer;
-  text-align: left;
+  font-family: 'DM Sans', sans-serif; font-size: 0.875rem; color: #c8b898;
+  text-decoration: none; transition: all 0.15s;
+  background: none; border: none; width: 100%; cursor: pointer; text-align: left;
 }
 .dropdown-item:hover        { background: rgba(212, 175, 55, 0.08); color: #d4af37; }
 .dropdown-item.danger:hover { background: rgba(220, 60, 60, 0.1);   color: #e05555; }

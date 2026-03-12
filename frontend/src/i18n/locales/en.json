@@ -1,6 +1,7 @@
 {
   "nav": {
     "preferences": "Cinema Preferences",
+    "userPreferences": "User Preferences",
     "logout": "Sign out",
     "manageUsers": "Manage Users"
   },
@@ -26,6 +27,8 @@
     "emailPlaceholder": "your@email.com",
     "cpf": "CPF",
     "cpfPlaceholder": "000.000.000-00",
+    "country": "Country",
+    "countryHint": "Used to filter films available in your region",
     "password": "Password",
     "passwordPlaceholder": "Create a strong password",
     "confirmPassword": "Confirm password",
@@ -45,8 +48,12 @@
       "email": "Invalid email",
       "cpf": "Invalid CPF",
       "password": "Password does not meet requirements",
-      "confirmPassword": "Passwords do not match"
-    }
+      "confirmPassword": "Passwords do not match",
+      "api": "Error creating account. Please try again.",
+      "birthDate": "Date of birth is required",
+      "birthDateInvalid": "Invalid date of birth"
+    },
+    "birthDate": "Date of birth"
   },
   "recommendations": {
     "hello": "Hello,",
@@ -57,7 +64,9 @@
     "title": "Recommendations",
     "history": "History",
     "movies": "movies",
-    "error": "Error generating recommendations"
+    "error": "Error generating recommendations",
+    "moodLabel": "How are you feeling today?",
+    "moodPlaceholder": "E.g.: excited, tired, nostalgic, up for an adventure..."
   },
   "ranks": {
     "joia": "Raw Gem",
@@ -71,6 +80,10 @@
     "saved": "Saved!",
     "saving": "Saving...",
     "loading": "Loading your preferences...",
+    "country": {
+      "title": "Your Country",
+      "subtitle": "We filter recommendations available in your local catalogue"
+    },
     "genres": {
       "title": "Favourite genres",
       "subtitle": "Select the genres you enjoy most"
@@ -103,6 +116,13 @@
       "title": "Your Streamings",
       "subtitle": "Select the platforms you subscribe to"
     }
+  },
+  "userPrefs": {
+    "title": "User Preferences",
+    "subtitle": "Set up your country and streaming platforms",
+    "loadingProviders": "Loading platforms...",
+    "popular": "Popular",
+    "others": "Others"
   },
   "language": {
     "label": "Language",

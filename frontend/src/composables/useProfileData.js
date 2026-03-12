@@ -26,6 +26,27 @@ export const GENRE_OPTIONS = [
   { value: 'Esporte',            label: 'Esporte',            emoji: '🏆' },
 ]
 
+export const COUNTRIES = [
+  { code: 'BR', name: 'Brasil',          flag: '🇧🇷' },
+  { code: 'US', name: 'United States',   flag: '🇺🇸' },
+  { code: 'GB', name: 'United Kingdom',  flag: '🇬🇧' },
+  { code: 'PT', name: 'Portugal',        flag: '🇵🇹' },
+  { code: 'AR', name: 'Argentina',       flag: '🇦🇷' },
+  { code: 'MX', name: 'México',          flag: '🇲🇽' },
+  { code: 'CO', name: 'Colômbia',        flag: '🇨🇴' },
+  { code: 'CL', name: 'Chile',           flag: '🇨🇱' },
+  { code: 'PE', name: 'Peru',            flag: '🇵🇪' },
+  { code: 'CA', name: 'Canadá',          flag: '🇨🇦' },
+  { code: 'AU', name: 'Austrália',       flag: '🇦🇺' },
+  { code: 'FR', name: 'França',          flag: '🇫🇷' },
+  { code: 'DE', name: 'Alemanha',        flag: '🇩🇪' },
+  { code: 'ES', name: 'Espanha',         flag: '🇪🇸' },
+  { code: 'IT', name: 'Itália',          flag: '🇮🇹' },
+  { code: 'JP', name: 'Japão',           flag: '🇯🇵' },
+  { code: 'KR', name: 'Coreia do Sul',   flag: '🇰🇷' },
+  { code: 'IN', name: 'Índia',           flag: '🇮🇳' },
+]
+
 export function useProfileData() {
   const loading = ref(true)
 
@@ -35,6 +56,7 @@ export function useProfileData() {
     favorite_actors:     [],
     favorite_directors:  [],
     streaming_platforms: [],
+    country:             'BR',
   })
 
   // ── Fetch + enrich ───────────────────────────────────────────────────────────
@@ -43,26 +65,24 @@ export function useProfileData() {
     try {
       const { data } = await api.get('/users/me/profile')
 
-      // Exibe nomes imediatamente sem foto
       Object.assign(profile, {
         favorite_genres:     data.favorite_genres     || [],
         favorite_movies:     (data.favorite_movies    || []).map(n => ({ id: n, name: n, image: null })),
         favorite_actors:     (data.favorite_actors    || []).map(n => ({ id: n, name: n, image: null })),
         favorite_directors:  (data.favorite_directors || []).map(n => ({ id: n, name: n, image: null })),
         streaming_platforms: data.streaming_platforms || [],
+        country:             data.country             || 'BR',
       })
 
       loading.value = false
       onReady?.()
 
-      // Enriquece com fotos em paralelo (cache sessionStorage)
       const [movies, actors, directors] = await Promise.all([
         enrichItems(data.favorite_movies,    'movie'),
         enrichItems(data.favorite_actors,    'person'),
         enrichItems(data.favorite_directors, 'person'),
       ])
 
-      // Atualiza fotos sem disparar o autosave
       onReady?.(false)
       profile.favorite_movies    = movies
       profile.favorite_actors    = actors

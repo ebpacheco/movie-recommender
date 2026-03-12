@@ -33,6 +33,7 @@ class UserService:
             email         = data.email,
             cpf           = data.cpf,
             password_hash = self.auth_service.hash_password(data.password),
+            birth_date    = data.birth_date,
         )
         self.user_repo.save(user)
 
@@ -42,6 +43,7 @@ class UserService:
             favorite_movies    = data.profile.favorite_movies,
             favorite_actors    = data.profile.favorite_actors,
             favorite_directors = data.profile.favorite_directors,
+            country            = data.profile.country,
         )
         self.profile_repo.save(profile)
 
@@ -64,15 +66,16 @@ class UserService:
         if not profile:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Perfil não encontrado")
 
-        profile.favorite_genres    = data.favorite_genres
-        profile.favorite_movies    = data.favorite_movies
-        profile.favorite_actors    = data.favorite_actors
-        profile.favorite_directors = data.favorite_directors
+        profile.favorite_genres     = data.favorite_genres
+        profile.favorite_movies     = data.favorite_movies
+        profile.favorite_actors     = data.favorite_actors
+        profile.favorite_directors  = data.favorite_directors
+        profile.streaming_platforms = data.streaming_platforms
+        profile.country             = data.country
 
         return self.profile_repo.save(profile)
 
     def update_language(self, user_id: UUID, language: str) -> None:
-        """Atualiza apenas o campo language no perfil — não afeta outros campos."""
         profile = self.profile_repo.find_by_user_id(user_id)
         if not profile:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Perfil não encontrado")
@@ -109,7 +112,6 @@ class UserService:
         user = self.user_repo.find_by_id(user_id)
         if not user:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Usuário não encontrado")
-        # Verifica conflito de email com outro usuário
         existing = self.user_repo.find_by_email(data.email)
         if existing and existing.id != user_id:
             raise HTTPException(status.HTTP_409_CONFLICT, "E-mail já em uso por outro usuário")

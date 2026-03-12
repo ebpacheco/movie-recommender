@@ -39,6 +39,30 @@
           <span class="field-msg" v-if="errors.cpf">{{ errors.cpf }}</span>
         </div>
 
+        <!-- Data de nascimento -->
+        <div class="field" :class="{ error: errors.birthDate, success: touched.birthDate && !errors.birthDate }">
+          <label>{{ t('register.birthDate') }}</label>
+          <input v-model="form.birthDate" type="date"
+            :max="maxBirthDate"
+            @blur="touch('birthDate'); validateBirthDate()"
+            @input="touched.birthDate && validateBirthDate()" />
+          <span class="field-msg" v-if="errors.birthDate">{{ errors.birthDate }}</span>
+        </div>
+
+        <!-- País -->
+        <div class="field">
+          <label>{{ t('register.country') }}</label>
+          <div class="select-wrapper">
+            <select v-model="form.country" class="country-select">
+              <option v-for="c in COUNTRIES" :key="c.code" :value="c.code">
+                {{ c.flag }} {{ c.name }}
+              </option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+          <span class="field-hint">{{ t('register.countryHint') }}</span>
+        </div>
+
         <!-- Senha -->
         <PasswordInput
           v-model="form.password"
@@ -104,9 +128,33 @@ const { t } = useI18n()
 const {
   form, errors, touched, loading, apiError,
   rules, isFormValid,
-  touch, validateName, validateEmail, validateCpf, validatePassword, validateConfirm,
+  touch, validateName, validateEmail, validateCpf, validateBirthDate, validatePassword, validateConfirm,
   formatCpf, handleRegister,
 } = useRegisterForm()
+
+// Data máxima = hoje (não permite data futura)
+const maxBirthDate = new Date().toISOString().split('T')[0]
+
+const COUNTRIES = [
+  { code: 'BR', name: 'Brasil',          flag: '🇧🇷' },
+  { code: 'US', name: 'United States',   flag: '🇺🇸' },
+  { code: 'GB', name: 'United Kingdom',  flag: '🇬🇧' },
+  { code: 'PT', name: 'Portugal',        flag: '🇵🇹' },
+  { code: 'AR', name: 'Argentina',       flag: '🇦🇷' },
+  { code: 'MX', name: 'México',          flag: '🇲🇽' },
+  { code: 'CO', name: 'Colômbia',        flag: '🇨🇴' },
+  { code: 'CL', name: 'Chile',           flag: '🇨🇱' },
+  { code: 'PE', name: 'Peru',            flag: '🇵🇪' },
+  { code: 'CA', name: 'Canadá',          flag: '🇨🇦' },
+  { code: 'AU', name: 'Austrália',       flag: '🇦🇺' },
+  { code: 'FR', name: 'França',          flag: '🇫🇷' },
+  { code: 'DE', name: 'Alemanha',        flag: '🇩🇪' },
+  { code: 'ES', name: 'Espanha',         flag: '🇪🇸' },
+  { code: 'IT', name: 'Itália',          flag: '🇮🇹' },
+  { code: 'JP', name: 'Japão',           flag: '🇯🇵' },
+  { code: 'KR', name: 'Coreia do Sul',   flag: '🇰🇷' },
+  { code: 'IN', name: 'Índia',           flag: '🇮🇳' },
+]
 </script>
 
 <style scoped>
@@ -185,6 +233,35 @@ input::placeholder { color: #3a3228; }
 input:focus    { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
 .field.error   input { border-color: rgba(220, 80, 80, 0.5); }
 .field.success input { border-color: rgba(80, 200, 120, 0.3); }
+
+/* Country select */
+.select-wrapper { position: relative; }
+.country-select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #e8e0d0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.country-select:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 55, 0.04); }
+.country-select option { background: #0f0f15; color: #e8e0d0; }
+.select-arrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #5a5040;
+  pointer-events: none;
+  font-size: 0.75rem;
+}
+.field-hint { font-size: 0.75rem; color: #3a3228; }
 
 .field-msg { font-size: 0.78rem; color: #e05555; }
 

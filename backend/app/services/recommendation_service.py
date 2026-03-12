@@ -1,21 +1,17 @@
 # app/services/recommendation_service.py
 from uuid import UUID
-from datetime import date
+from datetime import timedelta
+
 from fastapi import HTTPException, status
 
 from app.models.recommendation_model import Recommendation
 from app.models.user_model import UserRole
+from app.repositories.recommendation_repository import RecommendationRepository
 from app.repositories.interfaces.i_user_repository import IProfileRepository
-from app.repositories.interfaces.i_recommendation_repository import IRecommendationRepository
 from app.providers.interfaces.i_ai_provider import IAIProvider
 from app.builders.interfaces.i_prompt_builder import IPromptBuilder
 
-
-DAILY_LIMITS = {
-    UserRole.free:    1,
-    UserRole.premium: 3,
-    UserRole.admin:   None,  # ilimitado
-}
+CACHE_HOURS = 12
 
 
 class RecommendationService:
@@ -23,7 +19,7 @@ class RecommendationService:
     def __init__(
         self,
         profile_repo:        IProfileRepository,
-        recommendation_repo: IRecommendationRepository,
+        recommendation_repo: RecommendationRepository,
         ai_provider:         IAIProvider,
         prompt_builder:      IPromptBuilder,
     ):
@@ -32,51 +28,57 @@ class RecommendationService:
         self.ai_provider         = ai_provider
         self.prompt_builder      = prompt_builder
 
+    def _to_response(self, rec: Recommendation, cached: bool, is_admin: bool = False) -> dict:
+        # Admin não recebe next_available_at — pode gerar a qualquer momento
+        next_at = None if is_admin else rec.created_at + timedelta(hours=CACHE_HOURS)
+        return {
+            "movies":            rec.response,
+            "cached":            cached,
+            "created_at":        rec.created_at,
+            "next_available_at": next_at,
+        }
+
+    def get_cached(self, user_id: UUID) -> dict | None:
+        """Retorna a recomendação em cache das últimas 12h, ou None."""
+        profile = self.profile_repo.find_by_user_id(user_id)
+        if not profile:
+            return None
+
+        # Admin nunca retorna cache no GET /today — sempre pode gerar novo
+        if profile.user.role == UserRole.admin:
+            return None
+
+        rec = self.recommendation_repo.find_within_12h(user_id)
+        if not rec:
+            return None
+        return self._to_response(rec, cached=True, is_admin=False)
+
     def generate(
         self,
-        user_id:      UUID,
-        extra_prompt: str | None = None,
-        language:     str = 'pt',
-    ) -> Recommendation:
+        user_id:  UUID,
+        mood:     str | None = None,
+        language: str = 'pt',
+    ) -> dict:
         profile = self.profile_repo.find_by_user_id(user_id)
         if not profile:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Perfil não encontrado")
 
-        # Verifica limite diário baseado no role do usuário
-        user  = profile.user
-        limit = DAILY_LIMITS.get(user.role)
+        is_admin = profile.user.role == UserRole.admin
 
-        if limit is not None:
-            today = date.today()
-            count = self.recommendation_repo.count_by_user_and_date(user_id, today)
-            if count >= limit:
-                role_names = {
-                    UserRole.free:    "gratuito",
-                    UserRole.premium: "premium",
-                }
-                raise HTTPException(
-                    status.HTTP_429_TOO_MANY_REQUESTS,
-                    f"Limite diário atingido. Usuários {role_names[user.role]} podem solicitar "
-                    f"{limit} recomendação{'ões' if limit > 1 else ''} por dia.",
-                )
+        if not is_admin:
+            cached = self.recommendation_repo.find_within_12h(user_id)
+            if cached:
+                return self._to_response(cached, cached=True, is_admin=False)
 
-        prompt = self.prompt_builder.build(profile, extra_prompt, language)
+        prompt = self.prompt_builder.build(profile, None, language, mood)
+        print("\n" + "="*60)
+        print("PROMPT ENVIADO PARA A IA:")
+        print("="*60)
+        print(prompt)
+        print("="*60 + "\n")
         movies = self.ai_provider.get_recommendations(prompt)
 
-        recommendation = Recommendation(
-            user_id     = user_id,
-            prompt_used = prompt,
-            response    = movies,
-        )
-        return self.recommendation_repo.save(recommendation)
+        rec = Recommendation(user_id=user_id, prompt_used=prompt, response=movies)
+        rec = self.recommendation_repo.upsert(rec)
 
-    def list_by_user(self, user_id: UUID) -> list[Recommendation]:
-        return self.recommendation_repo.find_all_by_user_id(user_id)
-
-    def get_by_id(self, recommendation_id: UUID, user_id: UUID) -> Recommendation:
-        rec = self.recommendation_repo.find_by_id(recommendation_id)
-        if not rec:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, "Recomendação não encontrada")
-        if rec.user_id != user_id:
-            raise HTTPException(status.HTTP_403_FORBIDDEN, "Acesso negado")
-        return rec
+        return self._to_response(rec, cached=False, is_admin=is_admin)

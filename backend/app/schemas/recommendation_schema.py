@@ -1,5 +1,4 @@
 # app/schemas/recommendation_schema.py
-from uuid import UUID
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -12,15 +11,12 @@ class MovieResult(BaseModel):
 
 
 class RecommendationRequest(BaseModel):
-    extra_prompt: str | None = None
-    language:     str = 'pt'  # idioma para geração das descrições
+    mood:     str | None = None
+    language: str = 'pt'
 
 
 class RecommendationResponse(BaseModel):
-    id:          UUID
-    movies:      list[MovieResult]
-    prompt_used: str
-    created_at:  datetime
-
-    class Config:
-        from_attributes = True
+    movies:           list[MovieResult]
+    cached:           bool = False
+    created_at:       datetime | None = None
+    next_available_at: datetime | None = None  # created_at + 24h — usado no countdown do frontend

@@ -9,12 +9,30 @@ LANGUAGE_NAMES = {
     'es': 'español',
 }
 
-# Limites máximos usados na construção do prompt
-PROMPT_LIMITS = {
-    'genres':    3,
-    'movies':    3,
-    'actors':    5,
-    'directors': 3,
+COUNTRY_NAMES = {
+    'BR': 'Brasil',       'US': 'United States', 'GB': 'United Kingdom',
+    'PT': 'Portugal',     'AR': 'Argentina',      'MX': 'México',
+    'CO': 'Colômbia',     'CL': 'Chile',          'FR': 'França',
+    'DE': 'Alemanha',     'ES': 'Espanha',        'IT': 'Itália',
+    'JP': 'Japão',        'KR': 'Coreia do Sul',  'CA': 'Canadá',
+    'AU': 'Austrália',    'PE': 'Peru',            'IN': 'Índia',
+}
+
+PROVIDER_NAMES: dict[str, str] = {
+    '8':    'Netflix',
+    '119':  'Amazon Prime Video',
+    '337':  'Disney+',
+    '1899': 'Max',
+    '531':  'Paramount+',
+    '350':  'Apple TV+',
+    '307':  'Globoplay',
+    '619':  'Star+',
+    '167':  'Mubi',
+    '584':  'Pluto TV',
+    '509':  'Pluto TV',
+    '386':  'Peacock',
+    '15':   'Hulu',
+    '283':  'Crunchyroll',
 }
 
 
@@ -25,70 +43,99 @@ class MoviePromptBuilder(IPromptBuilder):
         profile:       Profile,
         extra_context: str | None = None,
         language:      str = 'pt',
+        mood:          str | None = None,
     ) -> str:
-        lang_name = LANGUAGE_NAMES.get(language, 'português brasileiro')
+        lang_name    = LANGUAGE_NAMES.get(language, 'português brasileiro')
+        country_code = getattr(profile, 'country', 'BR') or 'BR'
+        country_name = COUNTRY_NAMES.get(country_code, country_code)
 
-        # Aplica limites defensivamente
-        # Suporta tanto strings simples quanto objetos {name, id, image} do autocomplete
-        def names(lst, limit):
-            items = (lst or [])[:limit]
+        # Extrai nomes — sem limites, usa TODAS as preferências
+        def names(lst):
+            items = lst or []
             return [i['name'] if isinstance(i, dict) else i for i in items]
 
-        genres    = names(profile.favorite_genres,    PROMPT_LIMITS['genres'])
-        movies    = names(profile.favorite_movies,    PROMPT_LIMITS['movies'])
-        actors    = names(profile.favorite_actors,    PROMPT_LIMITS['actors'])
-        directors  = names(profile.favorite_directors, PROMPT_LIMITS['directors'])
-        streamings = (profile.streaming_platforms or [])
+        genres    = names(profile.favorite_genres)
+        movies    = names(profile.favorite_movies)
+        actors    = names(profile.favorite_actors)
+        directors = names(profile.favorite_directors)
 
-        parts = ["Recomende 6 filmes para um usuário com as seguintes preferências:"]
+        # Converte IDs → nomes legíveis, remove duplicatas
+        raw_platforms  = profile.streaming_platforms or []
+        platform_names = list(dict.fromkeys(
+            PROVIDER_NAMES.get(str(pid), str(pid)) for pid in raw_platforms
+        ))
+
+        parts = [
+            f"Você é um especialista em cinema. Recomende exatamente 20 filmes para um usuário em {country_name}.",
+            "",
+            "PERFIL DO USUÁRIO:",
+        ]
 
         if genres:
             parts.append(f"- Gêneros favoritos: {', '.join(genres)}")
 
         if movies:
-            parts.append(f"- Filmes favoritos (use como referência de estilo/gosto, NÃO os inclua na lista): {', '.join(movies)}")
+            parts.append(f"- Filmes favoritos (referência de gosto, NÃO inclua na lista): {', '.join(movies)}")
 
         if actors:
-            parts.append(f"- Atores favoritos: {', '.join(actors)}")
+            parts.append(f"- Atores/atrizes favoritos: {', '.join(actors)}")
 
         if directors:
             parts.append(f"- Diretores favoritos: {', '.join(directors)}")
 
-        if streamings:
-            parts.append(f"- Plataformas de streaming que o usuário tem acesso: {', '.join(streamings)}")
-            parts.append("- PRIORIZE filmes disponíveis nessas plataformas, mas pode recomendar outros se forem muito relevantes")
-
-        if not any([genres, movies, actors, directors]):
-            parts.append("- Sem preferências específicas: recomende filmes variados e populares")
+        if mood:
+            parts.append(f"- Como o usuário está se sentindo hoje: {mood}")
 
         if extra_context:
-            parts.append(f"- Pedido específico do usuário: {extra_context}")
+            parts.append(f"- Pedido específico: {extra_context}")
+
+        if not any([genres, movies, actors, directors, mood]):
+            parts.append("- Sem preferências específicas: recomende filmes variados e populares")
+
+        parts.append("")
+
+        if platform_names:
+            platforms_str = ', '.join(platform_names)
+            parts.append(f"PLATAFORMAS DISPONÍVEIS: {platforms_str} (catálogo de {country_name})")
+            parts.append("")
+            parts.append(
+                f"REGRA CRÍTICA: Todos os 20 filmes OBRIGATORIAMENTE devem estar disponíveis "
+                f"para assistir agora em {country_name} em pelo menos uma dessas plataformas: {platforms_str}. "
+                f"NÃO inclua filmes que não estejam no catálogo atual dessas plataformas em {country_name}. "
+                f"Se necessário, escolha filmes menos famosos mas que estejam confirmadamente disponíveis."
+            )
+        else:
+            parts.append(f"Recomende filmes populares e bem avaliados disponíveis em {country_name}.")
 
         if movies:
-            parts.append("- NÃO repita os filmes favoritos listados acima na recomendação")
+            parts.append(f"NÃO repita estes filmes na recomendação: {', '.join(movies)}")
+
+        # Texto de referência para ordenação
+        mood_or_context = ' + '.join(filter(None, [mood, extra_context])) or 'preferências gerais do usuário'
 
         parts.append(f"""
-IMPORTANTE: Escreva o campo "description" de cada filme em {lang_name}.
-O campo "title" deve ser o título original do filme (em inglês ou no idioma original).
-O campo "genre" deve ser escrito em {lang_name}.
+FORMATO DE RESPOSTA:
+- Escreva "description" em {lang_name}
+- "title" deve ser o título original (inglês ou idioma original)
+- "genre" deve ser escrito em {lang_name}
+- ORDENAÇÃO OBRIGATÓRIA: ordene os 20 filmes do que melhor atende ao pedido específico e humor do usuário para o que atende menos. O primeiro filme deve ser o que mais combina com "{mood_or_context}", o último o que menos combina.
 
-Retorne APENAS um JSON válido com exatamente 6 filmes, ordenados do mais recomendado para o menos.
-
-Formato obrigatório:
+Retorne APENAS um JSON válido com exatamente 20 filmes:
 
 [
   {{
     "title": "Nome original do filme",
     "year": 2000,
     "genre": "Gênero principal",
-    "description": "Breve descrição do motivo da recomendação"
+    "description": "Por que este filme combina com o perfil do usuário"
   }}
 ]
 
-Regras:
-- Retorne exatamente 6 filmes
-- Não inclua explicações fora do JSON
-- Não use ```json ou markdown
+Regras absolutas:
+- Exatamente 20 filmes
+- Nenhum filme fora das plataformas listadas
+- Sem explicações fora do JSON
+- Sem ```json ou markdown
 """)
 
         return "\n".join(parts)

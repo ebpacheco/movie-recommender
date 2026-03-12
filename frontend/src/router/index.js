@@ -1,19 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-import LoginView from '@/views/LoginView.vue'
-import RegisterView from '@/views/RegisterView.vue'
-import RecommendationsView from '@/views/RecommendationsView.vue'
-import ProfileView from '@/views/ProfileView.vue'
-import AdminView from '@/views/AdminView.vue'
+import LoginView            from '@/views/LoginView.vue'
+import RegisterView         from '@/views/RegisterView.vue'
+import RecommendationsView  from '@/views/RecommendationsView.vue'
+import ProfileView          from '@/views/ProfileView.vue'
+import UserPreferencesView  from '@/views/UserPreferencesView.vue'
+import AdminView            from '@/views/AdminView.vue'
 
 const routes = [
-  { path: '/', redirect: '/recommendations' },
-  { path: '/login',           component: LoginView,           meta: { public: true } },
-  { path: '/register',        component: RegisterView,        meta: { public: true } },
-  { path: '/recommendations', component: RecommendationsView, meta: { requiresAuth: true } },
-  { path: '/profile',         component: ProfileView,         meta: { requiresAuth: true } },
-  { path: '/admin',           component: AdminView,           meta: { requiresAuth: true, requiresAdmin: true } },
+  { path: '/',                  redirect: '/recommendations' },
+  { path: '/login',             component: LoginView,           meta: { public: true } },
+  { path: '/register',          component: RegisterView,        meta: { public: true } },
+  { path: '/recommendations',   component: RecommendationsView, meta: { requiresAuth: true } },
+  { path: '/profile',           component: ProfileView,         meta: { requiresAuth: true } },
+  { path: '/user-preferences',  component: UserPreferencesView, meta: { requiresAuth: true } },
+  { path: '/admin',             component: AdminView,           meta: { requiresAuth: true, requiresAdmin: true } },
 ]
 
 const router = createRouter({

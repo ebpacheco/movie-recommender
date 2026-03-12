@@ -1,40 +1,34 @@
 # app/repositories/recommendation_repository.py
 from uuid import UUID
-from datetime import date
-from sqlalchemy import func
+from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 
 from app.models.recommendation_model import Recommendation
-from app.repositories.interfaces.i_recommendation_repository import IRecommendationRepository
 
 
-class RecommendationRepository(IRecommendationRepository):
+class RecommendationRepository:
 
     def __init__(self, db: Session):
         self.db = db
 
-    def find_by_id(self, recommendation_id: UUID) -> Recommendation | None:
-        return self.db.query(Recommendation).filter(Recommendation.id == recommendation_id).first()
-
-    def find_all_by_user_id(self, user_id: UUID) -> list[Recommendation]:
+    def find_within_12h(self, user_id: UUID) -> Recommendation | None:
+        """Retorna a recomendação mais recente do usuário se criada nas últimas 12h."""
+        cutoff = datetime.utcnow() - timedelta(hours=12)
         return (
             self.db.query(Recommendation)
-            .filter(Recommendation.user_id == user_id)
-            .order_by(Recommendation.created_at.desc())
-            .all()
-        )
-
-    def count_by_user_and_date(self, user_id: UUID, day: date) -> int:
-        return (
-            self.db.query(func.count(Recommendation.id))
             .filter(
-                Recommendation.user_id == user_id,
-                func.date(Recommendation.created_at) == day,
+                Recommendation.user_id   == user_id,
+                Recommendation.created_at >= cutoff,
             )
-            .scalar() or 0
+            .order_by(Recommendation.created_at.desc())
+            .first()
         )
 
-    def save(self, recommendation: Recommendation) -> Recommendation:
+    def upsert(self, recommendation: Recommendation) -> Recommendation:
+        """Substitui qualquer recomendação anterior do usuário, mantendo 1 linha por usuário."""
+        self.db.query(Recommendation).filter(
+            Recommendation.user_id == recommendation.user_id
+        ).delete(synchronize_session=False)
         self.db.add(recommendation)
         self.db.commit()
         self.db.refresh(recommendation)

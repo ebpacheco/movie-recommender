@@ -17,13 +17,13 @@ const POPULAR_IDS = [
   307,  // Globoplay
   619,  // Star+
   167,  // Mubi
-  509,  // Pluto TV
+  584,  // Pluto TV BR (substitui Claro Video)
 ]
 
 const POPULAR_SET = new Set(POPULAR_IDS)
 
 // IDs irrelevantes (aluguel/compra avulsa)
-const BLOCKED_IDS = new Set([3, 10, 192, 2, 68, 35, 130])
+const BLOCKED_IDS = new Set([3, 10, 192, 2, 68, 35, 130, 509, 384, 213])  // inclui Claro Video
 
 let _promise = null
 

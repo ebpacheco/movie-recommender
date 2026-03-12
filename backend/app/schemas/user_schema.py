@@ -1,5 +1,6 @@
 # app/schemas/user_schema.py
 from uuid import UUID
+from datetime import date
 from pydantic import BaseModel, EmailStr, field_validator
 from app.models.user_model import UserRole
 
@@ -15,11 +16,12 @@ PROFILE_LIMITS = {
 
 
 class ProfileBase(BaseModel):
-    favorite_genres:    list[str] = []
-    favorite_movies:    list[str] = []
-    favorite_actors:    list[str] = []
-    favorite_directors: list[str] = []
+    favorite_genres:     list[str] = []
+    favorite_movies:     list[str] = []
+    favorite_actors:     list[str] = []
+    favorite_directors:  list[str] = []
     streaming_platforms: list[str] = []
+    country:             str = 'BR'
 
 
 class ProfileCreate(ProfileBase):
@@ -27,7 +29,6 @@ class ProfileCreate(ProfileBase):
 
 
 class ProfileUpdate(ProfileBase):
-    from pydantic import field_validator
 
     @field_validator("favorite_genres")
     @classmethod
@@ -59,9 +60,8 @@ class ProfileUpdate(ProfileBase):
 
 
 class ProfileResponse(ProfileBase):
-    id:               UUID
-    user_id:          UUID
-    streaming_platforms: list[str] = []
+    id:      UUID
+    user_id: UUID
 
     @field_validator('streaming_platforms', mode='before')
     @classmethod
@@ -75,19 +75,21 @@ class ProfileResponse(ProfileBase):
 # --- User ---
 
 class UserCreate(BaseModel):
-    name:     str
-    email:    EmailStr
-    cpf:      str
-    password: str
-    profile:  ProfileCreate
+    name:       str
+    email:      EmailStr
+    cpf:        str
+    password:   str
+    birth_date: date | None = None
+    profile:    ProfileCreate
 
 
 class UserResponse(BaseModel):
-    id:      UUID
-    name:    str
-    email:   str
-    role:    UserRole
-    profile: ProfileResponse | None = None
+    id:         UUID
+    name:       str
+    email:      str
+    role:       UserRole
+    birth_date: date | None = None
+    profile:    ProfileResponse | None = None
 
     class Config:
         from_attributes = True
