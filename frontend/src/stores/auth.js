@@ -9,19 +9,19 @@ export const useAuthStore = defineStore('auth', () => {
 
   const isAuthenticated = computed(() => !!token.value)
 
-async function login(email, password) {
-  const { data } = await api.post('/auth/login', { email, password })
+  async function login(email, password) {
+    const { data } = await api.post('/auth/login', { email, password })
 
-  token.value = data.access_token
-  localStorage.setItem('token', data.access_token)
+    token.value = data.access_token
+    localStorage.setItem('token', data.access_token)
 
-  try {
-    await fetchUser()
-  } catch {
-    logout()
-    throw new Error('Erro ao carregar usuário')
+    try {
+      await fetchUser()
+    } catch {
+      logout()
+      throw new Error('Erro ao carregar usuário')
+    }
   }
-}
 
   async function register(payload) {
     await api.post('/auth/register', payload)
@@ -37,6 +37,10 @@ async function login(email, password) {
     token.value = null
     user.value  = null
     localStorage.removeItem('token')
+
+    // Limpa stores derivadas para evitar estado stale entre sessões
+    import('@/stores/profile').then(({ useProfileStore }) => useProfileStore().clear())
+    import('@/stores/recommendations').then(({ useRecommendationsStore }) => useRecommendationsStore().clear())
   }
 
   return { token, user, isAuthenticated, login, register, fetchUser, logout }

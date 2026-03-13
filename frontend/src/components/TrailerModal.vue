@@ -120,4 +120,12 @@ defineEmits(['close'])
 .modal-enter-from, .modal-leave-to { opacity: 0; }
 .modal-enter-active .modal { transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1); }
 .modal-enter-from .modal { transform: scale(0.94) translateY(12px); }
+
+@media (max-width: 640px) {
+  .modal-overlay { padding: 0; align-items: flex-end; }
+  .modal         { border-radius: 20px 20px 0 0; max-height: 95vh; }
+  .modal-header  { padding: 1rem; }
+  .modal-title   { font-size: 1.05rem; }
+  .modal-footer  { padding: 0.875rem 1rem; }
+}
 </style>

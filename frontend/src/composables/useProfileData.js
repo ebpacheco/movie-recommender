@@ -2,50 +2,10 @@
 import { ref, reactive } from 'vue'
 import api from '@/services/api'
 import { enrichItems } from '@/composables/useTmdbImages'
+import { GENRE_OPTIONS } from '@/constants/genres'
+import { COUNTRIES } from '@/constants/countries'
 
-export const GENRE_OPTIONS = [
-  { value: 'Ação',               label: 'Ação',               emoji: '💥' },
-  { value: 'Aventura',           label: 'Aventura',           emoji: '🗺️' },
-  { value: 'Comédia',            label: 'Comédia',            emoji: '😂' },
-  { value: 'Drama',              label: 'Drama',              emoji: '🎭' },
-  { value: 'Fantasia',           label: 'Fantasia',           emoji: '🧙' },
-  { value: 'Ficção Científica',  label: 'Ficção Científica',  emoji: '🚀' },
-  { value: 'Terror',             label: 'Terror',             emoji: '👻' },
-  { value: 'Mistério',           label: 'Mistério',           emoji: '🔍' },
-  { value: 'Suspense / Thriller',label: 'Suspense / Thriller',emoji: '😰' },
-  { value: 'Romance',            label: 'Romance',            emoji: '❤️' },
-  { value: 'Crime / Policial',   label: 'Crime / Policial',   emoji: '🕵️' },
-  { value: 'Guerra',             label: 'Guerra',             emoji: '⚔️' },
-  { value: 'Western',            label: 'Western',            emoji: '🤠' },
-  { value: 'Histórico / Épico',  label: 'Histórico / Épico',  emoji: '🏛️' },
-  { value: 'Musical',            label: 'Musical',            emoji: '🎵' },
-  { value: 'Animação',           label: 'Animação',           emoji: '✨' },
-  { value: 'Documentário',       label: 'Documentário',       emoji: '📽️' },
-  { value: 'Família / Infantil', label: 'Família / Infantil', emoji: '👨‍👩‍👧' },
-  { value: 'Biografia',          label: 'Biografia',          emoji: '📖' },
-  { value: 'Esporte',            label: 'Esporte',            emoji: '🏆' },
-]
-
-export const COUNTRIES = [
-  { code: 'BR', name: 'Brasil',          flag: '🇧🇷' },
-  { code: 'US', name: 'United States',   flag: '🇺🇸' },
-  { code: 'GB', name: 'United Kingdom',  flag: '🇬🇧' },
-  { code: 'PT', name: 'Portugal',        flag: '🇵🇹' },
-  { code: 'AR', name: 'Argentina',       flag: '🇦🇷' },
-  { code: 'MX', name: 'México',          flag: '🇲🇽' },
-  { code: 'CO', name: 'Colômbia',        flag: '🇨🇴' },
-  { code: 'CL', name: 'Chile',           flag: '🇨🇱' },
-  { code: 'PE', name: 'Peru',            flag: '🇵🇪' },
-  { code: 'CA', name: 'Canadá',          flag: '🇨🇦' },
-  { code: 'AU', name: 'Austrália',       flag: '🇦🇺' },
-  { code: 'FR', name: 'França',          flag: '🇫🇷' },
-  { code: 'DE', name: 'Alemanha',        flag: '🇩🇪' },
-  { code: 'ES', name: 'Espanha',         flag: '🇪🇸' },
-  { code: 'IT', name: 'Itália',          flag: '🇮🇹' },
-  { code: 'JP', name: 'Japão',           flag: '🇯🇵' },
-  { code: 'KR', name: 'Coreia do Sul',   flag: '🇰🇷' },
-  { code: 'IN', name: 'Índia',           flag: '🇮🇳' },
-]
+export { GENRE_OPTIONS, COUNTRIES }
 
 export function useProfileData() {
   const loading = ref(true)

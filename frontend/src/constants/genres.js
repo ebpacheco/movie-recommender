@@ -1,0 +1,23 @@
+// src/constants/genres.js
+export const GENRE_OPTIONS = [
+  { value: 'Ação',               label: 'Ação',               emoji: '💥' },
+  { value: 'Aventura',           label: 'Aventura',           emoji: '🗺️' },
+  { value: 'Comédia',            label: 'Comédia',            emoji: '😂' },
+  { value: 'Drama',              label: 'Drama',              emoji: '🎭' },
+  { value: 'Fantasia',           label: 'Fantasia',           emoji: '🧙' },
+  { value: 'Ficção Científica',  label: 'Ficção Científica',  emoji: '🚀' },
+  { value: 'Terror',             label: 'Terror',             emoji: '👻' },
+  { value: 'Mistério',           label: 'Mistério',           emoji: '🔍' },
+  { value: 'Suspense / Thriller',label: 'Suspense / Thriller',emoji: '😰' },
+  { value: 'Romance',            label: 'Romance',            emoji: '❤️' },
+  { value: 'Crime / Policial',   label: 'Crime / Policial',   emoji: '🕵️' },
+  { value: 'Guerra',             label: 'Guerra',             emoji: '⚔️' },
+  { value: 'Western',            label: 'Western',            emoji: '🤠' },
+  { value: 'Histórico / Épico',  label: 'Histórico / Épico',  emoji: '🏛️' },
+  { value: 'Musical',            label: 'Musical',            emoji: '🎵' },
+  { value: 'Animação',           label: 'Animação',           emoji: '✨' },
+  { value: 'Documentário',       label: 'Documentário',       emoji: '📽️' },
+  { value: 'Família / Infantil', label: 'Família / Infantil', emoji: '👨‍👩‍👧' },
+  { value: 'Biografia',          label: 'Biografia',          emoji: '📖' },
+  { value: 'Esporte',            label: 'Esporte',            emoji: '🏆' },
+]

@@ -200,8 +200,23 @@ h1 { font-family: 'Playfair Display', serif; font-size: 2.25rem; margin: 0 0 0.4
 .fade-enter-active { transition: opacity 0.4s, transform 0.4s; }
 .fade-enter-from   { opacity: 0; transform: translateY(12px); }
 
+@media (max-width: 1024px) {
+  .movies-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 640px) {
-  .movies-grid { grid-template-columns: 1fr; }
-  h1 { font-size: 1.75rem; }
+  .content        { padding: 80px 1rem 3rem; }
+  h1              { font-size: 1.75rem; }
+  .movies-grid    { grid-template-columns: 1fr; }
+  .prompt-row     { flex-direction: column; }
+  .btn-generate   { width: 100%; min-width: unset; }
+  .admin-generate { flex-direction: column; }
+  .admin-mood-input { width: 100%; }
+  .message-card   { padding: 1.25rem; }
+  .incomplete-card { flex-direction: column; gap: 0.75rem; }
+}
+
+@media (max-width: 380px) {
+  h1 { font-size: 1.5rem; }
 }
 </style>

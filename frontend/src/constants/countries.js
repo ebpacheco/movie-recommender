@@ -1,0 +1,21 @@
+// src/constants/countries.js
+export const COUNTRIES = [
+  { code: 'BR', name: 'Brasil',          flag: '🇧🇷' },
+  { code: 'US', name: 'United States',   flag: '🇺🇸' },
+  { code: 'GB', name: 'United Kingdom',  flag: '🇬🇧' },
+  { code: 'PT', name: 'Portugal',        flag: '🇵🇹' },
+  { code: 'AR', name: 'Argentina',       flag: '🇦🇷' },
+  { code: 'MX', name: 'México',          flag: '🇲🇽' },
+  { code: 'CO', name: 'Colômbia',        flag: '🇨🇴' },
+  { code: 'CL', name: 'Chile',           flag: '🇨🇱' },
+  { code: 'PE', name: 'Peru',            flag: '🇵🇪' },
+  { code: 'CA', name: 'Canadá',          flag: '🇨🇦' },
+  { code: 'AU', name: 'Austrália',       flag: '🇦🇺' },
+  { code: 'FR', name: 'França',          flag: '🇫🇷' },
+  { code: 'DE', name: 'Alemanha',        flag: '🇩🇪' },
+  { code: 'ES', name: 'Espanha',         flag: '🇪🇸' },
+  { code: 'IT', name: 'Itália',          flag: '🇮🇹' },
+  { code: 'JP', name: 'Japão',           flag: '🇯🇵' },
+  { code: 'KR', name: 'Coreia do Sul',   flag: '🇰🇷' },
+  { code: 'IN', name: 'Índia',           flag: '🇮🇳' },
+]

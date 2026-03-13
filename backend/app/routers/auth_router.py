@@ -1,7 +1,10 @@
 # app/routers/auth_router.py
 from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
+from app.database import get_db
 from app.dependencies import get_user_service, auth_service
+from app.repositories.user_repository import UserRepository
 from app.schemas.user_schema import UserCreate, LoginRequest, TokenResponse, UserResponse
 from app.services.user_service import UserService
 from app.core.session_cache import set_session
@@ -35,8 +38,12 @@ def register(data: UserCreate, service: UserService = Depends(get_user_service))
 
 
 @router.post("/login", response_model=TokenResponse)
-def login(data: LoginRequest, service: UserService = Depends(get_user_service)):
-    user  = service.authenticate(data.email, data.password)
-    token = auth_service.create_access_token(str(user.id))
+def login(
+    data: LoginRequest,
+    db:   Session = Depends(get_db),
+):
+    user_repo = UserRepository(db)
+    user      = auth_service.authenticate(data.email, data.password, user_repo)
+    token     = auth_service.create_access_token(str(user.id))
     set_session(user.id, _build_session(user))
     return TokenResponse(access_token=token, token_type="bearer")

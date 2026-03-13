@@ -3,7 +3,7 @@
     <div class="navbar-inner">
 
       <router-link to="/recommendations" class="brand">
-        <img src="/logo.png" alt="CineMAGIC" class="brand-logo" />
+        <img src="/logo.png" alt="CineMagIA" class="brand-logo" />
         <span class="brand-name">{{ appName }}</span>
       </router-link>
 
@@ -87,5 +87,11 @@ function handleLogout() {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+}
+
+@media (max-width: 480px) {
+  .navbar-inner { padding: 0 1rem; }
+  .brand-logo   { width: 28px; height: 28px; }
+  .brand-name   { font-size: 1rem; }
 }
 </style>

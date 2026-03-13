@@ -1,8 +1,10 @@
 // src/composables/useRecommendations.js
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useRecommendationsStore } from '@/stores/recommendations'
+import { useCountdown } from '@/composables/useCountdown'
 import api from '@/services/api'
 import { enrichMovies, useLocaleTranslation } from '@/composables/useMovieEnrich'
 
@@ -10,16 +12,15 @@ export function useRecommendations() {
   const { t, locale } = useI18n()
   const auth  = useAuthStore()
   const route = useRoute()
+  const store = useRecommendationsStore()
+  const { countdown, startCountdown } = useCountdown()
 
-  const loading         = ref(false)
-  const translating     = ref(false)
-  const error           = ref('')
-  const mood            = ref('')
-  const movies          = ref([])
-  const aiMessage       = ref('')
-  const nextAvailableAt = ref(null)
-  const countdown       = ref('')
-  let   countdownTimer  = null
+  const loading     = ref(false)
+  const translating = ref(false)
+  const error       = ref('')
+  const mood        = ref('')
+  const movies      = ref([])
+  const aiMessage   = ref('')
 
   useLocaleTranslation(movies, translating)
 
@@ -34,35 +35,6 @@ export function useRecommendations() {
     userGenres.value.length   >= 3
   )
 
-  // ── Countdown ───────────────────────────────────────────────────────────────
-
-  function startCountdown(nextAt) {
-    nextAvailableAt.value = new Date(nextAt)
-    if (countdownTimer) clearInterval(countdownTimer)
-
-    function tick() {
-      const diff = nextAvailableAt.value - Date.now()
-      if (diff <= 0) {
-        countdown.value       = ''
-        nextAvailableAt.value = null
-        clearInterval(countdownTimer)
-        return
-      }
-      const h   = Math.floor(diff / 3_600_000)
-      const min = Math.floor((diff % 3_600_000) / 60_000)
-      countdown.value = h > 0 ? `${h}h ${min}min` : `${min}min`
-    }
-
-    tick()
-    countdownTimer = setInterval(tick, 30_000)
-  }
-
-  function clearCountdown() {
-    if (countdownTimer) clearInterval(countdownTimer)
-  }
-
-  // ── Enrich ──────────────────────────────────────────────────────────────────
-
   async function enrich(rawMovies) {
     return enrichMovies(rawMovies, locale.value, {
       watchRegion:     userCountry.value,
@@ -70,15 +42,13 @@ export function useRecommendations() {
     })
   }
 
-  // ── API ─────────────────────────────────────────────────────────────────────
-
   async function loadCached() {
-    // Sempre re-busca para pegar preferências atualizadas
     await auth.fetchUser()
     try {
-      const { data } = await api.get('/recommendations/today')
+      const { data } = await api.get('/recommendations/latest')
       movies.value    = await enrich(data.movies)
       aiMessage.value = data.message || ''
+      store.set(data)
       if (data.next_available_at) startCountdown(data.next_available_at)
     } catch {} // 404 = sem cache
   }
@@ -93,6 +63,7 @@ export function useRecommendations() {
       })
       movies.value    = await enrich(data.movies)
       aiMessage.value = data.message || ''
+      store.set(data)
       if (data.next_available_at) startCountdown(data.next_available_at)
     } catch (e) {
       error.value = e.response?.data?.detail || t('recommendations.error')
@@ -103,11 +74,9 @@ export function useRecommendations() {
 
   onMounted(loadCached)
 
-  // Re-busca usuário sempre que navegar de volta para esta página
   watch(() => route.path, (path) => {
     if (path === '/recommendations') auth.fetchUser()
   })
-  onUnmounted(clearCountdown)
 
   return {
     loading, translating, error, mood, movies, aiMessage,

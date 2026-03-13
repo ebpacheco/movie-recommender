@@ -1,9 +1,7 @@
 // src/composables/useTmdbImages.js
-import axios from 'axios'
+import { searchMovieImage, searchPersonImage } from '@/services/tmdb'
 
-const TMDB_TOKEN   = import.meta.env.VITE_TMDB_TOKEN
-const TMDB_IMG_URL = 'https://image.tmdb.org/t/p/w92'
-const CACHE_KEY    = 'cinemagic_img_cache'
+const CACHE_KEY = 'cinemagic_img_cache'
 
 // ── Cache sessionStorage ──────────────────────────────────────────────────────
 
@@ -33,29 +31,11 @@ async function cachedFetch(key, fetchFn) {
 // ── Buscas TMDB ───────────────────────────────────────────────────────────────
 
 export async function fetchMovieImage(name) {
-  return cachedFetch(`movie:${name}`, async () => {
-    try {
-      const { data } = await axios.get('https://api.themoviedb.org/3/search/movie', {
-        headers: { Authorization: `Bearer ${TMDB_TOKEN}` },
-        params:  { query: name, language: 'pt-BR', page: 1 },
-      })
-      const result = data.results?.[0]
-      return result?.poster_path ? `${TMDB_IMG_URL}${result.poster_path}` : null
-    } catch { return null }
-  })
+  return cachedFetch(`movie:${name}`, () => searchMovieImage(name))
 }
 
 export async function fetchPersonImage(name) {
-  return cachedFetch(`person:${name}`, async () => {
-    try {
-      const { data } = await axios.get('https://api.themoviedb.org/3/search/person', {
-        headers: { Authorization: `Bearer ${TMDB_TOKEN}` },
-        params:  { query: name, language: 'pt-BR', page: 1 },
-      })
-      const result = data.results?.[0]
-      return result?.profile_path ? `${TMDB_IMG_URL}${result.profile_path}` : null
-    } catch { return null }
-  })
+  return cachedFetch(`person:${name}`, () => searchPersonImage(name))
 }
 
 // Converte lista de strings em objetos {id, name, image} buscando fotos em paralelo

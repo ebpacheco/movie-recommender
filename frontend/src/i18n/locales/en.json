@@ -1,4 +1,7 @@
 {
+  "common": {
+    "back": "Back"
+  },
   "nav": {
     "preferences": "Cinema Preferences",
     "userPreferences": "User Preferences",
@@ -6,7 +9,7 @@
     "manageUsers": "Manage Users"
   },
   "login": {
-    "title": "CineMAGIC",
+    "title": "CineMagIA",
     "subtitle": "Your personal cinema guide",
     "email": "Email",
     "password": "Password",
@@ -21,7 +24,7 @@
   },
   "register": {
     "title": "Create account",
-    "subtitle": "Join CineMAGIC and discover your next favourite films",
+    "subtitle": "Join CineMagIA and discover your next favourite films",
     "name": "Full name",
     "namePlaceholder": "Your name",
     "email": "Email",
@@ -137,7 +140,9 @@
     "subtitle": "Set up your country and streaming platforms",
     "loadingProviders": "Loading platforms...",
     "popular": "Popular",
-    "others": "Others"
+    "others": "Others",
+    "lockedHint": "Country and streamings are locked for 12h after generating recommendations.",
+    "lockedCountdown": "Unlocks in"
   },
   "language": {
     "label": "Language",

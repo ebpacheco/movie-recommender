@@ -181,4 +181,9 @@ onUnmounted(() => document.removeEventListener('click', onClickOutside))
 
 .dropdown-enter-active, .dropdown-leave-active { transition: all 0.15s ease; }
 .dropdown-enter-from, .dropdown-leave-to       { opacity: 0; transform: translateY(-6px); }
+
+@media (max-width: 380px) {
+  .user-name { display: none; }
+  .dropdown  { min-width: min(260px, calc(100vw - 2rem)); }
+}
 </style>

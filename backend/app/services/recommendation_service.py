@@ -1,7 +1,7 @@
 # app/services/recommendation_service.py
 import json
 from uuid import UUID
-from datetime import timedelta
+from datetime import timedelta, timezone
 
 from fastapi import HTTPException, status
 
@@ -30,7 +30,7 @@ class RecommendationService:
         self.prompt_builder      = prompt_builder
 
     def _to_response(self, rec: Recommendation, cached: bool, is_admin: bool = False) -> dict:
-        next_at = None if is_admin else rec.created_at + timedelta(hours=CACHE_HOURS)
+        next_at = None if is_admin else rec.created_at.replace(tzinfo=timezone.utc) + timedelta(hours=CACHE_HOURS)
         return {
             "movies":            rec.response,
             "message":           getattr(rec, 'message', None),

@@ -5,6 +5,7 @@
     <div class="content">
       <div class="page-header">
         <div>
+          <button class="back-btn" @click="router.push('/recommendations')">← {{ t('common.back') }}</button>
           <h1>{{ t('userPrefs.title') }}</h1>
           <p>{{ t('userPrefs.subtitle') }}</p>
         </div>
@@ -21,8 +22,17 @@
 
       <div v-else class="prefs-form">
 
+        <!-- Banner de bloqueio -->
+        <div v-if="isLocked" class="lock-banner">
+          <span class="lock-icon">🔒</span>
+          <div>
+            <span>{{ t('userPrefs.lockedHint') }}</span>
+            <strong v-if="countdown"> · {{ t('userPrefs.lockedCountdown') }} {{ countdown }}</strong>
+          </div>
+        </div>
+
         <!-- País -->
-        <section class="section">
+        <section class="section" :class="{ 'section--locked': isLocked }">
           <div class="section-header">
             <span class="section-icon">🌎</span>
             <div>
@@ -31,7 +41,7 @@
             </div>
           </div>
           <div class="select-wrapper">
-            <select v-model="profile.country" class="country-select">
+            <select v-model="profile.country" class="country-select" :disabled="isLocked">
               <option v-for="c in COUNTRIES" :key="c.code" :value="c.code">
                 {{ c.flag }} {{ c.name }}
               </option>
@@ -41,7 +51,7 @@
         </section>
 
         <!-- Streamings -->
-        <section class="section">
+        <section class="section" :class="{ 'section--locked': isLocked }">
           <div class="section-header">
             <span class="section-icon">📺</span>
             <div>
@@ -65,6 +75,7 @@
                 v-for="p in popularProviders" :key="p.id"
                 type="button" class="provider-logo-btn"
                 :class="{ active: profile.streaming_platforms.includes(p.id) }"
+                :disabled="isLocked"
                 @click="toggleStreaming(p.id)" :title="p.name"
               >
                 <img :src="p.logo" :alt="p.name" />
@@ -78,6 +89,7 @@
                 v-for="p in otherProviders" :key="p.id"
                 type="button" class="provider-logo-btn provider-logo-btn--sm"
                 :class="{ active: profile.streaming_platforms.includes(p.id) }"
+                :disabled="isLocked"
                 @click="toggleStreaming(p.id)" :title="p.name"
               >
                 <img :src="p.logo" :alt="p.name" />
@@ -95,12 +107,16 @@
 <script setup>
 import { onMounted }     from 'vue'
 import { useI18n }       from 'vue-i18n'
+import { useRouter }     from 'vue-router'
 import NavBar            from '@/components/NavBar.vue'
 import { useProfileData, COUNTRIES }  from '@/composables/useProfileData'
 import { useProfileAutosave }         from '@/composables/useProfileAutosave'
 import { useStreamingProviders }      from '@/composables/useStreamingProviders'
+import { useRecommendationLock }      from '@/composables/useRecommendationLock'
 
 const { t } = useI18n()
+const router = useRouter()
+const { isLocked, countdown } = useRecommendationLock()
 
 const { profile, loading, fetchProfile, toggleStreaming } = useProfileData()
 const { saveStatus, ready }                               = useProfileAutosave(profile)
@@ -121,6 +137,8 @@ onMounted(() => fetchProfile((state) => {
 .content { max-width: 800px; margin: 0 auto; padding: 96px 2rem 4rem; }
 
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+.back-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: none; color: #6b6050; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; padding: 0; margin-bottom: 0.75rem; transition: color 0.2s; }
+.back-btn:hover { color: #d4af37; }
 h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #e8e0d0; margin: 0 0 0.4rem; }
 .page-header > div > p { color: #6b6050; font-size: 0.9rem; margin: 0; }
 
@@ -132,7 +150,12 @@ h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #e8e0d0; ma
 
 .prefs-form { display: flex; flex-direction: column; gap: 1.5rem; }
 
+.lock-banner { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1.25rem; background: rgba(212,175,55,0.06); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; font-size: 0.85rem; color: #8a7a5a; }
+.lock-icon { font-size: 1.1rem; flex-shrink: 0; }
+.lock-banner strong { color: #d4af37; }
+
 .section        { background: #0f0f15; border: 1px solid rgba(212,175,55,0.1); border-radius: 16px; padding: 1.75rem; }
+.section--locked { opacity: 0.6; pointer-events: none; }
 .section-header { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
 .section-icon   { font-size: 1.5rem; line-height: 1; margin-top: 2px; flex-shrink: 0; }
 h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af37; margin: 0 0 0.25rem; font-weight: 600; }
@@ -159,7 +182,7 @@ h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af37; 
 }
 .country-select:focus { border-color: rgba(212,175,55,0.4); background: rgba(212,175,55,0.04); }
 .country-select option { background: #0f0f15; color: #e8e0d0; }
-.select-arrow { position: absolute; left: 295px; top: 50%; transform: translateY(-50%); color: #5a5040; pointer-events: none; font-size: 0.75rem; }
+.select-arrow { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: #5a5040; pointer-events: none; font-size: 0.75rem; }
 
 /* Streaming */
 .providers-loading    { display: flex; align-items: center; gap: 0.75rem; color: #6b6050; font-size: 0.85rem; padding: 1rem 0; }
@@ -179,4 +202,15 @@ h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af37; 
 .provider-logo-btn.active .provider-check { opacity: 1; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 768px) {
+  .content { padding: 80px 1rem 3rem; }
+  h1 { font-size: 1.5rem; }
+}
+
+@media (max-width: 640px) {
+  .section { padding: 1.25rem; }
+  .country-select { max-width: 100%; }
+  .page-header { margin-bottom: 1.5rem; }
+}
 </style>

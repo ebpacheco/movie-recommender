@@ -3,7 +3,7 @@ import pt from './locales/pt.json'
 import en from './locales/en.json'
 import es from './locales/es.json'
 
-const appName = import.meta.env.VITE_APP_NAME || 'CineMAGIC'
+const appName = import.meta.env.VITE_APP_NAME || 'CineMagIA'
 
 function detectLanguage() {
   const saved = localStorage.getItem('language')

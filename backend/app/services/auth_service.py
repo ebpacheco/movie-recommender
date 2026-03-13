@@ -1,6 +1,7 @@
 # app/services/auth_service.py
 from datetime import datetime, timedelta
 
+from fastapi import HTTPException, status
 from jose import jwt, JWTError
 from pwdlib import PasswordHash
 from pwdlib.hashers.bcrypt import BcryptHasher
@@ -30,3 +31,10 @@ class AuthService:
         if user_id is None:
             raise JWTError("Token inválido")
         return user_id
+
+    def authenticate(self, email: str, password: str, user_repo) -> "User":  # noqa: F821
+        """Valida credenciais e retorna o usuário ou lança 401."""
+        user = user_repo.find_by_email(email)
+        if not user or not self.verify_password(password, user.password_hash):
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Credenciais inválidas")
+        return user

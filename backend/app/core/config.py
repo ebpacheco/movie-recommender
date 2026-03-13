@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     ALGORITHM:                   str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     GEMINI_API_KEY:              str = ""
+    OPENAI_API_KEY:              str = ""
+    AI_PROVIDER:                 str = "gemini"
     APP_ENV:                     str = "development"
 
     # E-mail

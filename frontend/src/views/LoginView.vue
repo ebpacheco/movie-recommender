@@ -5,7 +5,7 @@
     <div class="card">
       <div class="card-header">
         <div class="logo">
-          <img src="/logo.png" alt="CineMAGIC" class="logo-img" />
+          <img src="/logo.png" alt="CineMagIA" class="logo-img" />
         </div>
         <h1>{{ t('login.title') }}</h1>
         <p>{{ t('login.subtitle') }}</p>
@@ -210,4 +210,8 @@ input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 
 .register-link { text-align: center; font-size: 0.85rem; color: #5a5040; margin: 0; }
 .register-link a { color: #d4af37; text-decoration: none; font-weight: 500; }
 .register-link a:hover { text-decoration: underline; }
+
+@media (max-width: 380px) {
+  .card { padding: 1.75rem 1.25rem; }
+}
 </style>

@@ -5,6 +5,7 @@
     <div class="content">
       <div class="page-header">
         <div>
+          <button class="back-btn" @click="router.push('/recommendations')">← {{ t('common.back') }}</button>
           <h1>{{ t('profile.title') }}</h1>
           <p>{{ t('profile.subtitle') }}</p>
         </div>
@@ -82,12 +83,14 @@
 <script setup>
 import { onMounted }     from 'vue'
 import { useI18n }       from 'vue-i18n'
+import { useRouter }     from 'vue-router'
 import NavBar            from '@/components/NavBar.vue'
 import AutocompleteInput from '@/components/AutocompleteInput.vue'
 import { useProfileData, GENRE_OPTIONS } from '@/composables/useProfileData'
 import { useProfileAutosave }            from '@/composables/useProfileAutosave'
 
 const { t } = useI18n()
+const router = useRouter()
 
 const { profile, loading, fetchProfile, toggleGenre } = useProfileData()
 const { saveStatus, ready }                           = useProfileAutosave(profile)
@@ -107,6 +110,8 @@ onMounted(() => fetchProfile((state) => {
 .content { max-width: 800px; margin: 0 auto; padding: 96px 2rem 4rem; }
 
 .page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2.5rem; flex-wrap: wrap; gap: 1rem; }
+.back-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: none; color: #6b6050; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; padding: 0; margin-bottom: 0.75rem; transition: color 0.2s; }
+.back-btn:hover { color: #d4af37; }
 h1 { font-family: 'Playfair Display', serif; font-size: 2rem; color: #e8e0d0; margin: 0 0 0.4rem; }
 .page-header > div > p { color: #6b6050; font-size: 0.9rem; margin: 0; }
 
@@ -134,4 +139,18 @@ h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #d4af37; 
 .genre-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 768px) {
+  .content { padding: 80px 1rem 3rem; }
+  h1 { font-size: 1.5rem; }
+}
+
+@media (max-width: 640px) {
+  .section { padding: 1.25rem; }
+  .page-header { margin-bottom: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .genre-btn { font-size: 0.8rem; padding: 0.4rem 0.75rem; }
+}
 </style>

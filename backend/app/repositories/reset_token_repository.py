@@ -5,9 +5,10 @@ from uuid import UUID
 from sqlalchemy.orm import Session
 
 from app.models.reset_token_model import PasswordResetToken
+from app.repositories.interfaces.i_reset_token_repository import IResetTokenRepository
 
 
-class ResetTokenRepository:
+class ResetTokenRepository(IResetTokenRepository):
 
     def __init__(self, db: Session):
         self.db = db

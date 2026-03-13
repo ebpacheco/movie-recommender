@@ -192,4 +192,18 @@ h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 0 0 0.4rem
 .modal-enter-from,   .modal-leave-to     { opacity: 0; }
 .modal-enter-active .modal-confirm { transition: transform 0.22s cubic-bezier(0.34, 1.3, 0.64, 1); }
 .modal-enter-from   .modal-confirm { transform: scale(0.94) translateY(12px); }
+
+@media (max-width: 768px) {
+  .content { padding: 80px 1rem 3rem; }
+  h1 { font-size: 1.5rem; }
+}
+
+@media (max-width: 640px) {
+  h1 { font-size: 1.25rem; }
+  .users-table th:nth-child(2),
+  .users-table td:nth-child(2) { display: none; }
+  .actions { flex-direction: column; gap: 0.3rem; align-items: flex-start; }
+  .pagination { justify-content: center; }
+  .page-info { display: none; }
+}
 </style>

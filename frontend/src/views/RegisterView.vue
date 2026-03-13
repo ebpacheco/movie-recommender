@@ -4,7 +4,7 @@
 
     <div class="card">
       <div class="card-header">
-        <img src="/logo.svg" alt="CineMAGIC" class="logo-img" />
+        <img src="/logo.svg" alt="CineMagIA" class="logo-img" />
         <h1>{{ t('register.title') }}</h1>
         <p>{{ t('register.subtitle') }}</p>
       </div>
@@ -131,6 +131,7 @@
 import { useI18n } from 'vue-i18n'
 import PasswordInput      from '@/components/PasswordInput.vue'
 import { useRegisterForm } from '@/composables/useRegisterForm'
+import { COUNTRIES } from '@/constants/countries'
 
 const { t } = useI18n()
 
@@ -143,27 +144,6 @@ const {
 
 // Data máxima = hoje (não permite data futura)
 const maxBirthDate = new Date().toISOString().split('T')[0]
-
-const COUNTRIES = [
-  { code: 'BR', name: 'Brasil',          flag: '🇧🇷' },
-  { code: 'US', name: 'United States',   flag: '🇺🇸' },
-  { code: 'GB', name: 'United Kingdom',  flag: '🇬🇧' },
-  { code: 'PT', name: 'Portugal',        flag: '🇵🇹' },
-  { code: 'AR', name: 'Argentina',       flag: '🇦🇷' },
-  { code: 'MX', name: 'México',          flag: '🇲🇽' },
-  { code: 'CO', name: 'Colômbia',        flag: '🇨🇴' },
-  { code: 'CL', name: 'Chile',           flag: '🇨🇱' },
-  { code: 'PE', name: 'Peru',            flag: '🇵🇪' },
-  { code: 'CA', name: 'Canadá',          flag: '🇨🇦' },
-  { code: 'AU', name: 'Austrália',       flag: '🇦🇺' },
-  { code: 'FR', name: 'França',          flag: '🇫🇷' },
-  { code: 'DE', name: 'Alemanha',        flag: '🇩🇪' },
-  { code: 'ES', name: 'Espanha',         flag: '🇪🇸' },
-  { code: 'IT', name: 'Itália',          flag: '🇮🇹' },
-  { code: 'JP', name: 'Japão',           flag: '🇯🇵' },
-  { code: 'KR', name: 'Coreia do Sul',   flag: '🇰🇷' },
-  { code: 'IN', name: 'Índia',           flag: '🇮🇳' },
-]
 </script>
 
 <style scoped>
@@ -330,4 +310,8 @@ input:focus    { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 17
 .login-link { text-align: center; font-size: 0.85rem; color: #5a5040; margin: 0; }
 .login-link a { color: #d4af37; text-decoration: none; font-weight: 500; }
 .login-link a:hover { text-decoration: underline; }
+
+@media (max-width: 480px) {
+  .card { padding: 1.75rem 1.25rem; }
+}
 </style>

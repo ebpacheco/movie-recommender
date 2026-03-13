@@ -7,7 +7,7 @@ from fastapi.responses import JSONResponse
 
 from app.database import Base, engine
 from app.routers import auth_router, user_router, recommendation_router
-from app.routers import translation_router
+from app.routers import translation_router, admin_router
 
 # Importa os models para o SQLAlchemy registrá-los antes de criar as tabelas
 import app.models.user_model           # noqa
@@ -61,6 +61,7 @@ app.include_router(user_router.router,           prefix=PREFIX)
 app.include_router(recommendation_router.router, prefix=PREFIX)
 app.include_router(translation_router.router,    prefix=PREFIX)
 app.include_router(password_reset_router.router, prefix=PREFIX)
+app.include_router(admin_router.router,          prefix=PREFIX)
 
 
 @app.get("/health")

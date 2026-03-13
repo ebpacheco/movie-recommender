@@ -1,4 +1,7 @@
 {
+  "common": {
+    "back": "Voltar"
+  },
   "nav": {
     "preferences": "Preferências de Cinema",
     "userPreferences": "Preferências de Usuário",
@@ -6,7 +9,7 @@
     "manageUsers": "Gerenciar Usuários"
   },
   "login": {
-    "title": "CineMAGIC",
+    "title": "CineMagIA",
     "subtitle": "Seu guia pessoal de cinema",
     "email": "E-mail",
     "password": "Senha",
@@ -21,7 +24,7 @@
   },
   "register": {
     "title": "Criar conta",
-    "subtitle": "Junte-se ao CineMAGIC e descubra seus próximos filmes favoritos",
+    "subtitle": "Junte-se ao CineMagIA e descubra seus próximos filmes favoritos",
     "name": "Nome completo",
     "namePlaceholder": "Seu nome",
     "email": "E-mail",
@@ -137,7 +140,9 @@
     "subtitle": "Configure seu país e plataformas de streaming",
     "loadingProviders": "Carregando plataformas...",
     "popular": "Populares",
-    "others": "Outros"
+    "others": "Outros",
+    "lockedHint": "País e streamings bloqueados por 12h após gerar recomendações.",
+    "lockedCountdown": "Libera em"
   },
   "language": {
     "label": "Idioma",

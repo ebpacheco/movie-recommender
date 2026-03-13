@@ -121,4 +121,9 @@ form { display: flex; flex-direction: column; gap: 1rem; }
 
 .spinner { width: 16px; height: 16px; border: 2px solid rgba(8,8,12,0.3); border-top-color: #08080c; border-radius: 50%; animation: spin 0.6s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .page { padding: 1rem; }
+  .card { padding: 1.75rem 1.25rem; }
+}
 </style>

@@ -1,8 +1,7 @@
 # app/services/email_service.py
 """
-Envio de e-mail com suporte a dois provedores:
-  - SMTP  → dev/homologação  (EMAIL_PROVIDER=smtp)
-  - SES   → produção         (EMAIL_PROVIDER=ses)
+Serviço de envio de e-mail.
+Recebe um IEmailProvider via injeção de dependência (SMTP ou SES).
 
 Variáveis de ambiente necessárias:
   Comuns:
@@ -21,24 +20,15 @@ Variáveis de ambiente necessárias:
     AWS_ACCESS_KEY   = AKIA...
     AWS_SECRET_KEY   = ...
 """
-import os
-import smtplib
-import logging
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
-logger = logging.getLogger(__name__)
-
-EMAIL_PROVIDER = os.getenv("EMAIL_PROVIDER", "smtp").lower()
-EMAIL_FROM     = os.getenv("EMAIL_FROM", "noreply@cinemagic.app")
-FRONTEND_URL   = os.getenv("FRONTEND_URL", "http://localhost:5173")
+from app.core.config import settings
+from app.providers.interfaces.i_email_provider import IEmailProvider
 
 
 # ── Templates por idioma ──────────────────────────────────────────────────────
 
 TEMPLATES = {
     "pt": {
-        "subject": "Recuperação de senha — CineMAGIC",
+        "subject": "Recuperação de senha — CineMagIA",
         "body": lambda url, name: f"""
 <!DOCTYPE html>
 <html lang="pt">
@@ -47,12 +37,12 @@ TEMPLATES = {
   <div style="max-width:520px;margin:40px auto;background:#0f0f15;border:1px solid rgba(212,175,55,0.2);border-radius:16px;overflow:hidden;">
     <div style="background:linear-gradient(135deg,#1a1a24,#0f0f15);padding:32px 40px;border-bottom:1px solid rgba(212,175,55,0.15);text-align:center;">
       <span style="font-size:2rem;">🎬</span>
-      <h1 style="color:#d4af37;font-size:1.5rem;margin:8px 0 0;letter-spacing:0.05em;">CineMAGIC</h1>
+      <h1 style="color:#d4af37;font-size:1.5rem;margin:8px 0 0;letter-spacing:0.05em;">CineMagIA</h1>
     </div>
     <div style="padding:36px 40px;">
       <h2 style="color:#e8e0d0;font-size:1.1rem;margin:0 0 12px;">Olá, {name}!</h2>
       <p style="color:#8a7a5a;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">
-        Recebemos uma solicitação para redefinir a senha da sua conta CineMAGIC.
+        Recebemos uma solicitação para redefinir a senha da sua conta CineMagIA.
         Clique no botão abaixo para criar uma nova senha.
       </p>
       <div style="text-align:center;margin:28px 0;">
@@ -66,7 +56,7 @@ TEMPLATES = {
       </p>
     </div>
     <div style="padding:16px 40px;border-top:1px solid rgba(255,255,255,0.04);text-align:center;">
-      <p style="color:#3a3228;font-size:0.75rem;margin:0;">© CineMAGIC · Todos os direitos reservados</p>
+      <p style="color:#3a3228;font-size:0.75rem;margin:0;">© CineMagIA · Todos os direitos reservados</p>
     </div>
   </div>
 </body>
@@ -74,7 +64,7 @@ TEMPLATES = {
 """,
     },
     "en": {
-        "subject": "Password recovery — CineMAGIC",
+        "subject": "Password recovery — CineMagIA",
         "body": lambda url, name: f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -83,12 +73,12 @@ TEMPLATES = {
   <div style="max-width:520px;margin:40px auto;background:#0f0f15;border:1px solid rgba(212,175,55,0.2);border-radius:16px;overflow:hidden;">
     <div style="background:linear-gradient(135deg,#1a1a24,#0f0f15);padding:32px 40px;border-bottom:1px solid rgba(212,175,55,0.15);text-align:center;">
       <span style="font-size:2rem;">🎬</span>
-      <h1 style="color:#d4af37;font-size:1.5rem;margin:8px 0 0;letter-spacing:0.05em;">CineMAGIC</h1>
+      <h1 style="color:#d4af37;font-size:1.5rem;margin:8px 0 0;letter-spacing:0.05em;">CineMagIA</h1>
     </div>
     <div style="padding:36px 40px;">
       <h2 style="color:#e8e0d0;font-size:1.1rem;margin:0 0 12px;">Hi, {name}!</h2>
       <p style="color:#8a7a5a;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">
-        We received a request to reset your CineMAGIC account password.
+        We received a request to reset your CineMagIA account password.
         Click the button below to create a new password.
       </p>
       <div style="text-align:center;margin:28px 0;">
@@ -102,7 +92,7 @@ TEMPLATES = {
       </p>
     </div>
     <div style="padding:16px 40px;border-top:1px solid rgba(255,255,255,0.04);text-align:center;">
-      <p style="color:#3a3228;font-size:0.75rem;margin:0;">© CineMAGIC · All rights reserved</p>
+      <p style="color:#3a3228;font-size:0.75rem;margin:0;">© CineMagIA · All rights reserved</p>
     </div>
   </div>
 </body>
@@ -110,7 +100,7 @@ TEMPLATES = {
 """,
     },
     "es": {
-        "subject": "Recuperación de contraseña — CineMAGIC",
+        "subject": "Recuperación de contraseña — CineMagIA",
         "body": lambda url, name: f"""
 <!DOCTYPE html>
 <html lang="es">
@@ -119,12 +109,12 @@ TEMPLATES = {
   <div style="max-width:520px;margin:40px auto;background:#0f0f15;border:1px solid rgba(212,175,55,0.2);border-radius:16px;overflow:hidden;">
     <div style="background:linear-gradient(135deg,#1a1a24,#0f0f15);padding:32px 40px;border-bottom:1px solid rgba(212,175,55,0.15);text-align:center;">
       <span style="font-size:2rem;">🎬</span>
-      <h1 style="color:#d4af37;font-size:1.5rem;margin:8px 0 0;letter-spacing:0.05em;">CineMAGIC</h1>
+      <h1 style="color:#d4af37;font-size:1.5rem;margin:8px 0 0;letter-spacing:0.05em;">CineMagIA</h1>
     </div>
     <div style="padding:36px 40px;">
       <h2 style="color:#e8e0d0;font-size:1.1rem;margin:0 0 12px;">¡Hola, {name}!</h2>
       <p style="color:#8a7a5a;font-size:0.95rem;line-height:1.6;margin:0 0 24px;">
-        Recibimos una solicitud para restablecer la contraseña de tu cuenta CineMAGIC.
+        Recibimos una solicitud para restablecer la contraseña de tu cuenta CineMagIA.
         Haz clic en el botón para crear una nueva contraseña.
       </p>
       <div style="text-align:center;margin:28px 0;">
@@ -138,7 +128,7 @@ TEMPLATES = {
       </p>
     </div>
     <div style="padding:16px 40px;border-top:1px solid rgba(255,255,255,0.04);text-align:center;">
-      <p style="color:#3a3228;font-size:0.75rem;margin:0;">© CineMAGIC · Todos los derechos reservados</p>
+      <p style="color:#3a3228;font-size:0.75rem;margin:0;">© CineMagIA · Todos los derechos reservados</p>
     </div>
   </div>
 </body>
@@ -152,63 +142,21 @@ def _get_template(language: str) -> dict:
     return TEMPLATES.get(language, TEMPLATES["pt"])
 
 
-# ── Providers ─────────────────────────────────────────────────────────────────
+# ── Serviço ───────────────────────────────────────────────────────────────────
 
-def _send_smtp(to: str, subject: str, html: str) -> None:
-    host     = os.getenv("SMTP_HOST", "smtp.gmail.com")
-    port     = int(os.getenv("SMTP_PORT", "587"))
-    user     = os.getenv("SMTP_USER", "")
-    password = os.getenv("SMTP_PASSWORD", "")
+class EmailService:
 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = subject
-    msg["From"]    = EMAIL_FROM
-    msg["To"]      = to
-    msg.attach(MIMEText(html, "html", "utf-8"))
+    def __init__(self, provider: IEmailProvider) -> None:
+        self.provider = provider
 
-    with smtplib.SMTP(host, port) as server:
-        server.ehlo()
-        server.starttls()
-        server.login(user, password)
-        server.sendmail(EMAIL_FROM, to, msg.as_string())
-
-    logger.info(f"[SMTP] E-mail enviado para {to}")
-
-
-def _send_ses(to: str, subject: str, html: str) -> None:
-    try:
-        import boto3
-    except ImportError:
-        raise RuntimeError("boto3 não instalado. Execute: pip install boto3 --break-system-packages")
-
-    client = boto3.client(
-        "ses",
-        region_name          = os.getenv("AWS_REGION", "us-east-1"),
-        aws_access_key_id    = os.getenv("AWS_ACCESS_KEY"),
-        aws_secret_access_key= os.getenv("AWS_SECRET_KEY"),
-    )
-
-    client.send_email(
-        Source      = EMAIL_FROM,
-        Destination = {"ToAddresses": [to]},
-        Message     = {
-            "Subject": {"Data": subject, "Charset": "UTF-8"},
-            "Body":    {"Html": {"Data": html, "Charset": "UTF-8"}},
-        },
-    )
-    logger.info(f"[SES] E-mail enviado para {to}")
-
-
-# ── Interface pública ─────────────────────────────────────────────────────────
-
-def send_password_reset_email(to: str, name: str, token: str, language: str = "pt") -> None:
-    """Envia o e-mail de recuperação de senha no idioma do usuário."""
-    reset_url = f"{FRONTEND_URL}/reset-password?token={token}"
-    template  = _get_template(language)
-    subject   = template["subject"]
-    html      = template["body"](reset_url, name)
-
-    if EMAIL_PROVIDER == "ses":
-        _send_ses(to, subject, html)
-    else:
-        _send_smtp(to, subject, html)
+    def send_password_reset_email(
+        self,
+        to:       str,
+        name:     str,
+        token:    str,
+        language: str = "pt",
+    ) -> None:
+        """Envia o e-mail de recuperação de senha no idioma do usuário."""
+        reset_url = f"{settings.FRONTEND_URL}/reset-password?token={token}"
+        template  = _get_template(language)
+        self.provider.send(to, template["subject"], template["body"](reset_url, name))
