@@ -1,7 +1,7 @@
 # app/models/user_model.py
 import uuid
 import enum
-from sqlalchemy import Column, String, Enum, Date, DateTime
+from sqlalchemy import Column, String, Enum, Date, DateTime, Boolean
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -22,8 +22,10 @@ class User(Base):
     email         = Column(String, unique=True, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
     role          = Column(Enum(UserRole), nullable=False, default=UserRole.free)
-    birth_date    = Column(Date, nullable=True)
+    birth_date        = Column(Date, nullable=True)
     terms_accepted_at = Column(DateTime, nullable=True)
+    email_verified    = Column(Boolean, nullable=False, default=False)
+    email_verified_at = Column(DateTime, nullable=True)
 
     profile         = relationship("Profile", back_populates="user", uselist=False, cascade="all, delete-orphan")
     recommendations = relationship("Recommendation", back_populates="user", cascade="all, delete-orphan")

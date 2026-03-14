@@ -36,7 +36,17 @@
           {{ t('login.forgotPassword') }}
         </router-link>
 
-        <div class="api-error" v-if="error">{{ error }}</div>
+        <div class="api-error" v-if="error && !unverified">{{ error }}</div>
+
+        <!-- Bloco especial: e-mail não confirmado -->
+        <div class="unverified-box" v-if="unverified">
+          <p>{{ t('login.emailNotVerified') }}</p>
+          <button type="button" class="btn-resend" :disabled="resending" @click="resend">
+            <span v-if="resending" class="spinner spinner--dark"></span>
+            <span v-else>{{ t('login.resendVerification') }}</span>
+          </button>
+          <p class="resend-ok" v-if="resentOk">{{ t('login.resentOk') }}</p>
+        </div>
 
         <button type="submit" class="btn-submit" :disabled="loading">
           <span v-if="loading" class="spinner"></span>
@@ -58,24 +68,44 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import PasswordInput from '@/components/PasswordInput.vue'
+import api from '@/services/api'
 
 const { t }  = useI18n()
 const auth   = useAuthStore()
 const router = useRouter()
 
-const loading = ref(false)
-const error   = ref('')
+const loading   = ref(false)
+const error     = ref('')
+const unverified = ref(false)
+const resending  = ref(false)
+const resentOk   = ref(false)
 const form    = reactive({ email: '', password: '' })
 const touched = reactive({ email: false, password: false })
 
+async function resend() {
+  resending.value = true
+  resentOk.value  = false
+  try {
+    await api.post('/auth/resend-verification', { email: form.email })
+    resentOk.value = true
+  } catch {} finally { resending.value = false }
+}
+
 async function submit() {
-  loading.value = true
-  error.value   = ''
+  loading.value    = true
+  error.value      = ''
+  unverified.value = false
+  resentOk.value   = false
   try {
     await auth.login(form.email, form.password)
     router.push('/recommendations')
   } catch (e) {
-    error.value = e.response?.data?.detail || t('login.error')
+    const detail = e.response?.data?.detail
+    if (e.response?.status === 403 && detail === 'email_not_verified') {
+      unverified.value = true
+    } else {
+      error.value = detail || t('login.error')
+    }
   } finally {
     loading.value = false
   }
@@ -210,6 +240,36 @@ input:focus { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 175, 
 .register-link { text-align: center; font-size: 0.85rem; color: #5a5040; margin: 0; }
 .register-link a { color: #d4af37; text-decoration: none; font-weight: 500; }
 .register-link a:hover { text-decoration: underline; }
+
+.unverified-box {
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.unverified-box p { color: #8a7a5a; font-size: 0.85rem; margin: 0; line-height: 1.5; }
+
+.btn-resend {
+  padding: 0.55rem 1rem;
+  background: none;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 8px;
+  color: #d4af37;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+}
+.btn-resend:hover:not(:disabled) { background: rgba(212, 175, 55, 0.1); }
+.btn-resend:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.spinner--dark { border: 2px solid rgba(212, 175, 55, 0.2); border-top-color: #d4af37; }
+
+.resend-ok { color: #50c878; font-size: 0.8rem; margin: 0; }
 
 @media (max-width: 380px) {
   .card { padding: 1.75rem 1.25rem; }

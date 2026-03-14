@@ -20,7 +20,10 @@
     "noAccount": "Não tem conta?",
     "register": "Cadastre-se",
     "error": "E-mail ou senha incorretos",
-    "forgotPassword": "Esqueceu a senha?"
+    "forgotPassword": "Esqueceu a senha?",
+    "emailNotVerified": "Seu e-mail ainda não foi confirmado. Verifique sua caixa de entrada (e o spam).",
+    "resendVerification": "Reenviar e-mail de confirmação",
+    "resentOk": "E-mail reenviado! Verifique sua caixa de entrada."
   },
   "register": {
     "title": "Criar conta",
@@ -61,7 +64,11 @@
     "termsLink": "Termos de Uso",
     "termsMiddle": "e a",
     "privacyLink": "Política de Privacidade",
-    "termsSuffix": "Minhas preferências serão usadas exclusivamente para gerar recomendações personalizadas."
+    "termsSuffix": "Minhas preferências serão usadas exclusivamente para gerar recomendações personalizadas.",
+    "checkEmailTitle": "Confirme seu e-mail",
+    "checkEmailMessage": "Enviamos um link de confirmação para o seu e-mail. Clique no link para ativar sua conta.",
+    "checkEmailHint": "Verifique também a pasta de spam.",
+    "goToLogin": "Ir para o login"
   },
   "recommendations": {
     "hello": "Olá,",
@@ -176,5 +183,14 @@
     "invalidMessage": "Este link é inválido ou já expirou. Solicite um novo.",
     "requestNew": "Solicitar novo link",
     "errorGeneric": "Não foi possível redefinir a senha. Tente novamente."
+  },
+  "verifyEmail": {
+    "verifying": "Confirmando seu e-mail...",
+    "successTitle": "E-mail confirmado!",
+    "successMessage": "Sua conta foi ativada com sucesso. Agora você pode fazer login.",
+    "goToLogin": "Ir para o login",
+    "errorTitle": "Link inválido",
+    "errorMessage": "Este link é inválido ou já expirou. Solicite um novo e-mail de confirmação.",
+    "resend": "Reenviar e-mail de confirmação"
   }
 }

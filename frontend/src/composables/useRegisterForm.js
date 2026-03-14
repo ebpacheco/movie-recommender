@@ -38,8 +38,9 @@ export function useRegisterForm() {
     terms:           false,
   })
 
-  const loading  = ref(false)
-  const apiError = ref('')
+  const loading    = ref(false)
+  const apiError   = ref('')
+  const registered = ref(false)
 
   // País fixo BR como padrão
 
@@ -130,7 +131,7 @@ export function useRegisterForm() {
         terms_accepted: form.termsAccepted,
         profile:        { country: form.country },
       })
-      router.push('/recommendations')
+      registered.value = true
     } catch (e) {
       const status = e.response?.status
       const detail = e.response?.data?.detail || ''
@@ -146,7 +147,7 @@ export function useRegisterForm() {
   }
 
   return {
-    form, errors, touched, loading, apiError,
+    form, errors, touched, loading, apiError, registered,
     rules, isPasswordValid, isFormValid,
     touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms,
     handleRegister,

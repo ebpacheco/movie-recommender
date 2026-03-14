@@ -6,9 +6,11 @@ from app.core.config import settings
 from app.database import Base
 
 # Importa todos os models para o autogenerate detectar
-import app.models.user_model           # noqa
-import app.models.profile_model        # noqa
-import app.models.recommendation_model # noqa
+import app.models.user_model                # noqa
+import app.models.profile_model             # noqa
+import app.models.recommendation_model      # noqa
+import app.models.reset_token_model         # noqa
+import app.models.email_verification_model  # noqa
 
 config = context.config
 

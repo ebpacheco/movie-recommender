@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m alembic revision --autogenerate -m \"add_email_verified_and_verification_tokens\")",
+      "Bash(..\\\\.venvScriptsalembic revision:*)",
+      "Bash(../.venv/Scripts/alembic.exe revision:*)",
+      "Bash(ls /c/Users/DudatraK/OneDrive/Documentos/movie-recommender/.venv/Scripts/alembic*)",
+      "Bash(find /c/Users/DudatraK/OneDrive/Documentos/movie-recommender -name alembic* -type f)",
+      "Bash(./venv/Scripts/alembic.exe revision:*)",
+      "Bash(./venv/Scripts/alembic.exe upgrade:*)",
+      "Bash(./venv/Scripts/python.exe -c \":*)"
+    ]
+  }
+}

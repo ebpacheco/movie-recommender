@@ -20,7 +20,10 @@
     "noAccount": "Don't have an account?",
     "register": "Sign up",
     "error": "Incorrect email or password",
-    "forgotPassword": "Forgot your password?"
+    "forgotPassword": "Forgot your password?",
+    "emailNotVerified": "Your email hasn't been confirmed yet. Check your inbox (and spam folder).",
+    "resendVerification": "Resend confirmation email",
+    "resentOk": "Email resent! Check your inbox."
   },
   "register": {
     "title": "Create account",
@@ -61,7 +64,11 @@
     "termsLink": "Terms of Use",
     "termsMiddle": "and the",
     "privacyLink": "Privacy Policy",
-    "termsSuffix": "My preferences will be used exclusively to generate personalized recommendations."
+    "termsSuffix": "My preferences will be used exclusively to generate personalized recommendations.",
+    "checkEmailTitle": "Confirm your email",
+    "checkEmailMessage": "We sent a confirmation link to your email. Click it to activate your account.",
+    "checkEmailHint": "Check your spam folder too.",
+    "goToLogin": "Go to login"
   },
   "recommendations": {
     "hello": "Hello,",
@@ -176,5 +183,14 @@
     "invalidMessage": "This link is invalid or has expired. Please request a new one.",
     "requestNew": "Request new link",
     "errorGeneric": "Could not reset password. Please try again."
+  },
+  "verifyEmail": {
+    "verifying": "Confirming your email...",
+    "successTitle": "Email confirmed!",
+    "successMessage": "Your account has been activated. You can now sign in.",
+    "goToLogin": "Go to login",
+    "errorTitle": "Invalid link",
+    "errorMessage": "This link is invalid or has expired. Please request a new confirmation email.",
+    "resend": "Resend confirmation email"
   }
 }

@@ -20,7 +20,10 @@
     "noAccount": "¿No tienes cuenta?",
     "register": "Regístrate",
     "error": "Correo o contraseña incorrectos",
-    "forgotPassword": "¿Olvidaste tu contraseña?"
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "emailNotVerified": "Tu correo aún no ha sido confirmado. Revisa tu bandeja de entrada (y el spam).",
+    "resendVerification": "Reenviar correo de confirmación",
+    "resentOk": "¡Correo reenviado! Revisa tu bandeja de entrada."
   },
   "register": {
     "title": "Crear cuenta",
@@ -61,7 +64,11 @@
     "termsLink": "Términos de Uso",
     "termsMiddle": "y la",
     "privacyLink": "Política de Privacidad",
-    "termsSuffix": "Mis preferencias se usarán exclusivamente para generar recomendaciones personalizadas."
+    "termsSuffix": "Mis preferencias se usarán exclusivamente para generar recomendaciones personalizadas.",
+    "checkEmailTitle": "Confirma tu correo",
+    "checkEmailMessage": "Enviamos un enlace de confirmación a tu correo. Haz clic en él para activar tu cuenta.",
+    "checkEmailHint": "Revisa también la carpeta de spam.",
+    "goToLogin": "Ir al inicio de sesión"
   },
   "recommendations": {
     "hello": "Hola,",
@@ -176,5 +183,14 @@
     "invalidMessage": "Este enlace es inválido o ya expiró. Solicita uno nuevo.",
     "requestNew": "Solicitar nuevo enlace",
     "errorGeneric": "No se pudo restablecer la contraseña. Inténtalo de nuevo."
+  },
+  "verifyEmail": {
+    "verifying": "Confirmando tu correo...",
+    "successTitle": "¡Correo confirmado!",
+    "successMessage": "Tu cuenta ha sido activada. Ya puedes iniciar sesión.",
+    "goToLogin": "Ir al inicio de sesión",
+    "errorTitle": "Enlace inválido",
+    "errorMessage": "Este enlace es inválido o ya expiró. Solicita un nuevo correo de confirmación.",
+    "resend": "Reenviar correo de confirmación"
   }
 }

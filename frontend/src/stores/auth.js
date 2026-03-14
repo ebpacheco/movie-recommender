@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function register(payload) {
     await api.post('/auth/register', payload)
-    await login(payload.email, payload.password)
+    // Não faz login automático — usuário precisa confirmar o e-mail primeiro
   }
 
   async function fetchUser() {

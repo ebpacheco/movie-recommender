@@ -3,6 +3,25 @@
     <div class="bg-overlay"></div>
 
     <div class="card">
+
+      <!-- Estado: e-mail enviado com sucesso -->
+      <template v-if="registered">
+        <div class="card-header">
+          <img src="/logo.svg" alt="CineMagIA" class="logo-img" />
+        </div>
+        <div class="success-box">
+          <div class="success-icon">✉️</div>
+          <h2>{{ t('register.checkEmailTitle') }}</h2>
+          <p>{{ t('register.checkEmailMessage') }}</p>
+          <p class="hint">{{ t('register.checkEmailHint') }}</p>
+        </div>
+        <router-link to="/login" class="btn-submit" style="text-decoration:none;text-align:center;margin-top:1rem;">
+          {{ t('register.goToLogin') }}
+        </router-link>
+      </template>
+
+      <!-- Formulário normal -->
+      <template v-else>
       <div class="card-header">
         <img src="/logo.svg" alt="CineMagIA" class="logo-img" />
         <h1>{{ t('register.title') }}</h1>
@@ -123,6 +142,7 @@
           <router-link to="/login">{{ t('register.login') }}</router-link>
         </p>
       </form>
+      </template>
     </div>
   </div>
 </template>
@@ -136,7 +156,7 @@ import { COUNTRIES } from '@/constants/countries'
 const { t } = useI18n()
 
 const {
-  form, errors, touched, loading, apiError,
+  form, errors, touched, loading, apiError, registered,
   rules, isFormValid,
   touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms,
   handleRegister,
@@ -306,6 +326,15 @@ input:focus    { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 17
   animation: spin 0.6s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+.success-box { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1rem 0; }
+.success-icon { font-size: 3rem; }
+.success-box h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: #d4af37; margin: 0; }
+.success-box p  { color: #8a7a5a; font-size: 0.9rem; margin: 0; line-height: 1.6; }
+.success-box .hint { color: #4a4038; font-size: 0.8rem; }
+
+.btn-submit { width: 100%; padding: 0.875rem; background: linear-gradient(135deg, #d4af37, #b8860b); border: none; border-radius: 10px; color: #08080c; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.btn-submit:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3); }
 
 .login-link { text-align: center; font-size: 0.85rem; color: #5a5040; margin: 0; }
 .login-link a { color: #d4af37; text-decoration: none; font-weight: 500; }

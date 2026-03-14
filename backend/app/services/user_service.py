@@ -15,13 +15,15 @@ class UserService:
 
     def __init__(
         self,
-        user_repo:    IUserRepository,
-        profile_repo: IProfileRepository,
-        auth_service: AuthService,
+        user_repo:              IUserRepository,
+        profile_repo:           IProfileRepository,
+        auth_service:           AuthService,
+        email_verification_svc=None,
     ):
-        self.user_repo    = user_repo
-        self.profile_repo = profile_repo
-        self.auth_service = auth_service
+        self.user_repo              = user_repo
+        self.profile_repo           = profile_repo
+        self.auth_service           = auth_service
+        self.email_verification_svc = email_verification_svc
 
     def register(self, data: UserCreate) -> User:
         if self.user_repo.find_by_email(data.email):
@@ -49,6 +51,15 @@ class UserService:
             streaming_platforms = [],
         )
         self.profile_repo.save(profile)
+
+        if self.email_verification_svc:
+            language = getattr(data.profile, "language", "pt") or "pt"
+            self.email_verification_svc.send_verification(
+                user_id  = user.id,
+                email    = user.email,
+                name     = user.name,
+                language = language,
+            )
 
         return user
 

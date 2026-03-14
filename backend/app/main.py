@@ -10,9 +10,11 @@ from app.routers import auth_router, user_router, recommendation_router
 from app.routers import translation_router, admin_router
 
 # Importa os models para o SQLAlchemy registrá-los antes de criar as tabelas
-import app.models.user_model           # noqa
-import app.models.profile_model        # noqa
-import app.models.recommendation_model # noqa
+import app.models.user_model                # noqa
+import app.models.profile_model             # noqa
+import app.models.recommendation_model      # noqa
+import app.models.reset_token_model         # noqa
+import app.models.email_verification_model  # noqa
 
 Base.metadata.create_all(bind=engine)
 

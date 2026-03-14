@@ -24,6 +24,8 @@ from app.services.admin_service import AdminService
 from app.services.recommendation_service import RecommendationService
 from app.services.email_service import EmailService
 from app.services.password_reset_service import PasswordResetService
+from app.services.email_verification_service import EmailVerificationService
+from app.repositories.email_verification_repository import EmailVerificationRepository
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 auth_service  = AuthService()
@@ -40,11 +42,24 @@ def _make_email_service() -> EmailService:
     return EmailService(provider)
 
 
+def get_email_verification_service(db: Session = Depends(get_db)) -> EmailVerificationService:
+    return EmailVerificationService(
+        user_repo         = UserRepository(db),
+        verification_repo = EmailVerificationRepository(db),
+        email_service     = _make_email_service(),
+    )
+
+
 def get_user_service(db: Session = Depends(get_db)) -> UserService:
     return UserService(
-        user_repo    = UserRepository(db),
-        profile_repo = ProfileRepository(db),
-        auth_service = auth_service,
+        user_repo              = UserRepository(db),
+        profile_repo           = ProfileRepository(db),
+        auth_service           = auth_service,
+        email_verification_svc = EmailVerificationService(
+            user_repo         = UserRepository(db),
+            verification_repo = EmailVerificationRepository(db),
+            email_service     = _make_email_service(),
+        ),
     )
 
 
