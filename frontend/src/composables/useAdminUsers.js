@@ -43,7 +43,7 @@ export function useAdminUsers() {
     loading.value = true
     error.value   = ''
     try {
-      const { data } = await api.get('/users/admin/users', {
+      const { data } = await api.get('/admin/users', {
         params: { page: page.value, page_size: PAGE_SIZE },
       })
       users.value      = data.items
@@ -79,7 +79,7 @@ export function useAdminUsers() {
     saving.value = true
     error.value  = ''
     try {
-      await api.patch(`/users/admin/users/${userId}`, editForm.value)
+      await api.patch(`/admin/users/${userId}`, editForm.value)
       await loadUsers()
       editingId.value = null
     } catch (e) {
@@ -99,7 +99,7 @@ export function useAdminUsers() {
     saving.value = true
     error.value  = ''
     try {
-      await api.delete(`/users/admin/users/${deleteTarget.value.id}`)
+      await api.delete(`/admin/users/${deleteTarget.value.id}`)
       deleteTarget.value = null
       if (users.value.length === 1 && page.value > 1) page.value--
       await loadUsers()

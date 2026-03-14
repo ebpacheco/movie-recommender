@@ -123,7 +123,9 @@ TAREFA DUPLA — retorne um JSON com dois campos: "message" e "movies".
    - Sem frases genéricas como "Que ótimo!" ou "Entendo como você se sente"
    - Termine sugerindo que os filmes abaixo foram escolhidos especialmente para esse momento
 
-2. "movies": Lista de exatamente 20 filmes ordenados do que melhor atende "{mood_or_context}" para o que atende menos.
+2. "movies": Lista de exatamente 20 filmes. Todos devem combinar com o sentimento/momento do usuário ("{mood_or_context}"). A lista segue esta estrutura:
+   - Posições 1–10: filmes que combinam com o humor E com as preferências de cinema do usuário (gêneros, atores, diretores favoritos)
+   - Posições 11–20 ("cartas curinga"): filmes que combinam APENAS com o humor do usuário, ignorando completamente os gêneros/atores/diretores favoritos. Devem ser de gêneros diferentes dos favoritos ({', '.join(genres) if genres else 'qualquer gênero'}). A ideia é ampliar horizontes sem perder a sintonia emocional.
    - Escreva "description" e "genre" em {lang_name}
    - "title" deve ser o título original
    - Todos OBRIGATORIAMENTE disponíveis nas plataformas listadas

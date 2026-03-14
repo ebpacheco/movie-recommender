@@ -9,10 +9,9 @@ export async function fetchRatings(title, year) {
       params: { apikey: API_KEY, t: title, y: year || undefined, tomatoes: true },
     })
     if (data.Response === 'False') return {}
-    const rt = data.Ratings?.find(r => r.Source === 'Rotten Tomatoes')
     return {
-      imdb:           data.imdbRating !== 'N/A' ? data.imdbRating : null,
-      rottenTomatoes: rt?.Value || null,
+      imdb:     data.imdbRating !== 'N/A' ? data.imdbRating : null,
+      runtime:  data.Runtime    !== 'N/A' ? data.Runtime    : null,
     }
   } catch { return {} }
 }

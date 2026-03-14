@@ -48,6 +48,14 @@ def update_profile(
     return profile
 
 
+@router.delete("/me", status_code=204)
+def delete_me(
+    user_id: UUID        = Depends(get_current_user_id),
+    service: UserService = Depends(get_user_service),
+):
+    service.delete_self(user_id)
+
+
 @router.patch("/me/language", status_code=204)
 def update_language(
     data:    LanguageUpdate,

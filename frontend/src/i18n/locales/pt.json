@@ -6,7 +6,24 @@
     "preferences": "Preferências de Cinema",
     "userPreferences": "Preferências de Usuário",
     "logout": "Sair",
-    "manageUsers": "Gerenciar Usuários"
+    "manageUsers": "Gerenciar Usuários",
+    "account": "Minha Conta"
+  },
+  "account": {
+    "title": "Minha Conta",
+    "subtitle": "Informações do seu cadastro",
+    "name": "Nome completo",
+    "email": "E-mail",
+    "birthDate": "Data de nascimento",
+    "dangerZone": "Zona de perigo",
+    "dangerDesc": "Ações irreversíveis para sua conta",
+    "deleteAccount": "Excluir conta",
+    "confirmTitle": "Excluir conta?",
+    "confirmMessage": "Essa ação é permanente e não pode ser desfeita. Todos os seus dados, preferências e histórico serão removidos.",
+    "cancel": "Cancelar",
+    "confirmDelete": "Sim, excluir minha conta",
+    "deleting": "Excluindo...",
+    "deleteError": "Erro ao excluir a conta. Tente novamente."
   },
   "login": {
     "title": "CineMagIA",

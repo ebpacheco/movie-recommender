@@ -12,7 +12,7 @@ from app.repositories.interfaces.i_user_repository import IProfileRepository
 from app.providers.interfaces.i_ai_provider import IAIProvider
 from app.builders.interfaces.i_prompt_builder import IPromptBuilder
 
-CACHE_HOURS = 12
+CACHE_HOURS = 3
 
 
 class RecommendationService:
@@ -34,6 +34,7 @@ class RecommendationService:
         return {
             "movies":            rec.response,
             "message":           getattr(rec, 'message', None),
+            "language":          getattr(rec, 'language', 'pt'),
             "cached":            cached,
             "created_at":        rec.created_at,
             "next_available_at": next_at,
@@ -98,8 +99,9 @@ class RecommendationService:
         raw            = self.ai_provider.get_recommendations(prompt)
         movies, message = self._parse_ai_response(raw)
 
-        rec         = Recommendation(user_id=user_id, prompt_used=prompt, response=movies)
-        rec.message = message
-        rec         = self.recommendation_repo.upsert(rec)
+        rec          = Recommendation(user_id=user_id, prompt_used=prompt, response=movies)
+        rec.message  = message
+        rec.language = language
+        rec          = self.recommendation_repo.upsert(rec)
 
         return self._to_response(rec, cached=False, is_admin=is_admin)

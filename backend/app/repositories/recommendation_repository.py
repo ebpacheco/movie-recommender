@@ -12,8 +12,8 @@ class RecommendationRepository:
         self.db = db
 
     def find_within_12h(self, user_id: UUID) -> Recommendation | None:
-        """Retorna a recomendação mais recente do usuário se criada nas últimas 12h."""
-        cutoff = datetime.utcnow() - timedelta(hours=12)
+        """Retorna a recomendação mais recente do usuário se criada nas últimas 3h."""
+        cutoff = datetime.utcnow() - timedelta(hours=3)
         return (
             self.db.query(Recommendation)
             .filter(

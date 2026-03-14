@@ -15,14 +15,22 @@ export function useRecommendations() {
   const store = useRecommendationsStore()
   const { countdown, startCountdown } = useCountdown()
 
-  const loading     = ref(false)
-  const translating = ref(false)
-  const error       = ref('')
-  const mood        = ref('')
-  const movies      = ref([])
-  const aiMessage   = ref('')
+  const loading           = ref(false)
+  const translating       = ref(false)
+  const error             = ref('')
+  const mood              = ref('')
+  const movies            = ref([])
+  const aiMessage         = ref('')
+  const originalAiMessage = ref('')
+  const originalAiLocale  = ref('')
 
-  useLocaleTranslation(movies, translating)
+  useLocaleTranslation(movies, translating, aiMessage, originalAiMessage, originalAiLocale)
+
+  function setAiMessage(message, lang) {
+    aiMessage.value         = message || ''
+    originalAiMessage.value = message || ''
+    originalAiLocale.value  = lang || locale.value
+  }
 
   const userCountry       = computed(() => auth.user?.profile?.country || 'BR')
   const userPlatforms     = computed(() => auth.user?.profile?.streaming_platforms || [])
@@ -46,8 +54,8 @@ export function useRecommendations() {
     await auth.fetchUser()
     try {
       const { data } = await api.get('/recommendations/latest')
-      movies.value    = await enrich(data.movies)
-      aiMessage.value = data.message || ''
+      movies.value = await enrich(data.movies)
+      setAiMessage(data.message, data.language || locale.value)
       store.set(data)
       if (data.next_available_at) startCountdown(data.next_available_at)
     } catch {} // 404 = sem cache
@@ -61,8 +69,8 @@ export function useRecommendations() {
         mood:     mood.value || null,
         language: locale.value,
       })
-      movies.value    = await enrich(data.movies)
-      aiMessage.value = data.message || ''
+      movies.value = await enrich(data.movies)
+      setAiMessage(data.message, locale.value)
       store.set(data)
       if (data.next_available_at) startCountdown(data.next_available_at)
     } catch (e) {

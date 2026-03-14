@@ -2,7 +2,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, Text, DateTime, ForeignKey
+from sqlalchemy import Column, String, Text, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import relationship
 
@@ -17,6 +17,7 @@ class Recommendation(Base):
     prompt_used  = Column(Text, nullable=True)
     response     = Column(JSONB, nullable=True)
     message      = Column(Text, nullable=True)
+    language     = Column(String(8), nullable=False, server_default='pt')
     created_at   = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     user = relationship("User", back_populates="recommendations")

@@ -6,7 +6,24 @@
     "preferences": "Cinema Preferences",
     "userPreferences": "User Preferences",
     "logout": "Sign out",
-    "manageUsers": "Manage Users"
+    "manageUsers": "Manage Users",
+    "account": "My Account"
+  },
+  "account": {
+    "title": "My Account",
+    "subtitle": "Your registration information",
+    "name": "Full name",
+    "email": "Email",
+    "birthDate": "Date of birth",
+    "dangerZone": "Danger zone",
+    "dangerDesc": "Irreversible actions for your account",
+    "deleteAccount": "Delete account",
+    "confirmTitle": "Delete account?",
+    "confirmMessage": "This action is permanent and cannot be undone. All your data, preferences and history will be removed.",
+    "cancel": "Cancel",
+    "confirmDelete": "Yes, delete my account",
+    "deleting": "Deleting...",
+    "deleteError": "Error deleting account. Please try again."
   },
   "login": {
     "title": "CineMagIA",

@@ -29,12 +29,12 @@
       </div>
       <span class="movie-genre">{{ movie.genre }}</span>
 
-      <div class="ratings" v-if="movie.imdb || movie.rottenTomatoes">
+      <div class="ratings" v-if="movie.imdb || movie.runtime">
         <span class="rating imdb" v-if="movie.imdb">
           <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" alt="IMDb" />
           {{ movie.imdb }}
         </span>
-        <span class="rating rt" v-if="movie.rottenTomatoes">🍅 {{ movie.rottenTomatoes }}</span>
+        <span class="rating runtime" v-if="movie.runtime">⏱ {{ movie.runtime }}</span>
       </div>
 
       <!-- Streaming providers -->
@@ -141,7 +141,7 @@ defineEmits(['click'])
 .rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.75rem; font-weight: 500; padding: 0.2rem 0.5rem; border-radius: 6px; }
 .rating.imdb { background: rgba(245, 197, 24, 0.1); border: 1px solid rgba(245, 197, 24, 0.2); color: #f5c518; }
 .rating.imdb img { height: 12px; width: auto; }
-.rating.rt { background: rgba(250, 80, 80, 0.08); border: 1px solid rgba(250, 80, 80, 0.2); color: #fa7070; }
+.rating.runtime { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #9e9080; }
 
 /* Streaming */
 .streaming {

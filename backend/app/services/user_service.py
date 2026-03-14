@@ -68,3 +68,9 @@ class UserService:
         if not user:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Usuário não encontrado")
         return user
+
+    def delete_self(self, user_id: UUID) -> None:
+        user = self.user_repo.find_by_id(user_id)
+        if not user:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Usuário não encontrado")
+        self.user_repo.delete(user_id)
