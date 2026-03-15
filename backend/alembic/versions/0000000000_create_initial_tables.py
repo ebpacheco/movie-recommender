@@ -17,17 +17,19 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.execute("DO $$ BEGIN CREATE TYPE userrole AS ENUM ('free', 'premium', 'admin'); EXCEPTION WHEN duplicate_object THEN null; END $$;")
 
-    op.create_table('users',
-        sa.Column('id', UUID(as_uuid=True), primary_key=True),
-        sa.Column('name', sa.String(), nullable=False),
-        sa.Column('email', sa.String(), nullable=False, unique=True, index=True),
-        sa.Column('password_hash', sa.String(), nullable=False),
-        sa.Column('role', sa.Enum('free', 'premium', 'admin', name='userrole', create_type=False), nullable=False, server_default='free'),
-        sa.Column('birth_date', sa.Date(), nullable=True),
-        sa.Column('terms_accepted_at', sa.DateTime(), nullable=True),
-        sa.Column('email_verified', sa.Boolean(), nullable=False, server_default='false'),
-        sa.Column('email_verified_at', sa.DateTime(), nullable=True),
-    )
+    op.execute("""
+        CREATE TABLE users (
+            id UUID PRIMARY KEY,
+            name VARCHAR NOT NULL,
+            email VARCHAR NOT NULL UNIQUE,
+            password_hash VARCHAR NOT NULL,
+            role userrole NOT NULL DEFAULT 'free',
+            birth_date DATE,
+            terms_accepted_at TIMESTAMP,
+            email_verified BOOLEAN NOT NULL DEFAULT false,
+            email_verified_at TIMESTAMP
+        )
+    """)
 
     op.create_table('profiles',
         sa.Column('id', UUID(as_uuid=True), primary_key=True),
