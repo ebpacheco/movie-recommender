@@ -1,6 +1,7 @@
 name = "movie-recommender"
 main = "worker.js"
 compatibility_date = "2024-01-01"
+no_bundle = true
 
 [assets]
 directory = "./dist"
