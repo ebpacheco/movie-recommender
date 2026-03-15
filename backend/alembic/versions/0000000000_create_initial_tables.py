@@ -22,7 +22,7 @@ def upgrade() -> None:
         sa.Column('name', sa.String(), nullable=False),
         sa.Column('email', sa.String(), nullable=False, unique=True, index=True),
         sa.Column('password_hash', sa.String(), nullable=False),
-        sa.Column('role', sa.Enum('free', 'premium', 'admin', name='userrole'), nullable=False, server_default='free'),
+        sa.Column('role', sa.Enum('free', 'premium', 'admin', name='userrole', create_type=False), nullable=False, server_default='free'),
         sa.Column('birth_date', sa.Date(), nullable=True),
         sa.Column('terms_accepted_at', sa.DateTime(), nullable=True),
         sa.Column('email_verified', sa.Boolean(), nullable=False, server_default='false'),
