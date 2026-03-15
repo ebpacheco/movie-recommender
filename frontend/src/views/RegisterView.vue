@@ -73,16 +73,17 @@
         </div>
 
         <!-- Senha -->
-        <PasswordInput
-          key="password"
-          v-model="form.password"
-          :label="t('register.password')"
-          :placeholder="t('register.passwordPlaceholder')"
-          autocomplete="new-password"
-          :has-error="!!errors.password"
-          :has-success="touched.password && !errors.password"
-          @blur="touch('password'); validatePassword()"
-        >
+        <div class="password-field-group">
+          <PasswordInput
+            key="password"
+            v-model="form.password"
+            :label="t('register.password')"
+            :placeholder="t('register.passwordPlaceholder')"
+            autocomplete="new-password"
+            :has-error="!!errors.password"
+            :has-success="touched.password && !errors.password"
+            @blur="touch('password'); validatePassword()"
+          />
           <div class="password-rules" v-if="touched.password || form.password">
             <div class="rule" :class="{ ok: rules.length }">
               <span class="rule-dot"></span>{{ t('register.rules.length') }}
@@ -97,21 +98,22 @@
               <span class="rule-dot"></span>{{ t('register.rules.special') }}
             </div>
           </div>
-        </PasswordInput>
+        </div>
 
         <!-- Confirmar senha -->
-        <PasswordInput
-          key="confirm-password"
-          v-model="form.confirmPassword"
-          :label="t('register.confirmPassword')"
-          :placeholder="t('register.confirmPlaceholder')"
-          autocomplete="new-password"
-          :has-error="!!errors.confirmPassword"
-          :has-success="touched.confirmPassword && !errors.confirmPassword"
-          @blur="touch('confirmPassword'); validateConfirm()"
-        >
+        <div class="password-field-group">
+          <PasswordInput
+            key="confirm-password"
+            v-model="form.confirmPassword"
+            :label="t('register.confirmPassword')"
+            :placeholder="t('register.confirmPlaceholder')"
+            autocomplete="new-password"
+            :has-error="!!errors.confirmPassword"
+            :has-success="touched.confirmPassword && !errors.confirmPassword"
+            @blur="touch('confirmPassword'); validateConfirm()"
+          />
           <span class="field-msg" v-if="errors.confirmPassword">{{ errors.confirmPassword }}</span>
-        </PasswordInput>
+        </div>
 
         <!-- Termos de uso -->
         <div class="terms-field" :class="{ error: errors.terms }">
@@ -297,7 +299,8 @@ input:focus    { border-color: rgba(212, 175, 55, 0.4); background: rgba(212, 17
 .terms-label a:hover { text-decoration: underline; }
 .terms-field.error .terms-label span { color: #e05555; }
 
-.password-rules { display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.35rem; }
+.password-field-group { display: flex; flex-direction: column; gap: 0.4rem; }
+.password-rules { display: flex; flex-direction: column; gap: 0.3rem; }
 .rule { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #5a5040; transition: color 0.2s; }
 .rule.ok { color: #50c878; }
 .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }

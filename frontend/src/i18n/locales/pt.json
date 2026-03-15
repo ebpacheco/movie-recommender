@@ -63,7 +63,7 @@
       "length": "Mínimo 8 caracteres",
       "upper": "Uma letra maiúscula",
       "number": "Um número",
-      "special": "Um caractere especial (!@#$%...)"
+      "special": "Um caractere especial (!{'@'}#$%...)"
     },
     "errors": {
       "name": "Nome muito curto",

@@ -63,7 +63,7 @@
       "length": "At least 8 characters",
       "upper": "One uppercase letter",
       "number": "One number",
-      "special": "One special character (!@#$%...)"
+      "special": "One special character (!{'@'}#$%...)"
     },
     "errors": {
       "name": "Name too short",
