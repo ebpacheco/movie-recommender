@@ -12,7 +12,9 @@
       "Bash(find c:/Users/DudatraK/OneDrive/Documentos/movie-recommender/frontend/src -type f -name *.tsx -o -name *.jsx -o -name *.ts -o -name *.js)",
       "Bash(find c:/Users/DudatraK/OneDrive/Documentos/movie-recommender/frontend/src -type f \\\\\\(-name *.vue -o -name *.jsx -o -name *.tsx \\\\\\))",
       "Bash(npm install:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(venv/Scripts/alembic revision:*)",
+      "Bash(venv/Scripts/alembic stamp:*)"
     ]
   }
 }
