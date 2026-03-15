@@ -18,20 +18,21 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    from sqlalchemy.exc import ProgrammingError
     conn = op.get_bind()
-    try:
+    result = conn.execute(sa.text(
+        "SELECT column_name FROM information_schema.columns "
+        "WHERE table_name='users' AND column_name='role'"
+    ))
+    if result.fetchone() is None:
         op.add_column('users', sa.Column(
             'role',
             sa.Enum('free', 'premium', 'admin', name='userrole'),
             nullable=False,
-            server_default='free',   # usuários existentes viram 'free'
+            server_default='free',
         ))
-    except ProgrammingError:
-        conn.execute(sa.text("ROLLBACK"))
-
-    # Seta seu usuário como admin
-    conn.execute(sa.text("UPDATE users SET role = 'admin' WHERE email = 'eduardobertoncinip@gmail.com'"))
+    conn.execute(sa.text(
+        "UPDATE users SET role = 'admin' WHERE email = 'eduardobertoncinip@gmail.com'"
+    ))
 
 
 def downgrade() -> None:
