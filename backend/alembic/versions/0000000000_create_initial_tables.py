@@ -15,7 +15,7 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
-    op.execute("CREATE TYPE userrole AS ENUM ('free', 'premium', 'admin')")
+    op.execute("DO $$ BEGIN CREATE TYPE userrole AS ENUM ('free', 'premium', 'admin'); EXCEPTION WHEN duplicate_object THEN null; END $$;")
 
     op.create_table('users',
         sa.Column('id', UUID(as_uuid=True), primary_key=True),
