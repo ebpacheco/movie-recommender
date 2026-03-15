@@ -24,6 +24,14 @@ class RecommendationRepository:
             .first()
         )
 
+    def delete_expired(self) -> None:
+        """Remove recomendações expiradas (mais de 3h) de todos os usuários."""
+        cutoff = datetime.utcnow() - timedelta(hours=3)
+        self.db.query(Recommendation).filter(
+            Recommendation.created_at < cutoff
+        ).delete(synchronize_session=False)
+        self.db.commit()
+
     def upsert(self, recommendation: Recommendation) -> Recommendation:
         """Substitui qualquer recomendação anterior do usuário, mantendo 1 linha por usuário."""
         self.db.query(Recommendation).filter(

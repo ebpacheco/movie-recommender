@@ -66,7 +66,7 @@ class MoviePromptBuilder(IPromptBuilder):
         ))
 
         parts = [
-            f"Você é um especialista em cinema. Recomende exatamente 20 filmes para um usuário em {country_name}.",
+            f"Você é um especialista em cinema. Recomende exatamente 10 filmes para um usuário em {country_name}.",
             "",
             "PERFIL DO USUÁRIO:",
         ]
@@ -99,7 +99,7 @@ class MoviePromptBuilder(IPromptBuilder):
             parts.append(f"PLATAFORMAS DISPONÍVEIS: {platforms_str} (catálogo de {country_name})")
             parts.append("")
             parts.append(
-                f"REGRA CRÍTICA: Todos os 20 filmes OBRIGATORIAMENTE devem estar disponíveis "
+                f"REGRA CRÍTICA: Todos os 10 filmes OBRIGATORIAMENTE devem estar disponíveis "
                 f"para assistir agora em {country_name} em pelo menos uma dessas plataformas: {platforms_str}. "
                 f"NÃO inclua filmes que não estejam no catálogo atual dessas plataformas em {country_name}. "
                 f"Se necessário, escolha filmes menos famosos mas que estejam confirmadamente disponíveis."
@@ -123,9 +123,9 @@ TAREFA DUPLA — retorne um JSON com dois campos: "message" e "movies".
    - Sem frases genéricas como "Que ótimo!" ou "Entendo como você se sente"
    - Termine sugerindo que os filmes abaixo foram escolhidos especialmente para esse momento
 
-2. "movies": Lista de exatamente 20 filmes. Todos devem combinar com o sentimento/momento do usuário ("{mood_or_context}"). A lista segue esta estrutura:
-   - Posições 1–10: filmes que combinam com o humor E com as preferências de cinema do usuário (gêneros, atores, diretores favoritos)
-   - Posições 11–20 ("cartas curinga"): filmes que combinam APENAS com o humor do usuário, ignorando completamente os gêneros/atores/diretores favoritos. Devem ser de gêneros diferentes dos favoritos ({', '.join(genres) if genres else 'qualquer gênero'}). A ideia é ampliar horizontes sem perder a sintonia emocional.
+2. "movies": Lista de exatamente 10 filmes. Todos devem combinar com o sentimento/momento do usuário ("{mood_or_context}"). A lista segue esta estrutura:
+   - Posições 1–5: filmes que combinam com o humor E com as preferências de cinema do usuário (gêneros, atores, diretores favoritos)
+   - Posições 6–10 ("cartas curinga"): filmes que combinam APENAS com o humor do usuário, ignorando completamente os gêneros/atores/diretores favoritos. Devem ser de gêneros diferentes dos favoritos ({', '.join(genres) if genres else 'qualquer gênero'}). A ideia é ampliar horizontes sem perder a sintonia emocional.
    - Escreva "description" e "genre" em {lang_name}
    - "title" deve ser o título original
    - Todos OBRIGATORIAMENTE disponíveis nas plataformas listadas
@@ -145,7 +145,7 @@ Retorne APENAS este JSON válido, sem explicações, sem ```json:
 }}
 
 Regras absolutas:
-- Exatamente 20 filmes
+- Exatamente 10 filmes
 - Nenhum filme fora das plataformas listadas
 - Sem nenhum texto fora do JSON
 """)

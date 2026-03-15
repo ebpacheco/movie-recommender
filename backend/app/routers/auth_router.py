@@ -1,5 +1,5 @@
 # app/routers/auth_router.py
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -7,6 +7,7 @@ from app.dependencies import get_user_service, auth_service
 from app.repositories.user_repository import UserRepository
 from app.schemas.user_schema import UserCreate, LoginRequest, TokenResponse, UserResponse
 from app.services.user_service import UserService
+from app.services.recaptcha_service import verify_recaptcha
 from app.core.session_cache import set_session
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -42,6 +43,9 @@ def login(
     data: LoginRequest,
     db:   Session = Depends(get_db),
 ):
+    if not verify_recaptcha(data.recaptcha_token):
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Verificação de segurança falhou. Tente novamente.")
+
     user_repo = UserRepository(db)
     user      = auth_service.authenticate(data.email, data.password, user_repo)
     token     = auth_service.create_access_token(str(user.id))

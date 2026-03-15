@@ -27,7 +27,7 @@ Required format:
 }
 
 Rules:
-- Return exactly 20 movies in the "movies" array
+- Return exactly 10 movies in the "movies" array
 - Write message, genre and description in the language specified in the prompt
 - Keep the original movie title (do not translate titles)
 - No extra text outside the JSON object, no markdown, no ```json

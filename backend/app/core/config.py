@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     OPENAI_API_KEY:              str = ""
     AI_PROVIDER:                 str = "gemini"
     APP_ENV:                     str = "development"
+    RECAPTCHA_SECRET_KEY:        str = ""
 
     # E-mail
     EMAIL_PROVIDER:  str = "smtp"

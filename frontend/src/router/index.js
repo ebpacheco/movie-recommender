@@ -11,6 +11,8 @@ import AccountView          from '@/views/AccountView.vue'
 import ForgotPasswordView   from '@/views/ForgotPasswordView.vue'
 import ResetPasswordView    from '@/views/ResetPasswordView.vue'
 import VerifyEmailView      from '@/views/VerifyEmailView.vue'
+import TermsView            from '@/views/TermsView.vue'
+import PrivacyView          from '@/views/PrivacyView.vue'
 
 const routes = [
   { path: '/',                   redirect: '/recommendations' },
@@ -19,6 +21,8 @@ const routes = [
   { path: '/forgot-password',    component: ForgotPasswordView,  meta: { public: true } },
   { path: '/reset-password',     component: ResetPasswordView,   meta: { public: true } },
   { path: '/verify-email',       component: VerifyEmailView,     meta: { standalone: true } },
+  { path: '/terms',              component: TermsView,           meta: { standalone: true } },
+  { path: '/privacy',            component: PrivacyView,         meta: { standalone: true } },
   { path: '/recommendations',    component: RecommendationsView, meta: { requiresAuth: true } },
   { path: '/profile',            component: ProfileView,         meta: { requiresAuth: true } },
   { path: '/user-preferences',   component: UserPreferencesView, meta: { requiresAuth: true } },

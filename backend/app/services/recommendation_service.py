@@ -84,6 +84,8 @@ class RecommendationService:
 
         is_admin = profile.user.role == UserRole.admin
 
+        self.recommendation_repo.delete_expired()
+
         if not is_admin:
             cached = self.recommendation_repo.find_within_12h(user_id)
             if cached:

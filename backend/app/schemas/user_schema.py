@@ -98,8 +98,9 @@ class UserResponse(BaseModel):
 # --- Auth ---
 
 class LoginRequest(BaseModel):
-    email:    EmailStr
-    password: str
+    email:             EmailStr
+    password:          str
+    recaptcha_token:   str = ""
 
 
 class TokenResponse(BaseModel):

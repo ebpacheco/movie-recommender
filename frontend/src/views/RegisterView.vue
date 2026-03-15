@@ -121,13 +121,26 @@
             />
             <span>
               {{ t('register.termsPrefix') }}
-              <a href="/terms" target="_blank">{{ t('register.termsLink') }}</a>
-              {{ t('register.termsMiddle') }}
-              <a href="/privacy" target="_blank">{{ t('register.privacyLink') }}</a>.
-              {{ t('register.termsSuffix') }}
+              <a href="/terms" target="_blank">{{ t('register.termsLink') }}</a>.
             </span>
           </label>
           <span class="field-msg" v-if="errors.terms">{{ errors.terms }}</span>
+        </div>
+
+        <!-- Política de Privacidade -->
+        <div class="terms-field" :class="{ error: errors.privacy }">
+          <label class="terms-label">
+            <input
+              type="checkbox"
+              v-model="form.privacyAccepted"
+              @change="touch('privacy'); validatePrivacy()"
+            />
+            <span>
+              {{ t('register.privacyPrefix') }}
+              <a href="/privacy" target="_blank">{{ t('register.privacyLink') }}</a>.
+            </span>
+          </label>
+          <span class="field-msg" v-if="errors.privacy">{{ errors.privacy }}</span>
         </div>
 
         <div class="api-error" v-if="apiError">{{ apiError }}</div>
@@ -158,7 +171,7 @@ const { t } = useI18n()
 const {
   form, errors, touched, loading, apiError, registered,
   rules, isFormValid,
-  touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms,
+  touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms, validatePrivacy,
   handleRegister,
 } = useRegisterForm()
 

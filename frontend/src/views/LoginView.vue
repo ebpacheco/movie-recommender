@@ -69,10 +69,12 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import PasswordInput from '@/components/PasswordInput.vue'
 import api from '@/services/api'
+import { useRecaptcha } from '@/composables/useRecaptcha'
 
 const { t }  = useI18n()
 const auth   = useAuthStore()
 const router = useRouter()
+const { executeRecaptcha } = useRecaptcha()
 
 const loading   = ref(false)
 const error     = ref('')
@@ -97,7 +99,8 @@ async function submit() {
   unverified.value = false
   resentOk.value   = false
   try {
-    await auth.login(form.email, form.password)
+    const recaptchaToken = await executeRecaptcha('login')
+    await auth.login(form.email, form.password, recaptchaToken)
     router.push('/recommendations')
   } catch (e) {
     const detail = e.response?.data?.detail

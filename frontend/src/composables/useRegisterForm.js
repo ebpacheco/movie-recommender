@@ -18,6 +18,7 @@ export function useRegisterForm() {
     country:         'BR',
     birthDate:       '',
     termsAccepted:   false,
+    privacyAccepted: false,
   })
 
   const errors = reactive({
@@ -27,6 +28,7 @@ export function useRegisterForm() {
     confirmPassword: '',
     birthDate:       '',
     terms:           '',
+    privacy:         '',
   })
 
   const touched = reactive({
@@ -36,6 +38,7 @@ export function useRegisterForm() {
     confirmPassword: false,
     birthDate:       false,
     terms:           false,
+    privacy:         false,
   })
 
   const loading    = ref(false)
@@ -60,6 +63,7 @@ export function useRegisterForm() {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
     form.birthDate &&
     form.termsAccepted &&
+    form.privacyAccepted &&
     isPasswordValid.value &&
     form.password === form.confirmPassword
   )
@@ -89,7 +93,7 @@ export function useRegisterForm() {
       today.getMonth() > birth.getMonth() ||
       (today.getMonth() === birth.getMonth() && today.getDate() >= birth.getDate())
     const realAge = hasBirthdayPassed ? age : age - 1
-    if (realAge < 10 || realAge > 120) {
+    if (realAge < 18 || realAge > 120) {
       errors.birthDate = t('register.errors.birthDateInvalid')
     } else {
       errors.birthDate = ''
@@ -111,12 +115,16 @@ export function useRegisterForm() {
     errors.terms = !form.termsAccepted ? t('register.errors.terms') : ''
   }
 
+  function validatePrivacy() {
+    errors.privacy = !form.privacyAccepted ? t('register.errors.privacy') : ''
+  }
+
   // ── Submit ───────────────────────────────────────────────────────────────────
 
   async function handleRegister() {
-    const fields = ['name', 'email', 'birthDate', 'password', 'confirmPassword', 'terms']
+    const fields = ['name', 'email', 'birthDate', 'password', 'confirmPassword', 'terms', 'privacy']
     fields.forEach(touch)
-    validateName(); validateEmail(); validateBirthDate(); validatePassword(); validateConfirm(); validateTerms()
+    validateName(); validateEmail(); validateBirthDate(); validatePassword(); validateConfirm(); validateTerms(); validatePrivacy()
 
     if (!isFormValid.value) return
 
@@ -128,7 +136,8 @@ export function useRegisterForm() {
         email:          form.email,
         password:       form.password,
         birth_date:     form.birthDate || null,
-        terms_accepted: form.termsAccepted,
+        terms_accepted:   form.termsAccepted,
+        privacy_accepted: form.privacyAccepted,
         profile:        { country: form.country },
       })
       registered.value = true
@@ -149,7 +158,7 @@ export function useRegisterForm() {
   return {
     form, errors, touched, loading, apiError, registered,
     rules, isPasswordValid, isFormValid,
-    touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms,
+    touch, validateName, validateEmail, validateBirthDate, validatePassword, validateConfirm, validateTerms, validatePrivacy,
     handleRegister,
   }
 }
