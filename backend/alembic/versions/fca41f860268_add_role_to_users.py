@@ -19,22 +19,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     conn = op.get_bind()
-    result = conn.execute(sa.text(
-        "SELECT column_name FROM information_schema.columns "
-        "WHERE table_name='users' AND column_name='role'"
-    ))
-    if result.fetchone() is None:
-        op.add_column('users', sa.Column(
-            'role',
-            sa.Enum('free', 'premium', 'admin', name='userrole'),
-            nullable=False,
-            server_default='free',
-        ))
     conn.execute(sa.text(
         "UPDATE users SET role = 'admin' WHERE email = 'eduardobertoncinip@gmail.com'"
     ))
 
 
 def downgrade() -> None:
-    op.drop_column('users', 'role')
-    sa.Enum(name='userrole').drop(op.get_bind(), checkfirst=True)
+    pass
