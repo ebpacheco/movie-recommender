@@ -18,12 +18,16 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column('users', sa.Column(
-        'role',
-        sa.Enum('free', 'premium', 'admin', name='userrole'),
-        nullable=False,
-        server_default='free',   # usuários existentes viram 'free'
-    ))
+    from sqlalchemy.exc import ProgrammingError
+    try:
+        op.add_column('users', sa.Column(
+            'role',
+            sa.Enum('free', 'premium', 'admin', name='userrole'),
+            nullable=False,
+            server_default='free',   # usuários existentes viram 'free'
+        ))
+    except ProgrammingError:
+        pass
 
     # Seta seu usuário como admin
     op.execute("UPDATE users SET role = 'admin' WHERE email = 'eduardobertoncinip@gmail.com'")
