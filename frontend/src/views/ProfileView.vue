@@ -53,6 +53,7 @@
 
         <!-- Filmes -->
         <AutocompleteInput
+          key="movies"
           v-model="profile.favorite_movies" icon="🎬" type="movie"
           :title="t('profile.movies.title')" :subtitle="t('profile.movies.subtitle')"
           :placeholder="t('profile.movies.placeholder')" :hint="t('profile.hint')"
@@ -61,6 +62,7 @@
 
         <!-- Atores -->
         <AutocompleteInput
+          key="actors"
           v-model="profile.favorite_actors" icon="⭐" type="person" department="Acting"
           :title="t('profile.actors.title')" :subtitle="t('profile.actors.subtitle')"
           :placeholder="t('profile.actors.placeholder')" :hint="t('profile.hint')"
@@ -69,6 +71,7 @@
 
         <!-- Diretores -->
         <AutocompleteInput
+          key="directors"
           v-model="profile.favorite_directors" icon="🎥" type="person" department="Directing"
           :title="t('profile.directors.title')" :subtitle="t('profile.directors.subtitle')"
           :placeholder="t('profile.directors.placeholder')" :hint="t('profile.hint')"

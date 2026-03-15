@@ -74,6 +74,7 @@
 
         <!-- Senha -->
         <PasswordInput
+          key="password"
           v-model="form.password"
           :label="t('register.password')"
           :placeholder="t('register.passwordPlaceholder')"
@@ -100,6 +101,7 @@
 
         <!-- Confirmar senha -->
         <PasswordInput
+          key="confirm-password"
           v-model="form.confirmPassword"
           :label="t('register.confirmPassword')"
           :placeholder="t('register.confirmPlaceholder')"
