@@ -1,4 +1,4 @@
-name = "cinemagia"
+name = "movie-recommender"
 compatibility_date = "2024-01-01"
 
 [assets]
