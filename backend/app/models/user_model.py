@@ -21,7 +21,7 @@ class User(Base):
     name          = Column(String, nullable=False)
     email         = Column(String, unique=True, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
-    role          = Column(Enum(UserRole), nullable=False, default=UserRole.free)
+    role          = Column(Enum(UserRole, create_type=False), nullable=False, default=UserRole.free)
     birth_date        = Column(Date, nullable=True)
     terms_accepted_at = Column(DateTime, nullable=True)
     email_verified    = Column(Boolean, nullable=False, default=False)
