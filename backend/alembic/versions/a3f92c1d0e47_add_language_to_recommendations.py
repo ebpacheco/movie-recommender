@@ -18,7 +18,12 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column('recommendations', sa.Column('language', sa.String(8), server_default='pt', nullable=False))
+    conn = op.get_bind()
+    result = conn.execute(sa.text(
+        "SELECT column_name FROM information_schema.columns WHERE table_name='recommendations' AND column_name='language'"
+    ))
+    if result.fetchone() is None:
+        op.add_column('recommendations', sa.Column('language', sa.String(8), server_default='pt', nullable=False))
 
 
 def downgrade() -> None:
