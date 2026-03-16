@@ -96,13 +96,16 @@ class MoviePromptBuilder(IPromptBuilder):
 
         if platform_names:
             platforms_str = ', '.join(platform_names)
-            parts.append(f"PLATAFORMAS DISPONÍVEIS: {platforms_str} (catálogo de {country_name})")
+            parts.append(f"PLATAFORMAS DO USUÁRIO: {platforms_str} (catálogo de {country_name})")
             parts.append("")
             parts.append(
-                f"REGRA CRÍTICA: Todos os 10 filmes OBRIGATORIAMENTE devem estar disponíveis "
-                f"para assistir agora em {country_name} em pelo menos uma dessas plataformas: {platforms_str}. "
-                f"NÃO inclua filmes que não estejam no catálogo atual dessas plataformas em {country_name}. "
-                f"Se necessário, escolha filmes menos famosos mas que estejam confirmadamente disponíveis."
+                f"⚠️ REGRA INVIOLÁVEL DE STREAMING: Cada um dos 10 filmes DEVE estar disponível "
+                f"para assistir agora (flatrate/inclusão na assinatura) em {country_name} "
+                f"em pelo menos uma dessas plataformas: {platforms_str}. "
+                f"NUNCA inclua filmes que exijam aluguel, compra ou que não estejam nessas plataformas. "
+                f"Se um filme icônico não estiver disponível nessas plataformas em {country_name}, "
+                f"SUBSTITUA por outro que esteja. É melhor um filme menos famoso mas disponível "
+                f"do que um clássico indisponível."
             )
         else:
             parts.append(f"Recomende filmes populares e bem avaliados disponíveis em {country_name}.")
@@ -146,7 +149,8 @@ Retorne APENAS este JSON válido, sem explicações, sem ```json:
 
 Regras absolutas:
 - Exatamente 10 filmes
-- Nenhum filme fora das plataformas listadas
+- TODOS disponíveis nas plataformas: {platforms_str if platform_names else 'qualquer plataforma'}
+- Não incluir filmes de aluguel ou compra — somente assinatura (flatrate)
 - Sem nenhum texto fora do JSON
 """)
 

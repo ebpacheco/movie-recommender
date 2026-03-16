@@ -33,17 +33,23 @@ export async function enrichMovies(list, lang, { watchRegion = 'BR', userPlatfor
   const preferencePool = enriched.slice(0, 5)
   const curingaPool    = enriched.slice(5)
 
-  function pick3(pool) {
-    if (!userPlatformIds?.length) return pool.slice(0, 3)
-    const ids = userPlatformIds.map(String)
-    const filtered = pool.filter(m => m.streamingProviders.some(p => ids.includes(String(p.id))))
-    // fallback: se não houver 3 confirmados, completa com os primeiros do pool
-    if (filtered.length >= 3) return filtered.slice(0, 3)
-    const fallback = pool.filter(m => !filtered.includes(m)).slice(0, 3 - filtered.length)
-    return [...filtered, ...fallback]
+  if (!userPlatformIds?.length) {
+    return [...preferencePool.slice(0, 3), ...curingaPool.slice(0, 3)]
   }
 
-  return [...pick3(preferencePool), ...pick3(curingaPool)]
+  const ids = userPlatformIds.map(String)
+  const isOnPlatform = (m) => m.streamingProviders.some(p => ids.includes(String(p.id)))
+
+  const prefConfirmed    = preferencePool.filter(isOnPlatform)
+  const curingaConfirmed = curingaPool.filter(isOnPlatform)
+
+  // Se o TMDB não retornou dados de nenhum filme (falha de dados), exibe sem filtro
+  if (prefConfirmed.length === 0 && curingaConfirmed.length === 0) {
+    return [...preferencePool.slice(0, 3), ...curingaPool.slice(0, 3)]
+  }
+
+  // Exibe apenas filmes confirmados nas plataformas do usuário
+  return [...prefConfirmed.slice(0, 3), ...curingaConfirmed.slice(0, 3)]
 }
 
 /**

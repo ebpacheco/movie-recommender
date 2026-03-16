@@ -14,7 +14,9 @@
       "Bash(npm install:*)",
       "Bash(git push:*)",
       "Bash(venv/Scripts/alembic revision:*)",
-      "Bash(venv/Scripts/alembic stamp:*)"
+      "Bash(venv/Scripts/alembic stamp:*)",
+      "Bash(find c:UsersDudatraKOneDriveDocumentosmovie-recommenderbackend -type f -name *recommendation* -o -name *recommend*)",
+      "Bash(find c:UsersDudatraKOneDriveDocumentosmovie-recommenderbackend -type f -name *prompt* -o -name *builder*)"
     ]
   }
 }
