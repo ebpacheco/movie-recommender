@@ -1,4 +1,7 @@
 # app/main.py
+import asyncio
+from contextlib import asynccontextmanager
+
 from app.routers import password_reset_router
 from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -9,6 +12,7 @@ from app.core.config import settings
 from app.database import Base, engine
 from app.routers import auth_router, user_router, recommendation_router
 from app.routers import translation_router, admin_router
+from app.services.cleanup_service import run_cleanup_loop
 
 # Importa os models para o SQLAlchemy registrá-los antes de criar as tabelas
 import app.models.user_model                # noqa
@@ -19,10 +23,19 @@ import app.models.email_verification_model  # noqa
 
 Base.metadata.create_all(bind=engine)
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(run_cleanup_loop())
+    yield
+    task.cancel()
+
+
 app = FastAPI(
     title       = "Movie Recommender API",
     description = "API de recomendação de filmes com IA",
     version     = "1.0.0",
+    lifespan    = lifespan,
 )
 
 app.add_middleware(
