@@ -60,9 +60,12 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         elif field == "cpf":
             messages.append("CPF inválido")
         elif field == "password":
-            messages.append("Senha inválida")
+            # Repassa a mensagem do validator de força de senha
+            messages.append(msg.replace("Value error, ", ""))
         elif field == "name":
             messages.append("Nome inválido")
+        elif field == "birth_date":
+            messages.append(msg.replace("Value error, ", ""))
         else:
             messages.append(f"{field}: {msg}")
 

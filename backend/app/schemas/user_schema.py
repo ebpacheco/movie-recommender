@@ -1,8 +1,46 @@
 # app/schemas/user_schema.py
+import re
 from uuid import UUID
 from datetime import date
 from pydantic import BaseModel, EmailStr, field_validator
 from app.models.user_model import UserRole
+
+
+def _parse_date(v) -> date | None:
+    """
+    Aceita datas nos formatos:
+      - date object          → passa direto
+      - YYYY-MM-DD           → ISO (padrão Pydantic)
+      - DD/MM/YYYY           → Brasileiro
+      - MM/DD/YYYY           → Americano  (detectado quando dia > 12 na 2ª posição)
+      - YYYY/MM/DD           → variação ISO com barra
+    Ambiguidade (ambos ≤ 12): assume DD/MM/YYYY (padrão brasileiro).
+    """
+    if v is None or isinstance(v, date):
+        return v
+    if not isinstance(v, str) or not v.strip():
+        return None
+    v = v.strip()
+
+    if re.match(r'^\d{4}-\d{2}-\d{2}$', v):
+        return v  # Pydantic converte ISO normalmente
+
+    if '/' in v:
+        parts = v.split('/')
+        if len(parts) == 3:
+            a, b, c = parts
+            if len(a) == 4:                   # YYYY/MM/DD
+                return date(int(a), int(b), int(c))
+            if len(c) == 4:
+                ai, bi, ci = int(a), int(b), int(c)
+                if ai > 12:                   # DD/MM/YYYY (dia na 1ª posição)
+                    return date(ci, bi, ai)
+                elif bi > 12:                 # MM/DD/YYYY (dia na 2ª posição)
+                    return date(ci, ai, bi)
+                else:                         # ambíguo → assume DD/MM/YYYY
+                    return date(ci, bi, ai)
+
+    raise ValueError(f"Formato de data inválido: '{v}'. Use DD/MM/AAAA ou AAAA-MM-DD")
 
 
 # --- Profile ---
@@ -74,6 +112,11 @@ class ProfileResponse(ProfileBase):
 
 # --- User ---
 
+_PASSWORD_RULES = re.compile(
+    r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\-_=+\[\]{};:\'",.<>?/\\|`~]).{8,}$'
+)
+
+
 class UserCreate(BaseModel):
     name:           str
     email:          EmailStr
@@ -81,6 +124,24 @@ class UserCreate(BaseModel):
     birth_date:     date | None = None
     terms_accepted: bool = False
     profile:        ProfileCreate
+
+    @field_validator("birth_date", mode="before")
+    @classmethod
+    def parse_birth_date(cls, v):
+        return _parse_date(v)
+
+    @field_validator("password")
+    @classmethod
+    def validate_password_strength(cls, v):
+        if len(v) < 8:
+            raise ValueError("A senha deve ter pelo menos 8 caracteres")
+        if not re.search(r'[A-Z]', v):
+            raise ValueError("A senha deve conter pelo menos uma letra maiúscula")
+        if not re.search(r'[0-9]', v):
+            raise ValueError("A senha deve conter pelo menos um número")
+        if not re.search(r'[!@#$%^&*()\-_=+\[\]{};:\'",.<>?/\\|`~]', v):
+            raise ValueError("A senha deve conter pelo menos um caractere especial")
+        return v
 
 
 class UserResponse(BaseModel):
