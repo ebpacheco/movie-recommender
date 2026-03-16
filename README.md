@@ -22,7 +22,7 @@
 
 <br/>
 
-[**✨ Demo ao Vivo**](https://cinemagia.fun) · [**📖 Docs da API**](https://cinemagia.fun/docs) · [**🐛 Reportar Bug**](issues)
+[**✨ Demo ao Vivo**](https://cinemagia.fun)
 
 <br/>
 
