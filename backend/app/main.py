@@ -1,5 +1,6 @@
 # app/main.py
 import asyncio
+import logging
 from contextlib import asynccontextmanager
 
 from app.routers import password_reset_router
@@ -7,6 +8,8 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+
+logger = logging.getLogger(__name__)
 
 from app.core.config import settings
 from app.database import Base, engine
@@ -50,6 +53,15 @@ app.add_middleware(
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     errors = exc.errors()
+
+    # Log para diagnóstico — registra IP, rota e campos que falharam
+    ip = request.client.host if request.client else "unknown"
+    raw_fields = [(e["loc"], e["msg"]) for e in errors]
+    logger.warning(
+        "[422] %s %s | IP: %s | campos: %s",
+        request.method, request.url.path, ip, raw_fields
+    )
+
     messages = []
     for e in errors:
         field = e["loc"][-1] if e["loc"] else "campo"
@@ -60,7 +72,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         elif field == "cpf":
             messages.append("CPF inválido")
         elif field == "password":
-            # Repassa a mensagem do validator de força de senha
             messages.append(msg.replace("Value error, ", ""))
         elif field == "name":
             messages.append("Nome inválido")

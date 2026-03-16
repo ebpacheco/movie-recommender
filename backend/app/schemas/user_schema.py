@@ -112,11 +112,6 @@ class ProfileResponse(ProfileBase):
 
 # --- User ---
 
-_PASSWORD_RULES = re.compile(
-    r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()\-_=+\[\]{};:\'",.<>?/\\|`~]).{8,}$'
-)
-
-
 class UserCreate(BaseModel):
     name:           str
     email:          EmailStr
