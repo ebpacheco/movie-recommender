@@ -11,3 +11,8 @@ class IAIProvider(ABC):
         [{"title": "...", "year": ..., "genre": "...", "description": "..."}]
         """
         pass
+
+    @abstractmethod
+    def stream_recommendations(self, prompt: str):
+        """Yields raw text chunks from AI response."""
+        pass

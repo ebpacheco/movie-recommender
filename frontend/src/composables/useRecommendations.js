@@ -65,16 +65,48 @@ export function useRecommendations() {
     loading.value = true
     error.value   = ''
     try {
-      const { data } = await api.post('/recommendations', {
-        mood:     mood.value || null,
-        language: locale.value,
+      const baseURL = `${import.meta.env.VITE_API_URL ?? ''}/api/v1`
+      const token   = localStorage.getItem('token')
+      const res     = await fetch(`${baseURL}/recommendations/stream`, {
+        method:  'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ mood: mood.value || null, language: locale.value }),
       })
+
+      if (res.status === 401 && token) {
+        localStorage.removeItem('token')
+        window.location.href = '/login'
+        return
+      }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.detail || t('recommendations.error'))
+      }
+
+      const reader  = res.body.getReader()
+      const decoder = new TextDecoder()
+      let   buffer  = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+      }
+
+      const MARKER = '\n__RESULT__\n'
+      const idx    = buffer.indexOf(MARKER)
+      if (idx === -1) throw new Error(t('recommendations.error'))
+
+      const data = JSON.parse(buffer.slice(idx + MARKER.length).trim())
       movies.value = await enrich(data.movies)
       setAiMessage(data.message, locale.value)
       store.set(data)
       if (data.next_available_at) startCountdown(data.next_available_at)
     } catch (e) {
-      error.value = e.response?.data?.detail || t('recommendations.error')
+      error.value = e.message || t('recommendations.error')
     } finally {
       loading.value = false
     }

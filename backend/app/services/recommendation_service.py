@@ -1,5 +1,6 @@
 # app/services/recommendation_service.py
 import json
+import re
 from uuid import UUID
 from datetime import timedelta, timezone
 
@@ -71,6 +72,81 @@ class RecommendationService:
         except Exception:
             pass
         return [], None
+
+    def _parse_raw_text(self, text: str) -> dict:
+        """Parses accumulated streaming text into a structured dict."""
+        text = text.strip()
+        if text.startswith("```"):
+            text = re.sub(r"^```[a-z]*\n?", "", text)
+            text = re.sub(r"\n?```$", "", text)
+            text = text.strip()
+        try:
+            parsed = json.loads(text)
+            if isinstance(parsed, dict) and "movies" in parsed:
+                return parsed
+            if isinstance(parsed, list):
+                return {"message": None, "movies": parsed}
+        except json.JSONDecodeError:
+            pass
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            try:
+                parsed = json.loads(match.group(0))
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                pass
+        match = re.search(r"\[.*\]", text, re.DOTALL)
+        if match:
+            try:
+                return {"message": None, "movies": json.loads(match.group(0))}
+            except json.JSONDecodeError:
+                pass
+        return {"message": None, "movies": []}
+
+    def generate_stream(self, user_id: UUID, mood: str | None, language: str):
+        """
+        Returns a generator that streams raw Gemini text chunks and then
+        yields a final sentinel line: \\n__RESULT__\\n{json}\\n
+        The setup code (auth/cache) runs eagerly before the generator starts.
+        """
+        profile = self.profile_repo.find_by_user_id(user_id)
+        if not profile:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Perfil não encontrado")
+
+        is_admin = profile.user.role == UserRole.admin
+        self.recommendation_repo.delete_expired()
+
+        if not is_admin:
+            cached = self.recommendation_repo.find_within_12h(user_id)
+            if cached:
+                result = self._to_response(cached, cached=True, is_admin=False)
+
+                def _cached():
+                    yield f'\n__RESULT__\n{json.dumps(result, default=str)}\n'
+
+                return _cached()
+
+        prompt = self.prompt_builder.build(profile, None, language, mood)
+
+        def _stream():
+            full_text = ''
+            for chunk in self.ai_provider.stream_recommendations(prompt):
+                full_text += chunk
+                yield chunk
+
+            raw            = self._parse_raw_text(full_text)
+            movies, message = self._parse_ai_response(raw)
+
+            rec          = Recommendation(user_id=user_id, prompt_used=prompt, response=movies)
+            rec.message  = message
+            rec.language = language
+            rec          = self.recommendation_repo.upsert(rec)
+
+            result = self._to_response(rec, cached=False, is_admin=is_admin)
+            yield f'\n__RESULT__\n{json.dumps(result, default=str)}\n'
+
+        return _stream()
 
     def generate(
         self,

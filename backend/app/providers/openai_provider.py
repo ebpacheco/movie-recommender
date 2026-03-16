@@ -38,3 +38,7 @@ class OpenAIProvider(IAIProvider):
 
         content = response.choices[0].message.content
         return json.loads(content)
+
+    def stream_recommendations(self, prompt: str):
+        result = self.get_recommendations(prompt)
+        yield json.dumps(result)

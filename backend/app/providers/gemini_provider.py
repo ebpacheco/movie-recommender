@@ -41,17 +41,8 @@ Rules:
     def __init__(self):
         self.client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-    def _call(self, prompt: str) -> dict:
-        response = self.client.models.generate_content(
-            model=TARGET_MODEL,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=self.SYSTEM_PROMPT,
-                temperature=0.8,
-            )
-        )
-
-        text = response.text.strip()
+    def _parse_text(self, text: str) -> dict:
+        text = text.strip()
 
         if text.startswith("```"):
             text = re.sub(r"^```[a-z]*\n?", "", text)
@@ -85,7 +76,32 @@ Rules:
 
         return {"message": None, "movies": []}
 
+    def _call(self, prompt: str) -> dict:
+        response = self.client.models.generate_content(
+            model=TARGET_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=self.SYSTEM_PROMPT,
+                temperature=0.8,
+            )
+        )
+        return self._parse_text(response.text)
+
     def get_recommendations(self, prompt: str) -> dict:
         result = self._call(prompt)
         logger.info(f"[Gemini] Retornando {len(result.get('movies', []))} filmes")
         return result
+
+    def stream_recommendations(self, prompt: str):
+        """Yields raw text chunks from Gemini streaming."""
+        response = self.client.models.generate_content_stream(
+            model=TARGET_MODEL,
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                system_instruction=self.SYSTEM_PROMPT,
+                temperature=0.8,
+            )
+        )
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
