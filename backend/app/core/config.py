@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     # E-mail
     EMAIL_PROVIDER:  str = "smtp"
     RESEND_API_KEY:  str = ""
-    EMAIL_FROM:      str = "noreply@cinemagic.app"
+    EMAIL_FROM:      str = "CineMagIA <noreply@cinemagia.fun>"
     FRONTEND_URL:    str = "http://localhost:5173"
 
     @property
