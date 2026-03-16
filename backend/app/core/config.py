@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     RESEND_API_KEY:  str = ""
     EMAIL_FROM:      str = "noreply@cinemagic.app"
     FRONTEND_URL:    str = "http://localhost:5173"
+
+    @property
+    def allowed_origins(self) -> list[str]:
+        return [o.rstrip("/") for o in self.FRONTEND_URL.split(",") if o.strip()]
     SMTP_HOST:       str = "sandbox.smtp.mailtrap.io"
     SMTP_PORT:       int = 587
     SMTP_USER:       str = ""
