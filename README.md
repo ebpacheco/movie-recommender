@@ -319,17 +319,3 @@ VITE_APP_NAME=CineMagIA
 ```
 
 ---
-
-## 📄 Licença
-
-Distribuído sob a licença MIT. Veja [`LICENSE`](LICENSE) para mais informações.
-
----
-
-<div align="center">
-
-Feito com ☕ e muita vontade de melhorar a experiência de escolher filmes.
-
-**[cinemagia.fun](https://cinemagia.fun)**
-
-</div>
