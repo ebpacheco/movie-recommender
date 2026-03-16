@@ -4,8 +4,7 @@
       <div class="card">
         <!-- Logo -->
         <div class="logo">
-          <span class="logo-icon">🎬</span>
-          <span class="logo-text">Cine<span class="gold">MagIA</span></span>
+          <img src="/logo.png" alt="CineMagIA" class="logo-img" />
         </div>
 
         <template v-if="!sent">
@@ -88,10 +87,8 @@ async function handleSubmit() {
 
 .card { background: #0f0f15; border: 1px solid rgba(212,175,55,0.15); border-radius: 20px; padding: 2.5rem 2rem; display: flex; flex-direction: column; gap: 1.25rem; }
 
-.logo { display: flex; align-items: center; gap: 0.5rem; justify-content: center; margin-bottom: 0.5rem; }
-.logo-icon { font-size: 1.5rem; }
-.logo-text { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #e8e0d0; font-weight: 600; letter-spacing: 0.04em; }
-.gold { color: #d4af37; }
+.logo { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.logo-img { width: 72px; height: 72px; object-fit: contain; filter: drop-shadow(0 0 12px rgba(245,197,24,0.45)); }
 
 h1 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #e8e0d0; margin: 0; text-align: center; }
 .subtitle { color: #6b6050; font-size: 0.9rem; text-align: center; margin: 0; line-height: 1.5; }
