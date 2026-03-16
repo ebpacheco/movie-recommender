@@ -5,7 +5,7 @@
         <!-- Logo -->
         <div class="logo">
           <span class="logo-icon">🎬</span>
-          <span class="logo-text">Cine<span class="gold">MAGIC</span></span>
+          <span class="logo-text">Cine<span class="gold">MagIA</span></span>
         </div>
 
         <template v-if="!sent">
