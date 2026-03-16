@@ -1,8 +1,11 @@
 # app/services/user_service.py
+import logging
 from datetime import datetime
 from uuid import UUID
 
 from fastapi import HTTPException, status
+
+logger = logging.getLogger(__name__)
 
 from app.models.profile_model import Profile
 from app.models.user_model import User
@@ -53,13 +56,16 @@ class UserService:
         self.profile_repo.save(profile)
 
         if self.email_verification_svc:
-            language = getattr(data.profile, "language", "pt") or "pt"
-            self.email_verification_svc.send_verification(
-                user_id  = user.id,
-                email    = user.email,
-                name     = user.name,
-                language = language,
-            )
+            try:
+                language = getattr(data.profile, "language", "pt") or "pt"
+                self.email_verification_svc.send_verification(
+                    user_id  = user.id,
+                    email    = user.email,
+                    name     = user.name,
+                    language = language,
+                )
+            except Exception as e:
+                logger.error(f"[register] Falha ao enviar e-mail de verificação para {user.email}: {e}")
 
         return user
 
