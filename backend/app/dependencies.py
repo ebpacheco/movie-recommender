@@ -13,6 +13,7 @@ from app.providers.gemini_provider import GeminiProvider
 from app.providers.openai_provider import OpenAIProvider
 from app.providers.smtp_provider import SmtpProvider
 from app.providers.ses_provider import SesProvider
+from app.providers.resend_provider import ResendProvider
 from app.repositories.user_repository import UserRepository, ProfileRepository
 from app.repositories.recommendation_repository import RecommendationRepository
 from app.repositories.reset_token_repository import ResetTokenRepository
@@ -38,7 +39,12 @@ def _make_ai_provider() -> IAIProvider:
 
 
 def _make_email_service() -> EmailService:
-    provider = SesProvider() if settings.EMAIL_PROVIDER == "ses" else SmtpProvider()
+    if settings.EMAIL_PROVIDER == "ses":
+        provider = SesProvider()
+    elif settings.EMAIL_PROVIDER == "resend":
+        provider = ResendProvider(settings.RESEND_API_KEY, settings.EMAIL_FROM)
+    else:
+        provider = SmtpProvider()
     return EmailService(provider)
 
 

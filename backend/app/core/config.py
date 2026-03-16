@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     # E-mail
     EMAIL_PROVIDER:  str = "smtp"
+    RESEND_API_KEY:  str = ""
     EMAIL_FROM:      str = "noreply@cinemagic.app"
     FRONTEND_URL:    str = "http://localhost:5173"
     SMTP_HOST:       str = "sandbox.smtp.mailtrap.io"
