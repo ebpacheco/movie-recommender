@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app.core.config import settings
 from app.database import Base, engine
 from app.routers import auth_router, user_router, recommendation_router
 from app.routers import translation_router, admin_router
@@ -26,7 +27,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins     = ["http://localhost:5173"],
+    allow_origins     = [settings.FRONTEND_URL],
     allow_credentials = True,
     allow_methods     = ["*"],
     allow_headers     = ["*"],
