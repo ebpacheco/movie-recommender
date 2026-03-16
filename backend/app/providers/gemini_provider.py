@@ -33,6 +33,8 @@ Required format:
 
 Rules:
 - Return exactly 10 movies in the "movies" array
+- The first 5 movies must closely match the user's stated preferences (genres, mood, favorite movies)
+- The last 5 movies are wildcard/surprise picks: bold, unexpected choices the user might not have considered
 - Write message, genre and description in the language specified in the prompt
 - Keep the original movie title (do not translate titles)
 - No extra text outside the JSON object, no markdown, no ```json

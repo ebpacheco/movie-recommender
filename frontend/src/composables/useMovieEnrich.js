@@ -29,9 +29,9 @@ export async function enrichMovies(list, lang, { watchRegion = 'BR', userPlatfor
     })
   )
 
-  // Posições 1-10 = preferências, 11-20 = curingas
-  const preferencePool = enriched.slice(0, 10)
-  const curingaPool    = enriched.slice(10)
+  // Posições 1-5 = preferências, 6-10 = curingas
+  const preferencePool = enriched.slice(0, 5)
+  const curingaPool    = enriched.slice(5)
 
   function pick3(pool) {
     if (!userPlatformIds?.length) return pool.slice(0, 3)
