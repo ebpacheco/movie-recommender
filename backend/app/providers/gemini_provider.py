@@ -10,8 +10,7 @@ from app.core.config import settings
 
 logger = logging.getLogger(__name__)
 
-MIN_MOVIES   = 6
-TARGET_MODEL = "gemini-2.0-flash"
+TARGET_MODEL = "gemini-2.5-flash-lite"
 
 
 class GeminiProvider(IAIProvider):
@@ -88,13 +87,5 @@ Rules:
 
     def get_recommendations(self, prompt: str) -> dict:
         result = self._call(prompt)
-        count  = len(result.get("movies", []))
-
-        if count < MIN_MOVIES:
-            logger.warning(f"[Gemini] Resposta insuficiente: {count} filmes. Tentando novamente...")
-            retry  = self._call(prompt)
-            if len(retry.get("movies", [])) > count:
-                result = retry
-
         logger.info(f"[Gemini] Retornando {len(result.get('movies', []))} filmes")
         return result
