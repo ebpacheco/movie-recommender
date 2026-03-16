@@ -42,6 +42,7 @@
               type="text"
               :placeholder="t('recommendations.moodPlaceholder')"
               :disabled="loading"
+              maxlength="200"
               @keydown.enter="generate"
             />
             <button class="btn-generate" :disabled="loading || !mood.trim()" @click="generate">
@@ -49,6 +50,7 @@
               <span v-else>🎲 {{ t('recommendations.button') }}</span>
             </button>
           </div>
+          <span class="char-count" :class="{ 'char-count--limit': mood.length >= 200 }">{{ mood.length }}/200</span>
         </div>
       </transition>
 
@@ -67,7 +69,10 @@
       <!-- Admin: input sempre visível para gerar novo -->
       <transition name="fade">
         <div v-if="isAdmin && hasRecommendation" class="admin-generate">
-          <input v-model="mood" type="text" :placeholder="t('recommendations.moodPlaceholder')" :disabled="loading" @keydown.enter="generate" class="admin-mood-input" />
+          <div class="admin-input-wrap">
+            <input v-model="mood" type="text" :placeholder="t('recommendations.moodPlaceholder')" :disabled="loading" maxlength="200" @keydown.enter="generate" class="admin-mood-input" />
+            <span class="char-count" :class="{ 'char-count--limit': mood.length >= 200 }">{{ mood.length }}/200</span>
+          </div>
           <button class="btn-generate" :disabled="loading" @click="generate">
             <span v-if="loading" class="spinner"></span>
             <span v-else>🎲 {{ t('recommendations.button') }}</span>
@@ -177,8 +182,12 @@ h1 { font-family: 'Playfair Display', serif; font-size: 2.25rem; margin: 0 0 0.4
 .countdown-bar { display: flex; align-items: center; gap: 0.5rem; padding-top: 0.75rem; border-top: 1px solid rgba(212,175,55,0.1); font-size: 0.82rem; color: #5a5040; }
 .countdown-bar strong { color: #d4af37; }
 
-.admin-generate { display: flex; gap: 0.75rem; }
-.admin-mood-input { flex: 1; padding: 0.75rem 1rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #e8e0d0; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: all 0.2s; }
+.char-count { font-size: 0.75rem; color: #3a3228; text-align: right; }
+.char-count--limit { color: #e05555; }
+
+.admin-generate { display: flex; gap: 0.75rem; align-items: flex-start; }
+.admin-input-wrap { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+.admin-mood-input { width: 100%; padding: 0.75rem 1rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #e8e0d0; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: all 0.2s; }
 .admin-mood-input::placeholder { color: #3a3228; }
 
 .btn-generate { padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #d4af37, #b8860b); border: none; border-radius: 10px; color: #08080c; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 0.4rem; min-width: 130px; justify-content: center; }
