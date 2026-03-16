@@ -34,11 +34,15 @@ async def lifespan(app: FastAPI):
     task.cancel()
 
 
+_is_dev = settings.APP_ENV != "production"
+
 app = FastAPI(
     title       = "Movie Recommender API",
     description = "API de recomendação de filmes com IA",
     version     = "1.0.0",
     lifespan    = lifespan,
+    docs_url    = "/docs" if _is_dev else None,
+    redoc_url   = "/redoc" if _is_dev else None,
 )
 
 app.add_middleware(
