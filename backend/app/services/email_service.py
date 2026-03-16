@@ -270,7 +270,7 @@ class EmailService:
         language: str = "pt",
     ) -> None:
         """Envia o e-mail de recuperação de senha no idioma do usuário."""
-        reset_url = f"{settings.FRONTEND_URL}/reset-password?token={token}"
+        reset_url = f"{settings.primary_frontend_url}/reset-password?token={token}"
         template  = _get_template(language)
         self.provider.send(to, template["subject"], template["body"](reset_url, name))
 
@@ -282,6 +282,6 @@ class EmailService:
         language: str = "pt",
     ) -> None:
         """Envia o e-mail de confirmação de cadastro no idioma do usuário."""
-        verify_url = f"{settings.FRONTEND_URL}/verify-email?token={token}"
+        verify_url = f"{settings.primary_frontend_url}/verify-email?token={token}"
         template   = _get_verification_template(language)
         self.provider.send(to, template["subject"], template["body"](verify_url, name))

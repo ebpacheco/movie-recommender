@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     @property
     def allowed_origins(self) -> list[str]:
         return [o.rstrip("/") for o in self.FRONTEND_URL.split(",") if o.strip()]
+
+    @property
+    def primary_frontend_url(self) -> str:
+        return self.FRONTEND_URL.split(",")[0].strip().rstrip("/")
     SMTP_HOST:       str = "sandbox.smtp.mailtrap.io"
     SMTP_PORT:       int = 587
     SMTP_USER:       str = ""
