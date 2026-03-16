@@ -133,21 +133,21 @@
     "movies": {
       "title": "Películas favoritas",
       "subtitle": "Añade películas que te marcaron",
-      "placeholder": "Escribe el nombre y presiona Enter",
+      "placeholder": "Escribe tus Películas Favoritas",
       "limitLabel": "películas",
       "emptyHint": "No se han añadido películas todavía."
     },
     "actors": {
       "title": "Actores y actrices favoritos",
       "subtitle": "¿A quién no te pierdes ninguna película?",
-      "placeholder": "Nombre del actor/actriz",
+      "placeholder": "Escribe tus Actores Favoritos",
       "limitLabel": "actores",
       "emptyHint": "No se han añadido actores todavía."
     },
     "directors": {
       "title": "Directores favoritos",
       "subtitle": "Tus cineastas preferidos",
-      "placeholder": "Nombre del director",
+      "placeholder": "Escribe tus Directores Favoritos",
       "limitLabel": "directores",
       "emptyHint": "No se han añadido directores todavía."
     },
@@ -209,5 +209,32 @@
     "errorTitle": "Enlace inválido",
     "errorMessage": "Este enlace es inválido o ya expiró. Solicita un nuevo correo de confirmación.",
     "resend": "Reenviar correo de confirmación"
+  },
+  "movieCard": {
+    "watchTrailer":         "Ver Tráiler",
+    "availableOn":          "Disponible en",
+    "streamingUnavailable": "No disponible en streaming"
+  },
+  "genres": {
+    "action":      "Acción",
+    "adventure":   "Aventura",
+    "comedy":      "Comedia",
+    "drama":       "Drama",
+    "fantasy":     "Fantasía",
+    "scifi":       "Ciencia Ficción",
+    "horror":      "Terror",
+    "mystery":     "Misterio",
+    "thriller":    "Suspenso / Thriller",
+    "romance":     "Romance",
+    "crime":       "Crimen / Policial",
+    "war":         "Guerra",
+    "western":     "Western",
+    "historical":  "Histórico / Épico",
+    "musical":     "Musical",
+    "animation":   "Animación",
+    "documentary": "Documental",
+    "family":      "Familia / Infantil",
+    "biography":   "Biografía",
+    "sports":      "Deporte"
   }
 }

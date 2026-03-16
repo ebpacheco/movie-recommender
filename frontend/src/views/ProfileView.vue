@@ -46,7 +46,7 @@
               @click="toggleGenre(genre.value)"
             >
               <span>{{ genre.emoji }}</span>
-              <span>{{ genre.label }}</span>
+              <span>{{ t('genres.' + genre.key) }}</span>
             </button>
           </div>
         </section>

@@ -18,7 +18,7 @@
             <polygon points="5,3 19,12 5,21"/>
           </svg>
         </div>
-        <span class="play-label">Ver Trailer</span>
+        <span class="play-label">{{ t('movieCard.watchTrailer') }}</span>
       </div>
     </div>
 
@@ -39,7 +39,7 @@
 
       <!-- Streaming providers -->
       <div class="streaming" v-if="movie.streamingProviders?.length">
-        <span class="streaming-label">Disponível em</span>
+        <span class="streaming-label">{{ t('movieCard.availableOn') }}</span>
         <div class="streaming-logos">
           <div
             v-for="provider in movie.streamingProviders.slice(0, 5)"
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="streaming streaming--unavailable" v-else-if="movie.tmdbId">
-        <span>Não disponível no streaming BR</span>
+        <span>{{ t('movieCard.streamingUnavailable') }}</span>
       </div>
 
       <p class="movie-desc">{{ movie.description }}</p>
@@ -61,6 +61,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 defineProps({
   movie:     { type: Object,  required: true },
   rankClass: { type: String,  default: '' },

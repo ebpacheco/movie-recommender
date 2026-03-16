@@ -133,21 +133,21 @@
     "movies": {
       "title": "Filmes favoritos",
       "subtitle": "Adicione filmes que marcaram você",
-      "placeholder": "Digite o nome e pressione Enter",
+      "placeholder": "Digite os Filmes Favoritos",
       "limitLabel": "filmes",
       "emptyHint": "Nenhum filme adicionado ainda."
     },
     "actors": {
       "title": "Atores e atrizes favoritos",
       "subtitle": "Quem você não perde um filme?",
-      "placeholder": "Nome do ator/atriz",
+      "placeholder": "Digite os Atores Favoritos",
       "limitLabel": "atores",
       "emptyHint": "Nenhum ator adicionado ainda."
     },
     "directors": {
       "title": "Diretores favoritos",
       "subtitle": "Seus cineastas preferidos",
-      "placeholder": "Nome do diretor",
+      "placeholder": "Digite os Diretores Favoritos",
       "limitLabel": "diretores",
       "emptyHint": "Nenhum diretor adicionado ainda."
     },
@@ -209,5 +209,32 @@
     "errorTitle": "Link inválido",
     "errorMessage": "Este link é inválido ou já expirou. Solicite um novo e-mail de confirmação.",
     "resend": "Reenviar e-mail de confirmação"
+  },
+  "movieCard": {
+    "watchTrailer":         "Ver Trailer",
+    "availableOn":          "Disponível em",
+    "streamingUnavailable": "Não disponível no streaming"
+  },
+  "genres": {
+    "action":      "Ação",
+    "adventure":   "Aventura",
+    "comedy":      "Comédia",
+    "drama":       "Drama",
+    "fantasy":     "Fantasia",
+    "scifi":       "Ficção Científica",
+    "horror":      "Terror",
+    "mystery":     "Mistério",
+    "thriller":    "Suspense / Thriller",
+    "romance":     "Romance",
+    "crime":       "Crime / Policial",
+    "war":         "Guerra",
+    "western":     "Western",
+    "historical":  "Histórico / Épico",
+    "musical":     "Musical",
+    "animation":   "Animação",
+    "documentary": "Documentário",
+    "family":      "Família / Infantil",
+    "biography":   "Biografia",
+    "sports":      "Esporte"
   }
 }

@@ -44,7 +44,7 @@
   },
   "register": {
     "title": "Create account",
-    "subtitle": "Join CineMagIA and discover your next favourite films",
+    "subtitle": "Join CineMagIA and discover your next favorite films",
     "name": "Full name",
     "namePlaceholder": "Your name",
     "email": "Email",
@@ -127,27 +127,27 @@
       "subtitle": "We filter recommendations available in your local catalogue"
     },
     "genres": {
-      "title": "Favourite genres",
+      "title": "Favorite genres",
       "subtitle": "Select the genres you enjoy most"
     },
     "movies": {
-      "title": "Favourite movies",
+      "title": "Favorite movies",
       "subtitle": "Add films that left a mark on you",
-      "placeholder": "Type a name and press Enter",
+      "placeholder": "Type your Favorite Movies",
       "limitLabel": "movies",
       "emptyHint": "No movies added yet."
     },
     "actors": {
-      "title": "Favourite actors & actresses",
+      "title": "Favorite actors & actresses",
       "subtitle": "Who do you never miss a film from?",
-      "placeholder": "Actor / actress name",
+      "placeholder": "Type your Favorite Actors",
       "limitLabel": "actors",
       "emptyHint": "No actors added yet."
     },
     "directors": {
-      "title": "Favourite directors",
+      "title": "Favorite directors",
       "subtitle": "Your preferred filmmakers",
-      "placeholder": "Director name",
+      "placeholder": "Type your Favorite Directors",
       "limitLabel": "directors",
       "emptyHint": "No directors added yet."
     },
@@ -209,5 +209,32 @@
     "errorTitle": "Invalid link",
     "errorMessage": "This link is invalid or has expired. Please request a new confirmation email.",
     "resend": "Resend confirmation email"
+  },
+  "movieCard": {
+    "watchTrailer":         "Watch Trailer",
+    "availableOn":          "Available on",
+    "streamingUnavailable": "Not available for streaming"
+  },
+  "genres": {
+    "action":      "Action",
+    "adventure":   "Adventure",
+    "comedy":      "Comedy",
+    "drama":       "Drama",
+    "fantasy":     "Fantasy",
+    "scifi":       "Science Fiction",
+    "horror":      "Horror",
+    "mystery":     "Mystery",
+    "thriller":    "Thriller",
+    "romance":     "Romance",
+    "crime":       "Crime",
+    "war":         "War",
+    "western":     "Western",
+    "historical":  "Historical / Epic",
+    "musical":     "Musical",
+    "animation":   "Animation",
+    "documentary": "Documentary",
+    "family":      "Family",
+    "biography":   "Biography",
+    "sports":      "Sports"
   }
 }
