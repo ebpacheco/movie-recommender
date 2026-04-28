@@ -176,6 +176,7 @@ O cache é salvo no banco junto com a mensagem e o idioma — o usuário vê exa
 
 ![Cloudflare](https://img.shields.io/badge/-Cloudflare_Workers_(frontend)-F38020?style=flat-square&logo=cloudflare&logoColor=white)
 ![Render](https://img.shields.io/badge/-Render_(backend)-46E3B7?style=flat-square&logo=render&logoColor=black)
+![Neon](https://img.shields.io/badge/-Neon_(database)-00E599?style=flat-square&logo=neon&logoColor=black)
 ![Hostinger](https://img.shields.io/badge/-Hostinger_(cinemagia.fun)-673DE6?style=flat-square)
 
 ---
@@ -226,7 +227,7 @@ movie-recommender/
 
 ### Pré-requisitos
 
-- Python 3.13+ · Node.js 18+ · PostgreSQL
+- Python 3.13+ · Node.js 18+ · PostgreSQL (ou Docker)
 
 ### 1. Clone o repositório
 
@@ -277,7 +278,9 @@ npm run dev
 ### Backend `backend/.env`
 
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/cinemagic
+# Banco de dados (produção: Neon | local: PostgreSQL)
+DATABASE_URL=postgresql://user:password@ep-xxx.sa-east-1.aws.neon.tech/neondb?sslmode=require
+
 SECRET_KEY=sua-chave-secreta-jwt
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=10080
